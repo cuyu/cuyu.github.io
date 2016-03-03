@@ -73,10 +73,10 @@ Ending lines must have at least as
 many tildes as the starting line.
 ~~~~~~
 
-~~~ python
+{% highlight python %}
 def main():
   print 'This is a code block with a language specified.'
-~~~
+{% endhighlight %}
 
 ---
 
