@@ -83,3 +83,10 @@ div > pre[class="highlight"] > code {
     font-family: Consolas, Monaco, Menlo, "Courier New", monospace;
     font-size: 14px;
 }
+
+code[class="highlighter-rouge"] {
+    background: #eae8f9;
+    border: #836d7d 1px solid;
+    border-radius: 4px;
+    padding: 2px;
+}

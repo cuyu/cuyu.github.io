@@ -8,8 +8,10 @@ The [kramdown syntax](http://kramdown.gettalong.org/syntax.html) is based on the
 
 ---
 
+
 Setext Style H1(上面一行必须是空行)
 ==========
+
 
 Setext Style H2
 --------
@@ -60,7 +62,7 @@ Setext Style H2
 
 ---
 
-`我是简单的代码框`
+Example: `我是简单的代码框`
 
       我是大片的代码框
       在前面需要tab
@@ -68,7 +70,7 @@ Setext Style H2
 
 ~~~~~~
 This is also a code block.
-~~~
+​~~~
 Ending lines must have at least as
 many tildes as the starting line.
 ~~~~~~
@@ -94,7 +96,6 @@ def show_post(post_id):
     return 'Post %d' % post_id
 ~~~
 
-
 ---
 
 我是脚注[^1]
@@ -110,17 +111,17 @@ def show_post(post_id):
 ---
 
 |-----------------+------------+-----------------+----------------|
-| Default aligned |Left aligned| Center aligned  | Right aligned  |
-|-----------------|:-----------|:---------------:|---------------:|
-| First body part |Second cell | Third cell      | fourth cell    |
-| Second line     |foo         | **strong**      | baz            |
-| Third line      |quux        | baz             | bar            |
-|-----------------+------------+-----------------+----------------|
-| Second body     |            |                 |                |
-| 2 line          |            |                 |                |
-|=================+============+=================+================|
-| Footer row      |            |                 |                |
-|-----------------+------------+-----------------+----------------|
+| Default aligned                          | Left aligned | Center aligned | Right aligned |
+| ---------------------------------------- | :----------- | :------------: | ------------: |
+| First body part                          | Second cell  |   Third cell   |   fourth cell |
+| Second line                              | foo          |   **strong**   |           baz |
+| Third line                               | quux         |      baz       |           bar |
+| -----------------+------------+-----------------+---------------- |              |                |               |
+| Second body                              |              |                |               |
+| 2 line                                   |              |                |               |
+| =================+============+=================+================ |              |                |               |
+| Footer row                               |              |                |               |
+| -----------------+------------+-----------------+---------------- |              |                |               |
 
 ---
 
