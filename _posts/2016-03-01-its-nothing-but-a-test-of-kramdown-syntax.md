@@ -73,10 +73,27 @@ Ending lines must have at least as
 many tildes as the starting line.
 ~~~~~~
 
-{% highlight python %}
-def main():
-  print 'This is a code block with a language specified.'
-{% endhighlight %}
+~~~python
+# Fixme: Hack to add our logger to flask server request handler.
+WSGIRequestHandler.log_request = hacked_log_request
+
+
+@WEB_SERVER.route('/_backend/register_splunk', methods=['POST'])
+def register_splunk():
+    data = request.json
+    for data_type in data['data_types']:
+        for func in REGISTER_OUTPUT_METHODS:
+            func(data['splunk_uri'], data['splunk_username'], data['splunk_password'],
+                 data['splunk_index'], data_type['source'], data_type['sourcetype'], int(data['time_range']) * 3600)
+    return 'register successfully!'
+
+
+@WEB_SERVER.route('/post/<int:post_id>')
+def show_post(post_id):
+    # show the post with the given id, the id is an integer
+    return 'Post %d' % post_id
+~~~
+
 
 ---
 
