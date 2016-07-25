@@ -81,7 +81,7 @@ div > pre[class="highlight"] {
 div > pre[class="highlight"] > code {
     color: white;
     font-family: Consolas, Monaco, Menlo, "Courier New", monospace;
-    font-size: 14px;
+    font-size: 15px;
 }
 
 code[class="highlighter-rouge"] {

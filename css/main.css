@@ -83,3 +83,55 @@ ul.posts {
 ul.posts > li {
     list-style: none;
 }
+
+/* For 脚注 */
+div[class="footnotes"] {
+    font-size: .8em;
+}
+
+/* For blockquote */
+blockquote {
+    margin-left: 5px;
+    border-left: #196aa7 5px solid;
+    padding-left: 5px;
+}
+
+/* For table */
+table {
+    border: 2px black solid;
+    border-collapse: collapse;
+    background: #eae8f9;
+}
+
+table > thead > tr > th {
+    border: 1px black solid;
+}
+
+table > tbody > tr > td {
+    border: 1px black solid;
+}
+
+table > tfoot {
+    font-size: .6em;
+}
+
+/* For horizon line, i.e. '---' in markdown */
+hr {
+    border: 1px darkgray inset;
+}
+
+/* For definition */
+dl {
+    margin-left: 5px;
+    border-left: orange 5px solid;
+    padding-left: 5px;
+}
+
+dl > dt {
+    font-style: oblique;
+    font-weight: bold;
+}
+
+dl > dd {
+    font-weight: 100;
+}
