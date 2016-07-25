@@ -2,16 +2,24 @@ body {
     font-family: "Avenir Next", Helvetica, arial, "Microsoft YaHei", 宋体, sans-serif;
     font-size: 20px;
     margin: 0;
+    background-image: url("/assets/images/main_background.jpg");
+    background-repeat: round;
 }
+
 nav {
     font-size: 1.2em;
-    background-color: #ec6f66;
-    background-image: linear-gradient(to bottom right,#ec6f66,#f3a183);
+    /*background-image: linear-gradient(to bottom right, #5766a7, white);*/
 }
+
 div[class="container"] {
     margin: auto;
     width: 70%;
+    background-color: white;
+    padding-left: 12px;
+    padding-right: 12px;
+    box-shadow: 0 0 .5em 0 #737660;
 }
+
 nav > ul, footer > ul {
     margin: auto;
     width: 70%;
@@ -19,58 +27,71 @@ nav > ul, footer > ul {
     list-style: none;
     font-weight: bold;
 }
+
 nav > ul > li, footer > ul > li {
     display: inline;
     margin-right: 20px;
 }
+
 nav > ul > li > a {
     color: #103355;
 }
+
 a {
     text-decoration: none;
     color: #5766a7;
 }
+
 a:hover {
     text-decoration: underline;
 }
+
 h1 > a {
     color: #103355;
     font-family: "Avenir Next", Helvetica, arial, "Microsoft YaHei", 宋体, sans-serif;
 }
+
 h1 {
     font-size: 2.6em;
     margin-top: 0.7em;
     margin-bottom: 0.7em;
 }
+
 h2 {
     font-size: 2.25em;
     margin-top: 0.55em;
     margin-bottom: 0.55em;
 }
+
 h3 {
     font-size: 1.9em;
     margin-top: 0.4em;
     margin-bottom: 0.4em;
 }
+
 h4 {
     font-size: 1.55em;
     margin-top: 0.35em;
     margin-bottom: 0.35em;
 }
+
 h5 {
     font-size: 1.25em;
     margin-top: 0.25em;
     margin-bottom: 0.25em;
 }
+
 h6 {
     font-size: 1.1em;
     margin-top: 0.25em;
     margin-bottom: 0.25em;
 }
+
 p {
     line-height: 1.8em;
     color: #333;
 }
+
 footer {
     border-top: 1px solid #d5d5d5;
     font-size: .8em;
