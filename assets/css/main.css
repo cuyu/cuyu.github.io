@@ -39,7 +39,7 @@ nav > ul > li > a {
 
 a {
     text-decoration: none;
-    color: #5766a7;
+    color: #c7338e;
 }
 
 a:hover {
@@ -48,7 +48,7 @@ a:hover {
 
 h1 > a {
     color: #103355;
-    font-family: "Avenir Next", Helvetica, arial, "Microsoft YaHei", 宋体, sans-serif;
+    font-family: 'Bree Serif', serif, "Avenir Next", Helvetica, arial, "Microsoft YaHei", 宋体, sans-serif;
 }
 
 h1 {
@@ -113,7 +113,7 @@ div[class="footnotes"] {
 /* For blockquote */
 blockquote {
     margin-left: 5px;
-    border-left: #196aa7 5px solid;
+    border-left: #29c79a 5px solid;
     padding-left: 5px;
 }
 
@@ -145,6 +145,7 @@ hr {
 dl {
     margin-left: 5px;
     border-left: orange 5px solid;
+    border-top: orange 2px solid;
     padding-left: 5px;
 }
 
