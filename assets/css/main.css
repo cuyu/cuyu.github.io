@@ -15,8 +15,8 @@ div[class="container"] {
     margin: auto;
     width: 70%;
     background-color: white;
-    padding-left: 12px;
-    padding-right: 12px;
+    padding-left: 1em;
+    padding-right: 1em;
     box-shadow: 0 0 .5em 0 #737660;
 }
 
@@ -55,12 +55,14 @@ h1 {
     font-size: 2.6em;
     margin-top: 0.7em;
     margin-bottom: 0.7em;
+    border-bottom: darkgray 3px double;
 }
 
 h2 {
     font-size: 2.25em;
     margin-top: 0.55em;
     margin-bottom: 0.55em;
+    border-bottom: gainsboro 1px solid;
 }
 
 h3 {

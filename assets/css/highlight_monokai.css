@@ -69,6 +69,7 @@ div[class^="language-"], div[class*="highlighter-rouge"] {
 	background: #333;
     margin: 0.5em;
     margin-left: 0;
+    margin-right: 0;
     padding: 0.8em;
     border-radius: 6px;
 }
