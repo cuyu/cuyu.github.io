@@ -1,30 +1,33 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>{{ page.title }}</title>
-		<!-- link to main stylesheet -->
-		<link rel="stylesheet" type="text/css" href="/assets/css/main.css">
-    	<link rel="stylesheet" type="text/css" href="/assets/css/highlight_monokai.css">
-	</head>
-	<body>
-		<nav>
-    		<ul>
-        		<li><a href="/">Home</a></li>
-	        	<li><a href="/about">About</a></li>
-        		<li><a href="/cv">CV</a></li>
-        		<li><a href="/blog">Blog</a></li>
-    		</ul>
-		</nav>
-		<div class="container">
+<head>
+    <title>{{ page.title }}</title>
+    <!-- link to main stylesheet -->
+    <link rel="stylesheet" type="text/css" href="/assets/css/main.css">
+    <link rel="stylesheet" type="text/css" href="/assets/css/highlight_monokai.css">
+</head>
 
+<body>
+<nav>
+    <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/about">About</a></li>
+        <li><a href="/cv">CV</a></li>
+        <li><a href="/blog">Blog</a></li>
+    </ul>
+</nav>
+
+<div class="container">
     {{ content }}
+</div><!-- /.container -->
 
-    </div><!-- /.container -->
-		<footer>
-    		<ul>
-        		<li><a href="mailto:icyarm@icloud.com">email</a></li>
-        		<li><a href="https://github.com/cuyu">github.com/cuyu</a></li>
-			</ul>
-		</footer>
-	</body>
+<footer>
+    <ul>
+        <li><a href="mailto:icyarm@icloud.com">email</a></li>
+        <li><a href="https://github.com/cuyu">github.com/cuyu</a></li>
+    </ul>
+</footer>
+
+</body>
+
 </html>
