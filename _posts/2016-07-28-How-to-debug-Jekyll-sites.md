@@ -1,9 +1,9 @@
 ---
 layout: post
 title: "How to debug Jekyll sites"
-date: 2016-07-28
 category: Web
 tags: [坑, 心得, Jekyll]
+date: 2016-07-28
 ---
 
 ## One Problem

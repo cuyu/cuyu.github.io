@@ -1,6 +1,8 @@
 ---
 layout: post
 title: "使用Jekyll搭建github个人网页实践"
+category: Web
+tags: [Jekyll]
 date: 2016-07-25
 ---
 
