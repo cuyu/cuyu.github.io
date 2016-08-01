@@ -10,7 +10,22 @@ date: 2016-07-28
 
 最近研究Jekyll遇到了不少坑，这里先讲其中的一个。
 
+问题是这样的：我安装了`jekyll-paginate`插件，想要分页显示我的blog，然后在主页的index.html里面写了如下代码：
 
+{% raw %}
+
+```html
+{% for post in paginator.posts %}
+	<article class="post">
+        <h1><a href="{{ post.url }}">{{ post.title }}</a></h1>
+		<div class="post-content">{{ post.content }}</div>
+	</article>
+{% endfor %}
+```
+
+{% endraw %}
+
+此时，启动server是可以正确在主页面看到分页的blog的。然后我希望这个blog部分移到*/blog/*页面下，所以就新建了blog文件夹和其中的index.html，并把上面的代码贴到新建的这个index.html里面。然而，打开*/blog/*页面，什么blog内容都没有，更别说分页了。
 
 ## Debug Jekyll like a boss
 
@@ -100,7 +115,7 @@ title: Blog
 
 {% endraw %}
 
-然后在命令行中执行`Jekyll serve`，你应该会看到如下的状态：
+然后在命令行中执行`Jekyll build`，你应该会看到如下的状态：
 
 {% raw %}
 
@@ -161,6 +176,18 @@ From: /usr/local/lib/ruby/gems/2.3.0/gems/octopress-debugger-1.0.2/lib/octopress
 
 可以看到和之前那个插件得到的结果是一样的。
 
-### 小结
+## Solve The Problem
 
-liquid这种html模板语言也是可以debug的嘛。然后两种debug的方法达到的效果基本是一样的，当然后者在交互上更友善，功能也更加强大一些，但开发可能还不够完善。
+回到开头的那个问题，使用新get到的技能在*/blog/index.html*中添加*{{ "{% paginator | debug " }}%}*，发现paginator变量为空，而在住页面的index.html中debug发现其不为空，也就是说paginator的作用域仅限于主页面！
+
+重新审视了paginator这个变量，发现要在其他页面使用的话是需要在`_config.yml`里面显式指定的（注意下面的‘num’不要替换成具体的数字，只是路径格式而已）：
+
+```yaml
+# How many articles do you wish to appear on the front page
+paginate: 2
+paginate_path: "/blog/page:num"
+```
+
+## 小结
+
+liquid这种html模板语言也是可以debug的嘛。然后两种debug的方法达到的效果基本是一样的，当然后者在交互上更友善，功能也更加强大一些，但开发可能还不够完善，有些细节做得不好。

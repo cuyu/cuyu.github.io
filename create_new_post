@@ -1,0 +1,40 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+import argparse
+import os
+import datetime
+from subprocess import call
+
+THIS_FILE_DIR = os.path.split(os.path.abspath(__file__))[0]
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter,
+                                     description='A simple tool to create new post file.\n' +
+                                                 'Use example: ./create_new_post "post_title" category tag1,tag2\n')
+    parser.add_argument('post_title', help='Title of the post blog')
+    parser.add_argument('category', help='The category of the blog')
+    parser.add_argument('tags', help='The tag list of the blog, split by comma')
+
+    args = parser.parse_args()
+
+    post_name = args.post_title
+    post_words = post_name.split(' ')
+    post_tags = '[' + ', '.join(args.tags.split(',')) + ']'
+    today = datetime.date.today()
+    file_name = str(today)
+    for word in post_words:
+        file_name += '-' + word
+    file_name += '.md'
+    content = """---
+layout: post
+title: "{title}"
+category: {category}
+tags: {tags}
+date: {date}
+---""".format(title=post_name, date=str(today), category=args.category, tags=post_tags)
+
+    post_path = os.path.join(THIS_FILE_DIR, '_posts', '{0}'.format(file_name))
+    with open(post_path, 'w') as f:
+        f.write(content)
+    print "\"{0}\" has been created under _posts folder.".format(file_name)
+    call(['open', post_path])
