@@ -178,7 +178,7 @@ From: /usr/local/lib/ruby/gems/2.3.0/gems/octopress-debugger-1.0.2/lib/octopress
 
 ## Solve The Problem
 
-回到开头的那个问题，使用新get到的技能在*/blog/index.html*中添加*{{ "{% paginator | debug " }}%}*，发现paginator变量为空，而在住页面的index.html中debug发现其不为空，也就是说paginator的作用域仅限于主页面！
+回到开头的那个问题，使用新get到的技能在*/blog/index.html*中进行debug，发现paginator变量为空，而在住页面的index.html中debug发现其不为空，也就是说paginator的作用域仅限于主页面！
 
 重新审视了paginator这个变量，发现要在其他页面使用的话是需要在`_config.yml`里面显式指定的（注意下面的‘num’不要替换成具体的数字，只是路径格式而已）：
 
