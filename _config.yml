@@ -13,7 +13,7 @@ markdown: kramdown
 
 highlighter: rouge
 
-permalink: /:year/:month/:day/:title
+permalink: /:categories/:year/:month/:day/:title
 # How many articles do you wish to appear on the front page
 paginate: 2
 paginate_path: "/blog/page:num"

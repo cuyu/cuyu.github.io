@@ -1,0 +1,64 @@
+---
+layout: default
+title: Category
+---
+
+
+{% assign rawcategories = "" %}
+{% for post in site.posts %}
+	{% assign rawcategories = rawcategories | append:'|' | append:post.category %}
+{% endfor %}
+
+{% assign rawcategories = rawcategories | split:'|' | sort %}
+
+{% comment %}
+=======================
+The following part removes dulpicated category and invalid category like blank category.
+=======================
+{% endcomment %}
+{% assign categories = "" %}
+{% for c in rawcategories %}
+	{% if c != "" %}
+		{% if categories == "" %}
+			{% assign categories = c | split:'|' %}
+		{% endif %}
+		{% unless categories contains c %}
+			{% assign categories = categories | join:'|' | append:'|' | append:c | split:'|' %}
+		{% endunless %}
+	{% endif %}
+{% endfor %}
+
+
+{% comment %}
+=======================
+Will list all the categories here.
+=======================
+{% endcomment %}
+<h2>Categories</h2>
+{% for c in categories %}
+	<a href="/blog/categories/#{{ c | slugify }}" class="post-category"> {{ c }} </a>
+{% endfor %}
+<hr>
+
+{% comment %}
+=======================
+The purpose of this snippet is to list all your posts posted with a certain tag.
+=======================
+{% endcomment %}
+{% for c in categories %}
+	<h3 id="{{ c | slugify }}">{{ c }}</h3>
+	<ul>
+	 {% for post in site.posts %}
+		 {% if post.category == c %}
+             <li>
+             <h3>
+             <a href="{{ post.url }}">
+             {{ post.title }}
+             <small>{{ post.date | date_to_string }}</small>
+             </a>
+             </h3>
+             </li>
+		 {% endif %}
+	 {% endfor %}
+	</ul>
+{% endfor %}

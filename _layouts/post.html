@@ -5,11 +5,15 @@ layout: default
 <article class="post">
 
 	<h1 class="post-title"><a href="{{ page.url }}">{{ page.title }}</a></h1>
+	<span class="post-date">{{ page.date | date: "%d %b %Y" }}</span>
+	<span class="sep">|</span>
+	{% if page.category %}
+		<a href="/blog/categories/#{{ page.category | slugify }}" class="post-category"> {{ page.category }} </a>
+	{% endif %}
+	<span class="sep">|</span>
 	{% for tag in page.tags %}
 		<a href="/blog/tags/#{{ tag | slugify }}" class="post-tag"> {{ tag }} </a>
 	{% endfor %}
 	<div class="post-content">{{ content }}</div>
-
-	<p class="meta">Posted on <span class="postdate">{{ page.date | date: "%b %d, %Y" }}</span></p>
 
 </article>

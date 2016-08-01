@@ -166,6 +166,35 @@ dl > dd {
     font-weight: 100;
 }
 
+/* For article date */
+span[class="post-date"] {
+    color: #5766a7;
+    font-size: 80%;
+}
+
+span[class="sep"] {
+    font-size: 80%;
+    color: #707070;
+}
+
+/* For article category */
+a[class="post-category"]:before {
+    content: "\f02d";
+    font-family: FontAwesome;
+    padding-left: .3em;
+    padding-right: .3em;
+}
+
+a[class="post-category"] {
+    display: inline-block;
+    font-size: 80%;
+    border-radius: 4px;
+    background-color: #d2bca9;
+    color: #934034;
+    border: #936b64 solid 1px;
+    padding-right: .3em;
+}
+
 /* For article tags */
 a[class="post-tag"]:before {
     content: "\f02b";
