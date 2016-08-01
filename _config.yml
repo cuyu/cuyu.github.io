@@ -13,7 +13,12 @@ markdown: kramdown
 
 highlighter: rouge
 
+# The excerpt will end when hit this tag
+excerpt_separator: <!--break-->
+
+# The link format of each post
 permalink: /:categories/:year/:month/:day/:title
+
 # How many articles do you wish to appear on the front page
 paginate: 2
 paginate_path: "/blog/page:num"

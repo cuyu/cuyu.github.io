@@ -220,3 +220,10 @@ small {
     color: #a68f96;
     font-weight: normal;
 }
+
+/* For Read more link */
+a[class="read-more"] {
+    margin: auto;
+    display: inline-block;
+    text-align:center;
+}

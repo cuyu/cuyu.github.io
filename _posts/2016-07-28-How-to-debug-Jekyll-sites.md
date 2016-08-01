@@ -26,6 +26,7 @@ date: 2016-07-28
 {% endraw %}
 
 此时，启动server是可以正确在主页面看到分页的blog的。然后我希望这个blog部分移到*/blog/*页面下，所以就新建了blog文件夹和其中的index.html，并把上面的代码贴到新建的这个index.html里面。然而，打开*/blog/*页面，什么blog内容都没有，更别说分页了。
+<!--break-->
 
 ## Debug Jekyll like a boss
 
