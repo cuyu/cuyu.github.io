@@ -104,13 +104,26 @@ ul.posts > li {
 
 /* For post title */
 h1[class="post-title"] {
-    margin: 0;
+    margin: 0 0 4px 0;
     border-bottom: None;
-}
-
-h1[class="post-title"] > a {
     color: #103355;
     font-family: 'Bree Serif', serif, "Avenir Next", Helvetica, arial, "Microsoft YaHei", 宋体, sans-serif;
+}
+
+h1[class="post-title"]:before {
+    content: "\f10d";
+    font-family: FontAwesome;
+    padding-right: .3em;
+    color: #1e0010;
+    font-size: 90%;
+}
+
+h1[class="post-title"]:after {
+    content: "\f10e";
+    font-family: FontAwesome;
+    padding-left: .3em;
+    color: #1e0010;
+    font-size: 90%;
 }
 
 /* For 脚注 */
@@ -222,8 +235,21 @@ small {
 }
 
 /* For Read more link */
-a[class="read-more"] {
-    margin: auto;
-    display: inline-block;
-    text-align:center;
+div[class="post-more"] {
+    display: block;
+    margin: 0 auto 10px auto;
+    text-align: center;
+}
+
+div[class="post-more"] > a:before {
+    content: "\f055";
+    font-family: FontAwesome;
+    font-size: 90%;
+    margin-right: 4px;
+}
+
+/* For page below navigation */
+div[class="postnavigation"] {
+    margin: 0 auto;
+    text-align: center;
 }

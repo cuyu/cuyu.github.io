@@ -7,12 +7,13 @@ title: Blog
 {% for post in paginator.posts %}
 
 	<article class="post">
-
-        <h1>{{ post.title }}</h1>
+        <h1 class="post-title">{{ post.title }}</h1>
 
 		{% if post.content contains site.excerpt_separator %}
 			<div class="post-content">{{ post.excerpt }}</div>
-		  	<a href="{{ post.url }}" class="read-more">Read more</a>
+			<div class="post-more">
+				<a href="{{ post.url }}">Read more</a>
+			</div>
 		{% else %}
 			<div class="post-content">{{ post.content }}</div>
 		{% endif %}
@@ -28,20 +29,20 @@ title: Blog
 
 		{% if paginator.previous_page %}
 			{% if paginator.page == 2 %}
-				<a class="prev left" href="/">&larr; Newer</a>
+				<a class="prev left" href="/blog/">&larr; Newer</a>
 			{% else %}
 				<a class="prev left" href="/blog/page{{paginator.previous_page}}/">&larr; Newer</a>
 			{% endif %}
 		{% else %}
-			<span class="nope left">&larr; Newer</span>
+			<span class="nope left">First</span>
 		{% endif %}
-
+		<span class="sep">|</span>
 		<span class="pages">Page {{ paginator.page }} of {{ paginator.total_pages }}</span>
-
+		<span class="sep">|</span>
 		{% if paginator.next_page %}
 			<a class="next right" href="/blog/page{{paginator.next_page}}/">Older &rarr;</a>
 		{% else %}
-			<span class="nope right">Older &rarr;</span>
+			<span class="nope right">Last</span>
 		{% endif %}
 
 	</div>
