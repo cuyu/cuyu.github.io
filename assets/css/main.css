@@ -253,3 +253,10 @@ div[class="postnavigation"] {
     margin: 0 auto;
     text-align: center;
 }
+
+/* For site visit stats info */
+div[class="site-stats"] {
+    font-size: 80%;
+    text-align: right;
+    color: gray;
+}
