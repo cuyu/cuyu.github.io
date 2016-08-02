@@ -1,27 +1,25 @@
 ---
 layout: default
-title: In a better world
+title: Gaming, Sleeping, Coding
 ---
 
 {% for post in paginator.posts %}
 
 	<article class="post">
+        <h1 class="post-title">{{ post.title }}</h1>
 
-		{% if post.external-url %}
-			<h1>
-				<a href="{{ post.external-url }}">{{ post.title }}</a>
-				<a class="anchor" href="{{ post.url }}"><i class="icon-anchor"></i></a>
-			</h1>
+		{% if post.content contains site.excerpt_separator %}
+			<div class="post-content">{{ post.excerpt }}</div>
+			<div class="post-more">
+				<a href="{{ post.url }}">Read more</a>
+			</div>
 		{% else %}
-			<h1><a href="{{ post.url }}">{{ post.title }}</a></h1>
+			<div class="post-content">{{ post.content }}</div>
 		{% endif %}
-
-		<div class="post-content">{{ post.content }}</div>
 
 	</article>
 
 {% endfor %}
-
 
 
 {% if paginator.total_pages > 1 %}
@@ -34,16 +32,20 @@ title: In a better world
 				<a class="prev left" href="/page{{paginator.previous_page}}/">&larr; Newer</a>
 			{% endif %}
 		{% else %}
-			<span class="nope left">&larr; Newer</span>
+			<span class="nope left">First</span>
 		{% endif %}
-
+		<span class="sep">|</span>
 		<span class="pages">Page {{ paginator.page }} of {{ paginator.total_pages }}</span>
-
+		<span class="sep">|</span>
 		{% if paginator.next_page %}
 			<a class="next right" href="/page{{paginator.next_page}}/">Older &rarr;</a>
 		{% else %}
-			<span class="nope right">Older &rarr;</span>
+			<span class="nope right">Last</span>
 		{% endif %}
 
 	</div>
 {% endif %}
+
+<div class="site-stats">
+	Site Visit: <span id="busuanzi_value_site_uv"><i class="fa fa-spinner fa-spin"></i></span> times
+</div>

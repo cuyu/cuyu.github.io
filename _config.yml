@@ -21,6 +21,6 @@ permalink: /:categories/:year/:month/:day/:title
 
 # How many articles do you wish to appear on the front page
 paginate: 2
-paginate_path: "/blog/page:num"
+paginate_path: "/page:num"
 
 exclude: ['README.md', 'Gemfile.lock', 'Gemfile', 'Rakefile']

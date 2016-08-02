@@ -1,6 +1,7 @@
 ---
 layout: default
-title: Category
+title: Categories
+permalink: /categories/
 ---
 
 
@@ -36,7 +37,7 @@ Will list all the categories here.
 {% endcomment %}
 <h2>Categories</h2>
 {% for c in categories %}
-	<a href="/blog/categories/#{{ c | slugify }}" class="post-category"> {{ c }} </a>
+	<a href="/categories/#{{ c | slugify }}" class="post-category"> {{ c }} </a>
 {% endfor %}
 <hr>
 
@@ -45,20 +46,16 @@ Will list all the categories here.
 The purpose of this snippet is to list all your posts posted with a certain tag.
 =======================
 {% endcomment %}
+<ul class="tags-box">
 {% for c in categories %}
-	<h3 id="{{ c | slugify }}">{{ c }}</h3>
-	<ul>
+	<li id="{{ c | slugify }}">{{ c }}</li>
 	 {% for post in site.posts %}
 		 {% if post.category == c %}
-             <li>
-             <h3>
              <a href="{{ post.url }}">
              {{ post.title }}
              <small>{{ post.date | date_to_string }}</small>
-             </a>
-             </h3>
-             </li>
+             </a><br>
 		 {% endif %}
 	 {% endfor %}
-	</ul>
 {% endfor %}
+</ul>

@@ -179,6 +179,11 @@ dl > dd {
     font-weight: 100;
 }
 
+/* For article content part */
+article[class="post"] {
+    margin-bottom: 2.5em;
+}
+
 /* For article date */
 span[class="post-date"] {
     color: #5766a7;
@@ -237,7 +242,7 @@ small {
 /* For Read more link */
 div[class="post-more"] {
     display: block;
-    margin: 0 auto 10px auto;
+    margin: 0 auto;
     text-align: center;
 }
 
