@@ -6,7 +6,7 @@ author:
   name: Curtis Yu
   description: Live for <strong>Gaming Sleeping Coding and Fun</strong>.
   contact:
-    email: icyarm@icloud.com
+    email: mailto:icyarm@icloud.com
     github: https://github.com/cuyu
 
 gems: [jekyll-paginate, rouge]
