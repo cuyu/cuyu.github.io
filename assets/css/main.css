@@ -1,28 +1,33 @@
+html {
+    font-size: 20px;
+}
+
 body {
     font-family: "Avenir Next", Helvetica, arial, "Microsoft YaHei", 宋体, sans-serif;
-    font-size: 20px;
+    font-size: 1rem;
+    color: #333;
     margin: 0;
     background-image: url("/assets/images/main_background.jpg");
     background-repeat: round;
 }
 
 nav {
-    font-size: 1.2em;
+    font-size: 1.2rem;
     /*background-image: linear-gradient(to bottom right, #5766a7, white);*/
 }
 
 div[class="container"] {
     margin: auto;
-    width: 70%;
+    width: 65%;
     background-color: white;
-    padding-left: 1em;
-    padding-right: 1em;
-    box-shadow: 0 0 .5em 0 #737660;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    box-shadow: 0 0 .5rem 0 #737660;
 }
 
 nav > ul, footer > ul {
     margin: auto;
-    width: 70%;
+    width: 65%;
     padding: 20px;
     list-style: none;
     font-weight: bold;
@@ -47,51 +52,50 @@ a:hover {
 }
 
 h1 {
-    font-size: 2.05em;
-    margin-top: 0.6em;
-    margin-bottom: 0.6em;
+    font-size: 2.05rem;
+    margin-top: 0.6rem;
+    margin-bottom: 0.6rem;
     border-bottom: darkgray 3px double;
 }
 
 h2 {
-    font-size: 1.7em;
-    margin-top: 0.5em;
-    margin-bottom: 0.5em;
+    font-size: 1.7rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
     border-bottom: gainsboro 1px solid;
 }
 
 h3 {
-    font-size: 1.55em;
-    margin-top: 0.3em;
-    margin-bottom: 0.3em;
+    font-size: 1.55rem;
+    margin-top: 0.3rem;
+    margin-bottom: 0.3rem;
 }
 
 h4 {
-    font-size: 1.4em;
-    margin-top: 0.25em;
-    margin-bottom: 0.25em;
+    font-size: 1.4rem;
+    margin-top: 0.25rem;
+    margin-bottom: 0.25rem;
 }
 
 h5 {
-    font-size: 1.3em;
-    margin-top: 0.2em;
-    margin-bottom: 0.2em;
+    font-size: 1.3rem;
+    margin-top: 0.2rem;
+    margin-bottom: 0.2rem;
 }
 
 h6 {
-    font-size: 1.15em;
-    margin-top: 0.15em;
-    margin-bottom: 0.15em;
+    font-size: 1.15rem;
+    margin-top: 0.15rem;
+    margin-bottom: 0.15rem;
 }
 
 p {
-    line-height: 1.8em;
-    color: #333;
+    line-height: 1.8rem;
 }
 
 footer {
     border-top: 1px solid #d5d5d5;
-    font-size: .8em;
+    font-size: .8rem;
 }
 
 ul.posts {
@@ -113,7 +117,7 @@ h1[class="post-title"] {
 h1[class="post-title"]:before {
     content: "\f10d";
     font-family: FontAwesome;
-    padding-right: .3em;
+    padding-right: .3rem;
     color: #1e0010;
     font-size: 90%;
 }
@@ -121,14 +125,14 @@ h1[class="post-title"]:before {
 h1[class="post-title"]:after {
     content: "\f10e";
     font-family: FontAwesome;
-    padding-left: .3em;
+    padding-left: .3rem;
     color: #1e0010;
     font-size: 90%;
 }
 
 /* For 脚注 */
 div[class="footnotes"] {
-    font-size: .8em;
+    font-size: .8rem;
 }
 
 /* For blockquote */
@@ -136,6 +140,7 @@ blockquote {
     margin-left: 5px;
     border-left: #29c79a 5px solid;
     padding-left: 5px;
+    color: darkolivegreen;
 }
 
 /* For table */
@@ -154,7 +159,7 @@ table > tbody > tr > td {
 }
 
 table > tfoot {
-    font-size: .6em;
+    font-size: .6rem;
 }
 
 /* For horizon line, i.e. '---' in markdown */
@@ -181,7 +186,7 @@ dl > dd {
 
 /* For article content part */
 article[class="post"] {
-    margin-bottom: 2.5em;
+    margin-bottom: 2.5rem;
 }
 
 /* For article date */
@@ -199,8 +204,8 @@ span[class="sep"] {
 a[class="post-category"]:before {
     content: "\f02d";
     font-family: FontAwesome;
-    padding-left: .3em;
-    padding-right: .3em;
+    padding-left: .3rem;
+    padding-right: .3rem;
 }
 
 a[class="post-category"] {
@@ -210,15 +215,15 @@ a[class="post-category"] {
     background-color: #d2bca9;
     color: #934034;
     border: #936b64 solid 1px;
-    padding-right: .3em;
+    padding-right: .3rem;
 }
 
 /* For article tags */
 a[class="post-tag"]:before {
     content: "\f02b";
     font-family: FontAwesome;
-    padding-left: .3em;
-    padding-right: .3em;
+    padding-left: .3rem;
+    padding-right: .3rem;
 }
 
 a[class="post-tag"] {
@@ -229,12 +234,12 @@ a[class="post-tag"] {
     color: #432687;
     border: #6b5587 solid 1px;
     margin-right: 8px;
-    padding-right: .3em;
+    padding-right: .3rem;
 }
 
 /* For <small> tag */
 small {
-    font-size: .65em;
+    font-size: .65rem;
     color: #a68f96;
     font-weight: normal;
 }
