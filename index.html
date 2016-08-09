@@ -7,8 +7,9 @@ title: Gaming, Sleeping, Coding
 
 	<article class="post">
         <h1 class="post-title">{{ post.title }}</h1>
-		<span class="paginator-date">{{ post.date | date: "%B %d, %Y" }}</span> |
-		<a href="{{ post.url }}#disqus_thread" data-disqus-identifier="{{ post.id }}" class="paginator-comment">Comment</a>
+		<span class="post-date">{{ post.date | date: "%B %d, %Y" }}</span>
+		<span class="sep">|</span>
+		<a href="{{ post.url }}#disqus_thread" data-disqus-identifier="{{ post.id }}" class="post-comment">Comment</a>
 		{% if post.content contains site.excerpt_separator %}
 			<div class="post-content">{{ post.excerpt }}</div>
 			<div class="post-more">

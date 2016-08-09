@@ -194,12 +194,6 @@ article[class="post"] {
     margin-bottom: 2.5rem;
 }
 
-/* For article date */
-span[class="post-date"] {
-    color: #5766a7;
-    font-size: 80%;
-}
-
 span[class="sep"] {
     font-size: 80%;
     color: #707070;
@@ -277,24 +271,24 @@ div[class="site-stats"] {
 }
 
 /* For date and comments display on main index */
-a[class="paginator-comment"] {
+a[class="post-comment"] {
     font-size: .8rem;
     color: #47a526;
 }
 
-a[class="paginator-comment"]:before {
+a[class="post-comment"]:before {
     content: "\f086";
     font-family: FontAwesome;
     font-size: .8rem;
     margin-right: 4px;
 }
 
-span[class="paginator-date"] {
+span[class="post-date"] {
     font-size: .8rem;
     color: #707070;
 }
 
-span[class="paginator-date"]:before {
+span[class="post-date"]:before {
     content: "\f073";
     font-family: FontAwesome;
     font-size: .8rem;
