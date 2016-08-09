@@ -8,9 +8,10 @@ permalink: /about/
 
 This site is developed based on `Jekyll 3`. Here are some plugins and third-party services I used:
 
-- `rouge` — a Jekyll plugin to display code blocks with colours
-- `jekyll-paginate` — a Jekyll plugin to display articles with multiple pages conveniently
-- [不蒜子](http://ibruce.info/2015/04/04/busuanzi/) — a third-party service to record the site and article visit statistics
+- `rouge` — A Jekyll plugin to display code blocks with colours
+- `jekyll-paginate` — A Jekyll plugin to display articles with multiple pages conveniently
+- [不蒜子](http://ibruce.info/2015/04/04/busuanzi/) — A third-party service to record the site and article visit statistics
+- [Disqus](https://disqus.com/) — A third-party service to provide comment function
 
 ### About this blog
 

@@ -275,3 +275,28 @@ div[class="site-stats"] {
     text-align: right;
     color: gray;
 }
+
+/* For date and comments display on main index */
+a[class="paginator-comment"] {
+    font-size: .8rem;
+    color: #47a526;
+}
+
+a[class="paginator-comment"]:before {
+    content: "\f086";
+    font-family: FontAwesome;
+    font-size: .8rem;
+    margin-right: 4px;
+}
+
+span[class="paginator-date"] {
+    font-size: .8rem;
+    color: #707070;
+}
+
+span[class="paginator-date"]:before {
+    content: "\f073";
+    font-family: FontAwesome;
+    font-size: .8rem;
+    margin-right: 4px;
+}
