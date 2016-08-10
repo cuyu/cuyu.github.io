@@ -12,3 +12,5 @@ This is my personal blog.
 - Add about page
 - Complete sidebar
 - More cool animation
+- A playground page to display some front-end cool staff
+- A side bar to display footnotes
