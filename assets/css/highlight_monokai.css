@@ -87,11 +87,13 @@ div > pre[class="highlight"] > code {
 
 /* For small code block, i.e. `content` in markdown */
 code[class="highlighter-rouge"] {
-    background: #f4f5ff;
-    border: #c0c1ee 1px solid;
-    border-radius: 4px;
+    background: rgba(0,148,191,0.1);
+    /*border: #c0c1ee 1px solid;*/
+    border-radius: 5px;
+    color: #0094bf;
     padding: 2px;
-    font-family: "Avenir Next", Helvetica, arial, "Microsoft YaHei", 宋体, sans-serif;
+    font-family: Menlo, arial, "Microsoft YaHei", 宋体, sans-serif;
+    font-size: 85%;
 }
 
 pre > code{
