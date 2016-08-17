@@ -192,7 +192,7 @@ dl > dd {
 
 /* For article content part */
 article[class="post"] {
-    margin-bottom: 2.5rem;
+    margin-bottom: 3rem;
 }
 
 span[class="sep"] {
@@ -312,4 +312,67 @@ span[class="post-date"]:before {
     font-family: FontAwesome;
     font-size: .8rem;
     margin-right: 4px;
+}
+
+/* For nav article links in the bottom */
+div[class="bottom-nav"] {
+    font-size: 1rem;
+}
+div[class="bottom-nav"] > a {
+    display: table;
+    height: 2rem;
+    margin: 0 0 4px 10px;
+    border-bottom: None;
+    color: #103355;
+    font-family: 'Bree Serif', serif, "Avenir Next", Helvetica, arial, "Microsoft YaHei", 宋体, sans-serif;
+    transition: .3s;
+}
+
+div[class="bottom-nav"] > a > span[class="bottom-nav-title"] {
+    display:table-cell;
+    vertical-align:middle;
+}
+
+div[class="bottom-nav"] > a > span[class="bottom-nav-title"]:before {
+    content: "\f10d";
+    font-family: FontAwesome;
+    padding-right: .3rem;
+    color: #1e0010;
+    font-size: 90%;
+}
+
+div[class="bottom-nav"] > a > span[class="bottom-nav-title"]:after {
+    content: "\f10e";
+    font-family: FontAwesome;
+    padding-left: .3rem;
+    color: #1e0010;
+    font-size: 90%;
+}
+
+span[id="previous-logo"] {
+    margin-right: 5px;
+    color: #103355;
+    font-size: 1.7rem;
+    transition: .3s;
+}
+
+span[id="next-logo"] {
+    margin-right: 5px;
+    color: #103355;
+    font-size: 1.7rem;
+    transition: .3s;
+}
+
+div[class="bottom-nav"] > a:hover {
+    color: #a5a149;
+    -webkit-transform: translateX(1rem) translateY(0.2rem);
+    transform: translateX(1rem) translateY(0.2rem);
+}
+
+div[class="bottom-nav"] > a:hover > span[id="previous-logo"] {
+    color: #3e885e;
+}
+
+div[class="bottom-nav"] > a:hover > span[id="next-logo"] {
+    color: #3e885e;
 }

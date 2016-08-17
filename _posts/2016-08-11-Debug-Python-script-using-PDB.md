@@ -219,14 +219,14 @@ ipdb>
 
 PDB不够强大的一点就在于它没法debug multiprocess的代码，强行debug也是报错，原因是其他进程的stdin/out/err等文件对主进程而言是关闭的，pdb无法调用。而Pycharm之所以可以debug multiprocess的代码是因为它使用了Remote Debugging的技术，通过远程通信来进行debug（所以debug一个multiprocess的程序和debug一个远程机器上的代码技术实现上是一样的）。
 
-如果还是想使用PDB来debug multiprocess的话，可以参考[最简单方法远程调试Python多进程子程序](http://blog.ptsang.net/debugging_python_multiprocessing)和[PDB远程调试Python多进程子程序](http://blog.ptsang.net/rm_pdb_module_for_debugging_multiprocessing)这两篇文章。
+如果还是想使用PDB来debug multiprocess的话，可以参考[最简单方法远程调试Python多进程子程序](http://blog.ptsang.net/debugging_python_multiprocessing)和[PDB远程调试Python多进程子程序](http://blog.ptsang.net/rm_pdb_module_for_debugging_multiprocessing)这两篇文章。简单的说，就是通过管道或socket来传递debug的信息，从而使得PDB跨进程也可以使用（感觉近似于自己实现了类似Remote Debugging的功能）。
 
 如果觉得这样做比较麻烦的话，就要移步使用别的带有Remote Debugging功能的库了。
 
 ## 小结
 
-如果需要在远程服务器上debug Python代码，请使用PDB。
+如果想要快速地在远程服务器上debug Python代码，请使用PDB。
 
 如果想舒服地使用PDB，请使用IPython。
 
-如果想debug multiprocess的代码，可能使用其他debugger是更好的选择。
+如果想debug multiprocess的代码，需要更复杂的设置（但debug起来并不复杂）或是使用其他已经实现了Remote Debugging的工具。

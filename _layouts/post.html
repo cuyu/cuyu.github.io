@@ -18,6 +18,17 @@ layout: default
 
 </article>
 
+<div class="bottom-nav">
+    {% if page.previous %}
+        <a href="{{ page.previous.url }}"><span class="fa fa-step-backward" id="previous-logo"></span><span
+            class="bottom-nav-title">{{ page.previous.title }}</span></a>
+    {% endif %}
+    {% if page.next %}
+        <a href="{{ page.next.url }}"><span class="fa fa-step-forward" id="next-logo"></span><span
+                class="bottom-nav-title">{{ page.next.title }}</span></a>
+    {% endif %}
+</div>
+
 <div class="site-stats">
     Article Viewed: <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span> times
 </div>
