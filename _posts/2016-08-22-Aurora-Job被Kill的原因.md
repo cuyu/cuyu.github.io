@@ -17,4 +17,4 @@ date: 2016-08-22
 > - `KILL_EXISTING`: The default policy - on a collision the old instances are killed and a instances with the current configuration are started.
 > - `CANCEL_NEW`: On a collision the new run is cancelled.
 
-解决方案是取消所有的同名job，然后重新schedule此job。（注意使用`aurora cron deschedule xxx`会把正在run的job从cron类型变成adhoc类型的job，并不会终止它）
+解决方案是取消所有的同名job，然后重新schedule此job。（注意使用`aurora cron deschedule xxx`会把正在run的job从cron类型变成adhoc类型的job，并不会终止它，还需要使用`aurora job killall xxx`来把active的job终止掉。）
