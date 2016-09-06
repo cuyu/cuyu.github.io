@@ -2,7 +2,7 @@
 layout: post
 title: "Terminate multi process/thread in Python correctly and gracefully"
 category: Python
-tags: [multiprocess, 坑]
+tags: [multiprocessing, 坑]
 date: 2016-08-15
 ---
 
