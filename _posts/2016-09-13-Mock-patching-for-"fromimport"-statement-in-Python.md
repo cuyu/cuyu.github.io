@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Mock patching for "from/import" statement in Python"
+title: "Mock patching for 'from/import' statement in Python"
 category: Python
 tags: [坑, mock]
 date: 2016-09-13
