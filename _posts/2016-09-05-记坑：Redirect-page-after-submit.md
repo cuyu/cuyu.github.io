@@ -11,20 +11,20 @@ date: 2016-09-05
 写了一个表单页面，想要用户点击完提价按钮后跳转到另外一个页面。这个按钮的js就是一个简单的ajax请求：
 
 ```javascript
-    $("#register").click(function (event) {
-      	event.preventDefault();
-        var request = $.ajax({
-            url: "/_backend/register",
-            type: 'POST',
-            contentType: "application/json",
-            dataType: "json",
-            data: JSON.stringify({
-                output_method: $("#output_method").val(),
-                send_speed: $("#send_speed").val(),
-                receive_email: $("#receive_email").val()
-            })
-        });
+$("#register").click(function (event) {
+    event.preventDefault();
+    var request = $.ajax({
+        url: "/_backend/register",
+        type: 'POST',
+        contentType: "application/json",
+        dataType: "json",
+        data: JSON.stringify({
+            output_method: $("#output_method").val(),
+            send_speed: $("#send_speed").val(),
+            receive_email: $("#receive_email").val()
+        })
     });
+});
 ```
 
 后端是Flask写的，大概是这样的：
@@ -72,6 +72,8 @@ request.done(function (data) {
 
 不使用js，而直接通过`<form>`的action属性来直接把表单送答到server端，从而使server端的返回值也可以直接到达浏览器端：
 
+{% raw %}
+
 ```html
 <form action="{{ url_for('about') }}" method="POST">
     <label for="outputMethod">Output Method</label>
@@ -90,9 +92,13 @@ request.done(function (data) {
 </form>
 ```
 
+{% endraw %}
+
 这个方法的好处就是不需要写js，但在必须要写js的场景下这个方法就没用了。
 
 值得注意的是，利用这个方法还可以对一些非表单按钮绑定POST操作，即把`<input>`改为`hidden`的并使其value在渲染html页面时就生成即可。比如：
+
+{% raw %}
 
 ```html
 <form action="{{ url_for('stop_task') }}" method="POST">
@@ -100,6 +106,8 @@ request.done(function (data) {
     <button type="submit" id="stop_the_task">Stop</button>
 </form>
 ```
+
+{% endraw %}
 
 上述使用了template来对task_id信息进行填充，使得每个button可以绑定不同的input值，从而也实现了某种意义上的"动态"提交表单的功能。
 
