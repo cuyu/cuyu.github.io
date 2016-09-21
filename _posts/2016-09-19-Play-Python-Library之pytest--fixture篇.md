@@ -45,9 +45,9 @@ def smtp(request):
 以上，可以看出一个fixture的几个特点：
 
 - 必须是一个有`pytest.fixture`的装饰器的函数；
-- 该函数必须return或yield一个返回值；
+- 该函数一般会return或yield一个返回值；
 - 该函数在yield/return语句之前的操作都可以看做是对要返回对象的tear up的过程，而在yield（这里return不行）语句之后的操作都可以看做是对返回对象的tear down的过程；
-- 该函数可以有一个输入参数，这个输入参数包含一些test case相关的信息。
+- 该函数可以有一个输入参数，这个输入参数包含一些test方法相关的信息。
 
 <!--break-->
 
