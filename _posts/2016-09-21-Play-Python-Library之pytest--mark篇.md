@@ -33,7 +33,7 @@ def test_three():
 
 通过使用`-m`参数可以让pytest选择性的执行部分test方法：
 
-```shell
+```
 ➜  python-demo git:(master) ✗ pytest demo_pytest/test_mark_0.py -m "not not_run"
 ==================================== test session starts ====================================
 platform darwin -- Python 2.7.11, pytest-3.0.2, py-1.4.31, pluggy-0.3.1
