@@ -89,8 +89,13 @@ PLUGIN registered: <_pytest.fixtures.FixtureManager instance at 0x10decbd88>
   ```
 
 
-
 <!--break-->
+
+### What is a hook
+
+要理解pytest hook，首先要知道什么是hook方法（钩子函数）。
+
+这里举一个简单的例子，比如说你写了一个框架类的程序，然后你希望这个框架可以“被代码注入”，即别人可以加入代码对你这个框架进行定制化，该如何做比较好？一种很常见的方式就是约定一个规则，框架初始化时会收集满足这个规则的所有代码（文件），然后把这些代码加入到框架中来，在执行时一并执行即可。所有这一规则下可以被框架收集到的方法就是hook方法。
 
 ### How pytest hook runs
 
@@ -173,7 +178,7 @@ for name in dir(plugin):
 return plugin_name
 ```
 
-执行时你会发现所有pytest的那些特殊hook方法都会通过`hook.has_spec()`验证，也就是说pytest事先定义好了一些hookspec（这些方法定义可以在`_pytest.hookspec.py`中看到），在注册hook方法如果名称符合定义的这些hookspec时，会“特别关照”这些方法（pytest对那些满足了筛选条件但hookspec中没有的方法，目前策略是会注册进来但不会去执行~~（上述`register`方法中在`hook._maybe_apply_history(hookimpl)`这句会执行这个hook方法）~~）。
+执行时你会发现所有pytest的那些特殊hook方法都会通过`hook.has_spec()`验证，也就是说pytest事先定义好了一些hookspec（这些方法定义可以在`_pytest.hookspec.py`中看到），在注册hook方法如果名称符合定义的这些hookspec时，会“特别关照”这些方法（pytest对那些满足了筛选条件但hookspec中没有的方法，目前策略是会注册进来然后抛出一个`PluginValidationError`异常）。
 
 还是以`pytest_addoption`为例，基本每个pytest plugin都会有这个hook方法，它的作用是为pytest命令行添加自定义的参数。那么pytest是怎样把所有的plugin需要添加的参数“杂糅”到一块的呢？它的实现是这样的：由于每个plugin的执行顺序有先后，想要让plugin B的addoption结果在plugin A的基础上进行，那么就需要把之前所有的plugin的addoption的结果存下来。上述`register`方法中的`self.hook`就存储了这些中间结果，每次执行一个新的plugin的`pytest_addoption`方法时，pytest会把之前执行改变过的`parser`传递进去进行“再造”。
 
@@ -230,7 +235,7 @@ def _wrapped_call(wrap_controller, func):
 
 pytest通过这种plugin的方式，大大增强了这个测试框架的实用性，可以看到pytest本身的许多组件也是通过plugin的方式加载的，可以说pytest就是由许许多多个plugin组成的。另外，通过定义好一些hook spec，可以有效地控制plugin的“权限”，再通过类似`pytest.hookimpl`这样的装饰器又可以增强了各种plugin的“权限”。这种design对于pytest这样复杂的框架而言无疑是非常重要的，这可能也是pytest相比于其他测试框架中越来越🔥的原因吧。
 
-### Example
+### Examples
 
 一个最容易也最实用的pytest plugin大概就是可以自定义pytest marker了吧（直接看[官方文档](http://doc.pytest.org/en/latest/example/markers.html#custom-marker-and-command-line-option-to-control-test-runs)好了）。
 
