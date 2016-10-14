@@ -106,6 +106,53 @@ del smtp
 
 以上两种fixture的写法效果是一样的（之所以存在两种方式大部分是兼容旧版本的缘故吧），官方文档更推荐使用yield来tear down的方式，因为更简洁。
 
+---
+
+为了验证以上猜想，直接上pytest源码：
+
+```python
+def call_fixture_func(fixturefunc, request, kwargs):
+    yieldctx = is_generator(fixturefunc)
+    if yieldctx:
+        it = fixturefunc(**kwargs)
+        res = next(it)
+
+        def teardown():
+            try:
+                next(it)
+            except StopIteration:
+                pass
+            else:
+                fail_fixturefunc(fixturefunc,
+                    "yield_fixture function has more than one 'yield'")
+
+        request.addfinalizer(teardown)
+    else:
+        res = fixturefunc(**kwargs)
+    return res
+```
+
+这个函数会在pytest fixture进行setup的时候执行，可以看到如果是用yield的方式进行tear down的，它会帮你写一个使用`request.addfinalizer`方式来tear down的函数，然后使用`request.addfinalizer`注册到tear down方法list中（tear down方法会在fixture超出scope时再被调用）。
+
+fixture进行tear down时的源码如下：
+
+```python
+def finish(self):
+    try:
+        while self._finalizer:
+            func = self._finalizer.pop()
+            func()
+    finally:
+        ihook = self._fixturemanager.session.ihook
+        ihook.pytest_fixture_post_finalizer(fixturedef=self)
+        # even if finalization fails, we invalidate
+        # the cached fixture value
+        if hasattr(self, "cached_result"):
+            del self.cached_result
+```
+
+其中`self._finalizer`就是之前添加tear down方法的那个list。
+
 ### Fixture's scope
 
 关于fixture的scope，它只关乎这个fixture的生命周期，而和作用域无关。fixture的作用域只和定义它的位置有关：定义在一个文件夹的`conftest.py`的fixture的作用域就是整个文件夹，定义在其他文件的fixture作用域就是单个文件。
