@@ -2,7 +2,7 @@
 layout: post
 title: "记坑：paramiko sftp hangs on multi-thread"
 category: Python
-tags: [坑]
+tags: [坑,paramiko]
 date: 2016-10-20
 ---
 

@@ -1,8 +1,8 @@
 ---
 layout: post
 title: "Play Python Library之pytest--xunit-style setup篇"
-category: pytest,Play Python Library
-tags: [Python]
+category: Python
+tags: [pytest,Play Python Library]
 date: 2016-10-14
 ---
 
