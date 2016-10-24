@@ -2,7 +2,7 @@
 layout: post
 title: "Remote debugging with Pycharm"
 category: Python
-tags: [心得]
+tags: [心得,Pycharm]
 date: 2016-07-12
 ---
 
