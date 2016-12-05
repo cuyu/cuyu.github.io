@@ -124,6 +124,8 @@ JavaScript冷知识。
 
 虽然在严格模式下，`with`语句被禁了，但还是可以了解下，可以看到`with`的用处和Python完全不一样。
 
+<!--break-->
+
 ---
 
 ## Chapter 3: Function vs. Block Scope
