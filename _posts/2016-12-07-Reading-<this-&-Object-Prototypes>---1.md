@@ -3,7 +3,7 @@ layout: post
 title: "Reading &lt;this & Object Prototypes&gt; - 1"
 category: Javascript
 tags: [读书笔记, You Dont Know JS]
-date: 2016-12-08
+date: 2016-12-07
 ---
 
 ## Chapter 1: `this` Or That?
@@ -92,6 +92,8 @@ JavaScript的`this`存放在调用栈里（显而易见嘛）。
 > ```
 
 严格模式下禁用了默认的`this`绑定（默认的这个行为我是暂时没看到啥好处，所以，怎么严格怎么来吧）。
+
+<!--break-->
 
 ---
 
@@ -235,8 +237,6 @@ foo.call( obj );  // true
 > Let's examine how this variation works. We create a function `bar()` which, internally, manually calls `foo.call(obj)`, thereby forcibly invoking `foo` with `obj` binding for `this`. No matter how you later invoke the function `bar`, it will always manually invoke `foo` with `obj`. This binding is both explicit and strong, so we call it *hard binding*.
 
 **规则3.1**：使用`<func>.bind`方法来持久地绑定`this`到指定对象（“持久”是相对`<func>.call`（一次性绑定）而言的，即绑定之后无论怎么调用该方法`this`都指向绑定的对象，绑定后再通过`<func>.bind`方法是可以更换绑定对象的）。
-
-<!--break-->
 
 ---
 
