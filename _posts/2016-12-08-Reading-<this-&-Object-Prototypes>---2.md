@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Reading <this & Object Prototypes> - 2"
+title: "Reading &lt;this & Object Prototypes&gt; - 2"
 category: Javascript
 tags: [读书笔记, You Dont Know JS]
 date: 2016-12-08
