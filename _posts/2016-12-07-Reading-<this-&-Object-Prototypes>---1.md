@@ -363,9 +363,31 @@ JavaScript的`new`和C++的`new`或Python的`__new__`可不一样。
 > console.log( bar.a ); // 2
 > ```
 
-这么看来JavaScript的`new`和其他语言唯一相同的点是也会生成一个新的对象。
-
 **规则4**：使用`new`来绑定`this`到新生成的对象。
+
+这么看来JavaScript的`new`和其他语言唯一相同的点是也会生成一个新的对象（其实还不一定，比如下面的例子）。
+
+上面关于`new`的流程特别要**注意**最后一条：当函数有返回值，且返回值的基本类型为`object`时，新创建的对象会被抛弃，转而把这个返回值赋予`new`语句左边的变量：
+
+```javascript
+var myObj = {};
+function Foo() {
+    this.a = 1;
+    return myObj; // object type
+}
+
+function Bar() {
+    this.b = 2;
+    return 'abc'; // non-object type
+}
+
+
+foo = new Foo();
+bar = new Bar();
+console.log(foo); // {}
+console.log(foo === myObj); // true
+console.log(bar); // Bar { b: 2 }
+```
 
 ---
 

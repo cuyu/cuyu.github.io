@@ -52,7 +52,7 @@ This is why I like Python.
 >
 > But in JS, these are actually just built-in functions. Each of these built-in functions can be used as a constructor (that is, a function call with the `new` operator), with the result being a newly *constructed* object of the sub-type in question.
 
-我的问题是`object`也只是一个内置函数吗？
+我的问题是`Object`也只是一个内置函数吗？（是的，`Object`是一个函数对象，不但可以调用，还有许多属性。）
 
 ------
 
