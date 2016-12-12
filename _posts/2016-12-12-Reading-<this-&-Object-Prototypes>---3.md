@@ -3,7 +3,7 @@ layout: post
 title: "Reading &lt;this & Object Prototypes&gt; - 3"
 category: Javascript
 tags: [读书笔记, You Dont Know JS]
-date: 2016-12-08
+date: 2016-12-12
 ---
 
 ## Chapter 5: Prototypes
@@ -395,4 +395,222 @@ console.log(Object.getOwnPropertyNames(Object.prototype));
 
 ---
 
-> 
+> Some developers take a much stricter view, which is that no function should be polyfilled unless it can be *fully* polyfilled. Since `Object.create(..)` is one of those partial-polyfill'able utilities, this narrower perspective says that if you need to use any of the functionality of `Object.create(..)` in a pre-ES5 environment, instead of polyfilling, you should use a custom utility, and stay away from using the name `Object.create` entirely.
+>
+> I do not share this strict opinion. I fully endorse the common partial-polyfill of `Object.create(..)` as shown above, and using it in your code even in pre-ES5.
+
+partial-polyfill'able的意思是在某些特定情况下没法polyfill（感觉要考虑兼容性好麻烦啊）。
+
+---
+
+## Chapter 6: Behavior Delegation
+
+> ```javascript
+> var Task = {
+>     setID: function(ID) { this.id = ID; },
+>     outputID: function() { console.log( this.id ); }
+> };
+>
+> // make `XYZ` delegate to `Task`
+> var XYZ = Object.create( Task );
+>
+> XYZ.prepareTask = function(ID,Label) {
+>     this.setID( ID );
+>     this.label = Label;
+> };
+>
+> XYZ.outputTaskDetails = function() {
+>     this.outputID();
+>     console.log( this.label );
+> };
+>
+> // ABC = Object.create( Task );
+> // ABC ... = ...
+> ```
+>
+> As compared to class-orientation (aka, OO -- object-oriented), I call this style of code **"OLOO"** (objects-linked-to-other-objects). All we *really* care about is that the `XYZ` object delegates to the `Task` object (as does the `ABC` object).
+>
+> In JavaScript, the `[[Prototype]]` mechanism links **objects** to other **objects**. There are no abstract mechanisms like "classes", no matter how much you try to convince yourself otherwise. It's like paddling a canoe upstream: you *can* do it, but you're *choosing* to go against the natural current, so it's obviously **going to be harder to get where you're going.**
+>
+> Some other differences to note with **OLOO style code**:
+>
+> 1. Both `id` and `label` data members from the previous class example are data properties directly on `XYZ` (neither is on `Task`). In general, with `[[Prototype]]` delegation involved, **you want state to be on the delegators** (`XYZ`, `ABC`), not on the delegate (`Task`).
+>
+> 2. With the class design pattern, we intentionally named `outputTask` the same on both parent (`Task`) and child (`XYZ`), so that we could take advantage of overriding (polymorphism). In behavior delegation, we do the opposite: **we avoid if at all possible naming things the same** at different levels of the `[[Prototype]]` chain (called shadowing -- see Chapter 5), because having those name collisions creates awkward/brittle syntax to disambiguate references (see Chapter 4), and we want to avoid that if we can.
+>
+>    This design pattern calls for less of general method names which are prone to overriding and instead more of descriptive method names, *specific* to the type of behavior each object is doing. **This can actually create easier to understand/maintain code**, because the names of methods (not only at definition location but strewn throughout other code) are more obvious (self documenting).
+>
+> 3. `this.setID(ID);` inside of a method on the `XYZ` object first looks on `XYZ` for `setID(..)`, but since it doesn't find a method of that name on `XYZ`, `[[Prototype]]` *delegation* means it can follow the link to `Task` to look for `setID(..)`, which it of course finds. Moreover, because of implicit call-site `this` binding rules (see Chapter 2), when `setID(..)` runs, even though the method was found on `Task`, the `this` binding for that function call is `XYZ`exactly as we'd expect and want. We see the same thing with `this.outputID()` later in the code listing.
+>
+>    In other words, the general utility methods that exist on `Task` are available to us while interacting with `XYZ`, because `XYZ` can delegate to `Task`.
+
+尤其注意这里说的和OO的思想不同的几点：
+
+1. “基对象”（或者叫原型对象吧）不存储状态量（因为类的实例化是复制，本质上状态量也是绑定在子类对象上的））。
+2. “子对象”属性不要和“基对象”属性同名（即避免shadowing，OO里叫覆盖或重载）。
+3. “基对象”方法通过“子对象”方法内部调用来使用（避免直接用“子对象”调用“基对象”方法，OO里的继承）。
+
+---
+
+> **Behavior Delegation** means: let some object (`XYZ`) provide a delegation (to `Task`) for property or method references if not found on the object (`XYZ`).
+>
+> This is an *extremely powerful* design pattern, very distinct from the idea of parent and child classes, inheritance, polymorphism, etc. Rather than organizing the objects in your mind vertically, with Parents flowing down to Children, think of objects side-by-side, as peers, with any direction of delegation links between the objects as necessary.
+
+因为没有复制的行为，所以JavaScript里面利用原型链时要注意不能改变这条链上的其他对象，定下这些规则（模式）也是为了防止出现这种情况吧。
+
+---
+
+> You cannot create a *cycle* where two or more objects are mutually delegated (bi-directionally) to each other.
+>
+> It's disallowed because engine implementors have observed that it's more performant to check for (and reject!) the infinite circular reference once at set-time rather than needing to have the performance hit of that guard check every time you look-up a property on an object.
+
+类似Python的circulate import么。
+
+---
+
+> We'll examine some more theoretical ("Foo", "Bar") code, and compare both ways (OO vs. OLOO) of implementing the code. The first snippet uses the classical ("prototypal") OO style:
+>
+> ```javascript
+> function Foo(who) {
+>     this.me = who;
+> }
+> Foo.prototype.identify = function() {
+>     return "I am " + this.me;
+> };
+>
+> function Bar(who) {
+>     Foo.call( this, who );
+> }
+> Bar.prototype = Object.create( Foo.prototype );
+>
+> Bar.prototype.speak = function() {
+>     alert( "Hello, " + this.identify() + "." );
+> };
+>
+> var b1 = new Bar( "b1" );
+> var b2 = new Bar( "b2" );
+>
+> b1.speak();
+> b2.speak();
+> ```
+>
+> Now, let's implement **the exact same functionality** using *OLOO* style code:
+>
+> ```javascript
+> var Foo = {
+>     init: function(who) {
+>         this.me = who;
+>     },
+>     identify: function() {
+>         return "I am " + this.me;
+>     }
+> };
+>
+> var Bar = Object.create( Foo );
+>
+> Bar.speak = function() {
+>     alert( "Hello, " + this.identify() + "." );
+> };
+>
+> var b1 = Object.create( Bar );
+> b1.init( "b1" );
+> var b2 = Object.create( Bar );
+> b2.init( "b2" );
+>
+> b1.speak();
+> b2.speak();
+> ```
+
+第一种实现定义了“类”（函数对象的prototype属性），使用原型链来模拟了继承，并用`new`来“实例化”。
+
+第二种实现则只使用了原型链，原型链下层对象对上层对象方法进行封装，而“实例”则置于原型链最底层，并通过显式地初始化方法来设置属性。
+
+方案一看上去和方案二完全不一样，其实本质上是一样的，即利用原型链使多个对象产生联系，形成了类似继承和实例化的关系（但方案一用到了函数对象使得这种联系比方案二还要复杂一些，也因此有一些坑，所以作者强烈推荐使用OLOO的模式）。
+
+---
+
+> As of ES6, we can use *concise method declarations* in any object literal, so an object in OLOO style can be declared this way (same short-hand sugar as with `class` body syntax):
+>
+> ```javascript
+> var LoginController = {
+>     errors: [],
+>     getUser() { // Look ma, no `function`!
+>         // ...
+>     },
+>     getPassword() {
+>         // ...
+>     }
+>     // ...
+> };
+> ```
+
+语法糖，属性声明时可以省去`function`关键字，相当于`getUser: function(){...}`（注意是匿名函数）。
+
+---
+
+## Appendix A: ES6 class
+
+> Let's revisit the `Widget` / `Button` example from Chapter 6:
+>
+> ```javascript
+> class Widget {
+>     constructor(width,height) {
+>         this.width = width || 50;
+>         this.height = height || 50;
+>         this.$elem = null;
+>     }
+>     render($where){
+>         if (this.$elem) {
+>             this.$elem.css( {
+>                 width: this.width + "px",
+>                 height: this.height + "px"
+>             } ).appendTo( $where );
+>         }
+>     }
+> }
+>
+> class Button extends Widget {
+>     constructor(width,height,label) {
+>         super( width, height );
+>         this.label = label || "Default";
+>         this.$elem = $( "<button>" ).text( this.label );
+>     }
+>     render($where) {
+>         super.render( $where );
+>         this.$elem.click( this.onClick.bind( this ) );
+>     }
+>     onClick(evt) {
+>         console.log( "Button '" + this.label + "' clicked!" );
+>     }
+> }
+> ```
+>
+> Beyond this syntax *looking* nicer, what problems does ES6 solve?
+>
+> 1. There's no more (well, sorta, see below!) references to `.prototype` cluttering the code.
+> 2. `Button` is declared directly to "inherit from" (aka `extends`) `Widget`, instead of needing to use `Object.create(..)`to replace a `.prototype` object that's linked, or having to set with `.__proto__` or `Object.setPrototypeOf(..)`.
+> 3. `super(..)` now gives us a very helpful **relative polymorphism** capability, so that any method at one level of the chain can refer relatively one level up the chain to a method of the same name. This includes a solution to the note from Chapter 4 about the weirdness of constructors not belonging to their class, and so being unrelated -- `super()` works inside constructors exactly as you'd expect.
+> 4. `class` literal syntax has no affordance for specifying properties (only methods). This might seem limiting to some, but it's expected that the vast majority of cases where a property (state) exists elsewhere but the end-chain "instances", this is usually a mistake and surprising (as it's state that's implicitly "shared" among all "instances"). So, one *could* say the `class` syntax is protecting you from mistakes.
+> 5. `extends` lets you extend even built-in object (sub)types, like `Array` or `RegExp`, in a very natural way. Doing so without `class .. extends` has long been an exceedingly complex and frustrating task, one that only the most adept of framework authors have ever been able to accurately tackle. Now, it will be rather trivial!
+
+感觉用class-orientied这种设计模式的人比较多吧，所以JavaScript也一直在往这上面靠（增加语法糖）。
+
+---
+
+> Firstly, the `class` syntax may convince you a new "class" mechanism exists in JS as of ES6. **Not so.** `class` is, mostly, just syntactic sugar on top of the existing `[[Prototype]]` (delegation!) mechanism.
+
+---
+
+> You might assume that `super` would be bound in an analogous way to how `this` gets bound (see Chapter 2), which is that `super` would always be bound to one level higher than whatever the current method's position in the `[[Prototype]]` chain is.
+>
+> However, for performance reasons (`this` binding is already expensive), `super` is not bound dynamically. It's bound sort of "statically", as declaration time. 
+
+`super`是非动态绑定的会有一些潜在的问题，比如我动态改变了原型链可能会期待`super`指向的对象发生变化，然而它并没有变化（而`this`是动态绑定的）。（在Python里比较少考虑这个问题是因为class继承关系的动态程度（需要动态改变的几率）还是比原型链低一些的）
+
+---
+
+> `class` does a very good job of pretending to fix the problems with the class/inheritance design pattern in JS. But it actually does the opposite: **it hides many of the problems, and introduces other subtle but dangerous ones**.
+>
+> `class` contributes to the ongoing confusion of "class" in JavaScript which has plagued the language for nearly two decades. In some respects, it asks more questions than it answers, and it feels in totality like a very unnatural fit on top of the elegant simplicity of the `[[Prototype]]` mechanism.
+
+作者对JavaScript的`class`疯狂输出，哈哈。不过说的也确实在理。
