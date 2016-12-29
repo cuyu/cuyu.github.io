@@ -188,6 +188,11 @@ doFoo( obj.foo ); // "111"
 > **Note:** With respect to `this` binding, `call(..)` and `apply(..)` are identical. They *do* behave differently with their additional parameters, but that's not something we care about presently.
 
 **规则3**：使用`<func>.call`或`<func>.apply`方法可以显式地绑定`this`到指定对象。这里的`call`和`apply`方法可以理解为类似于Python里的魔法方法（没有特指某个魔法方法，Python的`__call__`显然和这里不一样嘛）。
+至于`<func>.call`和`<func>.apply` 区别，看下面的式子：
+
+```javascript
+foo.call(this, arg1, arg2, arg3) == foo.apply(this, arguments) == this.foo(arg1, arg2, arg3)
+```
 
 ---
 
