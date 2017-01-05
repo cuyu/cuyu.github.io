@@ -8,7 +8,7 @@ date: 2017-01-04
 
 ### Problem
 
-在已运行的web server上更新了一个css文件，结果在用户端由于缓存的缘故，该css文件并没有被更新，反复刷新页面也没有用，只有清楚掉缓存再打开网页才成功加载了新的css文件。问题是能否从服务端入手，迫使客户端来加载更新的资源文件？
+在已运行的web server上更新了一个css文件，结果在用户端由于缓存的缘故，该css文件并没有被更新，反复刷新页面也没有用，只有清除掉缓存再打开网页才成功加载了新的css文件。问题是能否从服务端入手，迫使客户端来加载更新的资源文件？
 
 ### Solution
 
@@ -28,8 +28,17 @@ date: 2017-01-04
 
 > For awareness: this is considered to be a hack. This method tricks the browser into thinking that a new file is being specified, as it simply looks at the full file name without interpreting it. foo.js?1 is not the same name as foo.js?2, so the browser will think they are two different files. One downside is that both files will simultaneously exist in the users' cache, taking up unnecessary space.
 
+### Easter egg
+
+对于客户端而言，要强制加载最新的js/css文件其实有更便捷的方法（不用手动清除缓存）。
+
+对Windows：<kbd>CTRL</kbd>+<kbd>F5</kbd>
+
+对MacOS：<kbd>Command</kbd>+<kbd>Shift</kbd>+<kbd>R</kbd>
+
 ### Reference
 
-http://stackoverflow.com/questions/32414/how-can-i-force-clients-to-refresh-javascript-files
-
-http://stackoverflow.com/questions/118884/how-to-force-browser-to-reload-cached-css-js-files
+- [How can I force clients to refresh JavaScript files?](http://stackoverflow.com/questions/32414/how-can-i-force-clients-to-refresh-javascript-files)
+- [How to force browser to reload cached CSS/JS files?](http://stackoverflow.com/questions/118884/how-to-force-browser-to-reload-cached-css-js-files)
+- [What requests do browsers' “F5” and “Ctrl + F5” refreshes generate?](http://stackoverflow.com/questions/385367/what-requests-do-browsers-f5-and-ctrl-f5-refreshes-generate)
+- [Hard Refresh a Page in Firefox on a Mac](http://greenwireit.com/it-tech-support-articles/hard-refresh-a-page-in-firefox-on-a-mac-ctrl-f5/)
