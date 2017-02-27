@@ -55,9 +55,8 @@ do
   Executed here
   ```
 
-- 猜想3：跟sshpass或ssh这条命令相关，
+- 猜想3：跟sshpass或ssh这条命令相关，参考[stackoverflow](http://stackoverflow.com/questions/9393038/ssh-breaks-out-of-while-loop-in-bash)。也就是说**ssh命令默认会读取后续的所有内容作为它的输入**，解决方法是把它的输入连到别的地方去。
 
-  http://stackoverflow.com/questions/9393038/ssh-breaks-out-of-while-loop-in-bash。也就是说**ssh命令默认会读取后续的所有内容作为它的输入**，解决方法是把它的输入连到别的地方去。
 
 ### 解决问题
 
