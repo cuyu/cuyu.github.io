@@ -79,6 +79,21 @@ class Button extends Component {
 
 单纯在React应用中使用`redux`。这个方案也会创建一个全局的变量`store`，各个组件通过`store`对象来获取/更新状态。
 
+在`redux`里，关于`store`对象我们只需要定义一个函数（Redux里面称这类函数为reduce函数，之所以叫reduce， 是类比了map reduce，至于它们哪里像了，暂时还没领悟。。），它的输入为组件的当前状态以及施加在当前状态之上的action，输出为新的状态，关于组件的当前状态的存储是`redux`做的，也就是说我们只定义了一个*纯函数*（即函数输出只和输入有关，不存储任何状态量，和状态无关），类似于只需要定义它的行为，并不需要关心其他的实现：
+
+```javascript
+export default function (state = {value: '0'}, action) {
+    switch (action.type) {
+        case 'APPEND':
+            return {
+                value: state.value + action.value,
+            };
+        default:
+            return state
+    }
+}
+```
+
 以下，在`Screen`组件中，在构造函数中，调用`store`的`subscribe`函数，将`Screen`组件的`setState`函数注册进去。当`store`中存储的状态方式改变时，会触发调用所有注册进去的函数（即广播者订阅者模式）：
 
 ```javascript
