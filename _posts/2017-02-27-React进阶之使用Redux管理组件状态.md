@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "React进阶之使用Redux管理组件状态"
-category: JavaScript
+category: Javascript
 tags: [React, Redux, 心得]
 date: 2017-02-27
 ---
