@@ -8,9 +8,13 @@ date: 2016-09-02
 
 一直没太明白为啥Flask中import站内的资源需要写成这样：
 
+{% raw %}
+
 ```html
 <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/main.css')}}">
 ```
+
+{% endraw %}
 
 直到最近用`Jinja2`和`Twisted`写一个web server，才发现这样做是有道理的。
 

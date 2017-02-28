@@ -1,0 +1,24 @@
+---
+layout: default
+title: Playground
+permalink: /playground/
+---
+
+<h2>Playground</h2>
+
+
+{% assign pages_list = site.pages %}
+{% for node in pages_list %}
+{% if node.title != null %}
+{% if node.layout == "play" %}
+<ul class="article-list">
+    <a href="{{ node.url }}">
+        <li>
+            {{ node.title }}
+        </li>
+    </a>
+    <small>{{ node.description }}</small>
+</ul>
+{% endif %}
+{% endif %}
+{% endfor %}
