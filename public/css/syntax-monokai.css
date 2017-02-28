@@ -66,31 +66,32 @@
 
 /* Set the style of the code block */
 div[class^="language-"], div[class*="highlighter-rouge"] {
-	background: #333;
+	background: #444;
     margin: 0.5em;
     margin-left: 0;
     margin-right: 0;
     /*padding: 0.8em;*/
-    border-radius: 6px;
+    border-radius: 3px;
 }
 
 div > pre[class="highlight"] {
     margin-bottom: 0;
     margin-top: 0;
-    background: #333;
+    background: #444;
 }
 
 div > pre[class="highlight"] > code {
     color: white;
     font-family: Consolas, Monaco, Menlo, "Courier New", monospace;
     /*font-size: .8em;*/
+    -webkit-font-smoothing: antialiased;
 }
 
 /* For small code block, i.e. `content` in markdown */
 code[class="highlighter-rouge"] {
     background: rgba(0,148,191,0.1);
     /*border: #c0c1ee 1px solid;*/
-    border-radius: 5px;
+    border-radius: 2px;
     color: #0094bf;
     padding: 2px;
     font-family: Menlo, arial, "Microsoft YaHei", 宋体, sans-serif;
