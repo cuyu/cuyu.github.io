@@ -70,19 +70,20 @@ div[class^="language-"], div[class*="highlighter-rouge"] {
     margin: 0.5em;
     margin-left: 0;
     margin-right: 0;
-    padding: 0.8em;
+    /*padding: 0.8em;*/
     border-radius: 6px;
 }
 
 div > pre[class="highlight"] {
     margin-bottom: 0;
     margin-top: 0;
+    background: #333;
 }
 
 div > pre[class="highlight"] > code {
     color: white;
     font-family: Consolas, Monaco, Menlo, "Courier New", monospace;
-    font-size: .8em;
+    /*font-size: .8em;*/
 }
 
 /* For small code block, i.e. `content` in markdown */

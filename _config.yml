@@ -1,6 +1,8 @@
+title: CuriousY
 name: In a better world
-description: Curtis Yu's personal blog
+description: Curtis Yu's personal blogging
 url: http://cuyu.github.io
+tagline: 'A world with wonder'
 
 # Custimized config about personal info.
 author:
@@ -9,6 +11,7 @@ author:
   contact:
     email: mailto:icyarm@icloud.com
     github: https://github.com/cuyu
+    stack-overflow: http://stackoverflow.com/users/5996843
 
 gems: [jekyll-paginate, rouge]
 
@@ -19,11 +22,13 @@ highlighter: rouge
 # The excerpt will end when hit this tag
 excerpt_separator: <!--break-->
 
-# The link format of each post
+# The link format of each blogging
 permalink: /:categories/:year/:month/:day/:title
 
 # How many articles do you wish to appear on the front page
 paginate: 5
 paginate_path: "/page:num"
 
-exclude: ['README.md', 'Gemfile.lock', 'Gemfile', 'Rakefile', 'create_new_post']
+exclude: ['README.md', 'Gemfile.lock', 'Gemfile', 'Rakefile', 'blogging']
+
+version: 1.0.0

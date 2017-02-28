@@ -1,33 +1,64 @@
-<div id="sidebar-checkbox" class="fa fa-bars"></div>
+<!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
 
 <!-- Toggleable sidebar -->
 <div class="sidebar" id="sidebar">
     <div class="sidebar-item">
-        <div class="sidebar-personal-info">
-            <div class="sidebar-personal-info-section">
-            </div>
-            <div class="sidebar-personal-info-section">
-                <p>{{ site.author.description }}</p>
-            </div>
-            {% if site.author.contact %}
-            {% assign len = site.author.contact | size %}
-            {% assign current_index = 0 %}
-            <div class="sidebar-personal-info-section">
-                <p> Follow me:
-                    {% for contact in site.author.contact %}
-                        {% assign iconname = contact[0] %}
-                        {% if contact[0] == 'email' %}
-                            {% assign iconname = 'envelope' %}
-                        {% endif %}
-                        <a href="{{ contact[1] }}">
-                            <i class="fa fa-{{ iconname }}" aria-hidden="true"></i>
-                        </a>
-                        {% assign current_index = current_index | plus: 1 %}
-                        {% if current_index != len %}|{% endif %}
-                    {% endfor %}
-                </p>
-            </div>
-            {% endif %}
+        <div class="sidebar-personal-info-section">
+            <p>{{ site.author.description }}</p>
         </div>
+        {% if site.author.contact %}
+        {% assign len = site.author.contact | size %}
+        {% assign current_index = 0 %}
+        <div class="sidebar-personal-info-section">
+            <p> Follow me:
+                {% for contact in site.author.contact %}
+                {% assign iconname = contact[0] %}
+                {% if contact[0] == 'email' %}
+                {% assign iconname = 'envelope' %}
+                {% endif %}
+                <a href="{{ contact[1] }}">
+                    <i class="fa fa-{{ iconname }}" aria-hidden="true"></i>
+                </a>
+                {% assign current_index = current_index | plus: 1 %}
+                {% if current_index != len %}|{% endif %}
+                {% endfor %}
+            </p>
+        </div>
+        {% endif %}
+    </div>
+
+    <nav class="sidebar-nav">
+        <a class="sidebar-nav-item{% if page.url == site.baseurl %} active{% endif %}" href="{{ site.baseurl }}/">Home</a>
+
+        {% comment %}
+        The code below dynamically generates a sidebar nav of pages with
+        `layout: page` in the front-matter. See readme for usage.
+        {% endcomment %}
+
+        {% assign pages_list = site.pages | sort:"url" %}
+        {% for node in pages_list %}
+        {% if node.title != null %}
+        {% if node.layout == "page" %}
+        <a class="sidebar-nav-item{% if page.url == node.url %} active{% endif %}" href="{{ node.url }}">{{ node.title }}</a>
+        {% endif %}
+        {% endif %}
+        {% endfor %}
+
+        <a class="sidebar-nav-item" href="{{ site.baseurl }}/categories/">Categories</a>
+        <a class="sidebar-nav-item" href="{{ site.baseurl }}/tags/">Tags</a>
+        <a class="sidebar-nav-item" href="{{ site.baseurl }}/archives/">Archives</a>
+        <a class="sidebar-nav-item" href="{{ site.baseurl }}/about/">About</a>
+        <span class="sidebar-nav-item">Currently v{{ site.version }}</span>
+    </nav>
+
+    <div class="sidebar-item">
+        <div class="site-stats">
+            Site Visit: <span id="busuanzi_value_site_uv"><i class="fa fa-spinner fa-spin"></i></span> times
+        </div>
+        <p>
+            &copy; {{ site.time | date: '%Y' }}. All rights reserved.
+        </p>
     </div>
 </div>

@@ -7,7 +7,7 @@ body {
     font-size: 1rem;
     color: #333;
     margin: 0;
-    background-image: url("/assets/images/main_background.jpg");
+    background-image: url("/public/images/main_background.jpg");
     background-repeat: round;
 }
 
@@ -112,7 +112,7 @@ ul > li {
     margin-bottom: .4em;
 }
 
-/* For post title */
+/* For blogging title */
 h1[class="post-title"] {
     margin: 0 0 4px 0;
     border-bottom: None;

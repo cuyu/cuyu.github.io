@@ -6,7 +6,7 @@ permalink: /about/
 
 ### About this site
 
-This site is developed based on `Jekyll 3`. Here are some plugins and third-party services I used:
+This site is developed based on `Jekyll 3` and powered by [lanyon](http://lanyon.getpoole.com/). Here are some plugins and third-party services I used:
 
 - `rouge` — A Jekyll plugin to display code blocks with colours
 - `jekyll-paginate` — A Jekyll plugin to display articles with multiple pages conveniently

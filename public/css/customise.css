@@ -1,0 +1,181 @@
+/*
+I will put most customised styles here.
+*/
+
+/* For all links */
+a {
+    text-decoration: none;
+    color: #c7338e;
+    transition: color .4s;
+}
+
+a:hover {
+    color: #47a526;
+}
+
+/* For page below navigation */
+div[class="postnavigation"] {
+    margin: 0 auto;
+    text-align: center;
+}
+
+/* For article category */
+a[class="post-category"]:before {
+    content: "\f02d";
+    font-family: FontAwesome;
+    padding-left: .3rem;
+    padding-right: .3rem;
+}
+
+a[class="post-category"] {
+    display: inline-block;
+    font-size: 80%;
+    border-radius: 4px;
+    background-color: #d2bca9;
+    color: #934034;
+    border: #936b64 solid 1px;
+    padding-right: .3rem;
+}
+
+/* For article tags */
+a[class="post-tag"]:before {
+    content: "\f02b";
+    font-family: FontAwesome;
+    padding-left: .3rem;
+    padding-right: .3rem;
+}
+
+a[class="post-tag"] {
+    display: inline-block;
+    font-size: 80%;
+    border-radius: 4px;
+    background-color: #c0c1ee;
+    color: #432687;
+    border: #6b5587 solid 1px;
+    margin-right: 8px;
+    padding-right: .3rem;
+}
+
+/* For article list in tags and category page */
+ul[class="article-list"] {
+    list-style: circle;
+    color: #881d6b;
+}
+
+ul[class="article-list"] > a {
+    display: block;
+    transition: .3s ease-in-out;
+}
+
+ul[class="article-list"] > a:hover {
+    color: #881d6b;
+    -webkit-transform: translateX(-1.5rem);
+    transform: translateX(-1.5rem);
+    list-style: disc;
+}
+
+/* For Read more link */
+div[class="post-more"] {
+    display: block;
+    margin: 0 auto;
+    text-align: center;
+}
+
+div[class="post-more"] > a:before {
+    content: "\f055";
+    font-family: FontAwesome;
+    font-size: 90%;
+    margin-right: 4px;
+}
+
+/* For date and comments display on main index */
+a[class="post-comment"] {
+    font-size: .8rem;
+    color: #47a526;
+}
+
+a[class="post-comment"]:before {
+    content: "\f086";
+    font-family: FontAwesome;
+    font-size: .8rem;
+    margin-right: 4px;
+}
+
+.post-date {
+    display: inline;
+    margin-top: -.5rem;
+    margin-bottom: 1rem;
+    font-size: .8rem;
+    color: #9a9a9a;
+    width: 100%;
+}
+
+.post-date:before {
+    content: "\f073";
+    font-family: FontAwesome;
+    font-size: .8rem;
+    margin-right: 4px;
+}
+
+/* For nav article links in the bottom */
+div[class="bottom-nav"] {
+    font-size: 1rem;
+}
+div[class="bottom-nav"] > a {
+    display: table;
+    height: 2rem;
+    margin: 0 0 4px 10px;
+    border-bottom: None;
+    color: #103355;
+    font-family: 'Bree Serif', serif, "Avenir Next", Helvetica, arial, "Microsoft YaHei", 宋体, sans-serif;
+    transition: .3s;
+}
+
+div[class="bottom-nav"] > a > span[class="bottom-nav-title"] {
+    display:table-cell;
+    vertical-align:middle;
+}
+
+div[class="bottom-nav"] > a > span[class="bottom-nav-title"]:before {
+    content: "\f10d";
+    font-family: FontAwesome;
+    padding-right: .3rem;
+    color: #1e0010;
+    font-size: 90%;
+}
+
+div[class="bottom-nav"] > a > span[class="bottom-nav-title"]:after {
+    content: "\f10e";
+    font-family: FontAwesome;
+    padding-left: .3rem;
+    color: #1e0010;
+    font-size: 90%;
+}
+
+span[id="previous-logo"] {
+    margin-right: 5px;
+    color: #103355;
+    font-size: 1.7rem;
+    transition: .3s;
+}
+
+span[id="next-logo"] {
+    margin-right: 5px;
+    color: #103355;
+    font-size: 1.7rem;
+    transition: .3s;
+}
+
+div[class="bottom-nav"] > a:hover {
+    color: #a5a149;
+    -webkit-transform: translateX(1rem) translateY(0.2rem);
+    transform: translateX(1rem) translateY(0.2rem);
+}
+
+div[class="bottom-nav"] > a:hover > span[id="previous-logo"] {
+    color: #3e885e;
+}
+
+div[class="bottom-nav"] > a:hover > span[id="next-logo"] {
+    color: #3e885e;
+}
