@@ -3,6 +3,11 @@ layout: default
 ---
 
 <div class="play">
-    <h1 class="play-title">{{ page.title }}</h1>
+    <h2 class="play-title">{{ page.title }}
+        {% if page.git != null %}
+        <small>[<a href="{{ page.git }}">Code</a>]</small>
+        {% endif %}
+    </h2>
+    <p class="play-description">{{ page.description }}</p>
     {{ content }}
 </div>

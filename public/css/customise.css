@@ -181,3 +181,23 @@ div[class="bottom-nav"] > a:hover > span[id="previous-logo"] {
 div[class="bottom-nav"] > a:hover > span[id="next-logo"] {
     color: #3e885e;
 }
+
+/* For playground title */
+.play-title {
+    margin-top: 0;
+    margin-bottom: 0;
+    color: black;
+}
+
+.play-title small {
+    font-size: 75%;
+    font-weight: 400;
+    color: #c0c0c0;
+    letter-spacing: 0;
+}
+
+.play-description {
+    color: #505050;
+    margin-left: 2rem;
+    margin-bottom: 2rem;
+}
