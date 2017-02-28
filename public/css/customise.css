@@ -90,14 +90,12 @@ div[class="post-more"] > a:before {
 
 /* For date and comments display on main index */
 a[class="post-comment"] {
-    font-size: .8rem;
     color: #47a526;
 }
 
 a[class="post-comment"]:before {
     content: "\f086";
     font-family: FontAwesome;
-    font-size: .8rem;
     margin-right: 4px;
 }
 
@@ -105,7 +103,6 @@ a[class="post-comment"]:before {
     display: inline;
     margin-top: -.5rem;
     margin-bottom: 1rem;
-    font-size: .8rem;
     color: #9a9a9a;
     width: 100%;
 }
@@ -113,8 +110,13 @@ a[class="post-comment"]:before {
 .post-date:before {
     content: "\f073";
     font-family: FontAwesome;
-    font-size: .8rem;
     margin-right: 4px;
+}
+
+.DateInfo {
+    display: block;
+    margin-top: -.5rem;
+    margin-bottom: 1rem;
 }
 
 /* For nav article links in the bottom */
