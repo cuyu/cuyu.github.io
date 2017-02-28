@@ -12,7 +12,7 @@ date: 2017-02-27
 
 默认情况下，React组件的属性是可以任意赋值的，为了对此加以限制，在定义React组件时，可以同时定义好它允许设置的属性以及对应的类型（通过定义组件`propTypes`属性来限定），比如：
 
-```javascript
+```jsx
 import React, {Component, PropTypes} from 'react';
 
 class MyButton extends Component {
