@@ -76,6 +76,10 @@ ul[class="article-list"] > a:hover {
     list-style: disc;
 }
 
+ul[class="article-list"] > a > li > small {
+    color: #7a7a7a;
+}
+
 /* For Read more link */
 div[class="post-more"] {
     display: block;
