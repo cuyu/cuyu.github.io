@@ -15,7 +15,9 @@ a:hover {
 
 /* For page below navigation */
 div[class="postnavigation"] {
-    margin: 0 auto;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 2rem;
     text-align: center;
 }
 
