@@ -14,23 +14,23 @@ date: 2015-10-14
 
 > **TCPKeepAlive**
 >
-> Specifies whether the system should send TCP keepalive messages to the other side.  If they are sent, death of the connection or crash of one of the machines will be properly noticed.  However, this means that connections will die if the route is down temporarily, and some people find it annoying.  On the other hand, if TCP keepalives are not sent, sessions may hang indefinitely on the server, leaving “ghost” users and consuming server resources.
+> Specifies whether the system should send TCP keepalive messages to the other side. If they are sent, death of the connection or crash of one of the machines will be properly noticed. However, this means that connections will die if the route is down temporarily, and some people find it annoying. On the other hand, if TCP keepalives are not sent, sessions may hang indefinitely on the server, leaving "ghost" users and consuming server resources.
 >
-> The default is “yes” (to send TCP keepalive messages), and the server will notice if the network goes down or the client host crashes.  This avoids infinitely hanging sessions.
+> The default is "yes" (to send TCP keepalive messages), and the server will notice if the network goes down or the client host crashes. This avoids infinitely hanging sessions.
 >
-> To disable TCP keepalive messages, the value should be set to “no”.`
+> To disable TCP keepalive messages, the value should be set to "no".
 >
 > This option was formerly called KeepAlive.
 >
 > **ClientAliveCountMax**
 >
-> Sets the number of client alive messages (see below) which may be sent without sshd(8) receiving any messages back from the client.  If this threshold is reached while client alive messages are being sent, sshd will disconnect the client, terminating the session.  It is important to note that the use of client alive messages is very different from TCPKeepAlive (below).  The client alive messages are sent through the encrypted channel and therefore will not be spoofable.  The TCP keepalive option enabled by TCPKeepAlive is spoofable.  The client alive mechanism is valueable when the client or server depend on knowing when a connection has become inactive.
+> Sets the number of client alive messages (see below) which may be sent without sshd(8) receiving any messages back from the client. If this threshold is reached while client alive messages are being sent, sshd will disconnect the client, terminating the session. It is important to note that the use of client alive messages is very different from TCPKeepAlive (below). The client alive messages are sent through the encrypted channel and therefore will not be spoofable. The TCP keepalive option enabled by TCPKeepAlive is spoofable. The client alive mechanism is valueable when the client or server depend on knowing when a connection has become inactive.
 >
-> The default value is 3.  If ClientAliveInterval (see below) is set to 15, and ClientAliveCountMax is left at the default, unresponsive SSH clients will be disconnected after approximately 45 seconds.  This option applies to protocol version 2 only.
+> The default value is 3. If ClientAliveInterval (see below) is set to 15, and ClientAliveCountMax is left at the default, unresponsive SSH clients will be disconnected after approximately 45 seconds. This option applies to protocol version 2 only.
 >
 > **ClientAliveInterval**
 >
-> Sets a timeout interval in seconds after which if no data has been received from the client, sshd(8) will send a message through the encrypted channel to request a response from the client.  The default is 0, indicating that these messages will not be sent to the client.  This option applies to protocol version 2 only.
+> Sets a timeout interval in seconds after which if no data has been received from the client, sshd(8) will send a message through the encrypted channel to request a response from the client. The default is 0, indicating that these messages will not be sent to the client. This option applies to protocol version 2 only.
 
 从官方的解释来看，默认设置下server端是不会主动断开连接的（`ClientAliveInterval`为0）。
 
