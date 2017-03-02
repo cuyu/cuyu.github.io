@@ -1,0 +1,34 @@
+---
+layout: default
+---
+
+<div class="page">
+    <h1 class="page-title">{{ page.title }}</h1>
+    {{ content }}
+</div>
+
+<style>
+    .Footnote {
+        background-color: #cfcf9c;
+    }
+</style>
+
+<script>
+    function removeElement(id) {
+        var elem = document.getElementById(id);
+        return elem.parentNode.removeChild(elem);
+    }
+    /* The script is used to relocate the footnote under the note text directly */
+    var noteLabels = document.getElementsByClassName("footnote");
+    for (var i = 0; i < noteLabels.length; ++i) {
+        var noteText = noteLabels[i].parentElement.parentElement;
+        var footnoteId = 'fn:' + noteLabels[i].text;
+        var footnote = document.getElementById(footnoteId).children[0];
+        footnote.className = "Footnote";
+        var newHr = document.createElement("hr");
+        noteText.parentNode.insertBefore(newHr, noteText.nextSibling);
+        noteText.parentNode.insertBefore(footnote, noteText.nextSibling); // Insert the footnote after note text
+        noteText.parentNode.insertBefore(newHr, noteText.nextSibling);
+        removeElement(footnoteId);
+    }
+</script>
