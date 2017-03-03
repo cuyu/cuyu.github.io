@@ -21,6 +21,7 @@ date: 2017-03-03
 > If you know exactly what `a + ""` is doing and you're intentionally doing that to coerce to a `string`, you might feel the operation is sufficiently "explicit." Conversely, if you've never seen the `String(..)` function used for `string` coercion, its behavior might seem hidden enough as to feel "implicit" to you.
 
 这段挺有意思，即隐式或显式是相对的，即一个人如果对某种方式进行的类型转换非常熟悉，那么这种方式对于他来说就是显示的，反之亦然。
+
 当然这有一些诡辩的感觉，毕竟你写的代码不是只有你一个人看的，那么可以认为大多数人熟悉的类型转换方式为显式，否则为隐式比较合适。
 
 ---
@@ -120,6 +121,8 @@ Object和array类型转换到number会先调用它们的`valueOf`方法（如果
 > Yep, you guessed it, `d` is still `true` here. Why? Same reason as before. Despite what it may seem like, `[]`, `{}`, and `function(){}` are *not* on the falsy list, and thus are truthy values.
 
 熟悉Python的得习惯过来了。
+
+---
 
 > ### Explicit Coercion
 >
