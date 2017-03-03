@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Reading <Types & Grammar> - 2"
+title: "Reading &lt;Types & Grammar&gt; - 2"
 category: Javascript
 tags: [读书笔记, You Dont Know JS]
 date: 2017-03-03
