@@ -75,7 +75,7 @@ div[class^="language-"], div[class*="highlighter-rouge"] {
 }
 
 pre {
-    margin-bottom: 0;
+    margin-bottom: 1rem;
     margin-top: 0;
     background: #333;
     border-radius: 2px;
