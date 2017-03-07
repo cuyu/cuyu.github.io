@@ -6,7 +6,7 @@ permalink: /categories/
 
 <h2>Categories</h2>
 {% for category in site.categories %}
-	<a href="/categories/#{{ category[0] }}" class="post-category"> {{ category[0] }} ({{ category[1].size }})</a>
+	<a href="/categories/#{{ category[0] }}" class="post-category"> {{ category[0] }} <sup>{{ category[1].size }}</sup></a>
 {% endfor %}
 
 {% for category in site.categories %}
