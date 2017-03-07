@@ -5,15 +5,24 @@ permalink: /tags/
 ---
 
 <h2>Tags</h2>
+{% assign tag_string = "" %}
 {% for tag in site.tags %}
-	<a href="/tags/#{{ tag[0] }}" class="post-tag"> {{ tag[0] }} ({{ tag[1].size }})</a>
+	{% assign tag_string = tag[0] | append: '#' | append: tag_string %}
+{% endfor %}
+
+{% assign tag_array = tag_string | split: '#' %}
+{% assign sorted_tags = tag_array | sort %}
+
+
+{% for tag in sorted_tags %}
+<a href="/tags/#{{ tag }}" class="post-tag"> {{ tag }} <sup>{{ site.tags[tag].size }}</sup></a>
 {% endfor %}
 
 
-{% for tag in site.tags %}
-	<h3 class="tag-list" id="{{ tag[0] }}">{{ tag[0] }}</h3>
+{% for tag in sorted_tags %}
+	<h3 class="tag-list" id="{{ tag }}">{{ tag }}</h3>
 	<ul class="article-list">
-	{% for post in tag[1] %}
+	{% for post in site.tags[tag] %}
 		<a href="{{ post.url }}">
 			<li>
 				{{ post.title }}
