@@ -74,13 +74,14 @@ div[class^="language-"], div[class*="highlighter-rouge"] {
     border-radius: 2px;
 }
 
-div > pre[class="highlight"] {
+pre {
     margin-bottom: 0;
     margin-top: 0;
     background: #333;
+    border-radius: 2px;
 }
 
-div > pre[class="highlight"] > code {
+pre > code {
     color: white;
     font-family: Consolas, Monaco, Menlo, "Courier New", monospace;
     /*font-size: .8em;*/
