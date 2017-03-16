@@ -205,11 +205,11 @@ const store = createStore(
 ### `react-redux`中各关键函数的作用
 
 - `connect`：`react-redux`提供的函数，这个函数的作用是对已有的组件进行一层包装，类似于装饰器的作用。它可以接受一些函数来“描述”要包装的组件的状态的变化。
-- `mapStateToProps`：`connect`可以接受的第一个函数（函数名不一定要是这个）。它的作用是根据Redux中存储组件现在的**状态**，来生成组件的**属性**。
-- `mapDispatchToProps`：`connect`可以接受的第二个函数（函数名也不一定是这个）。它的作用也是用来生成组件属性的，但这里的属性一般是一些事件的响应函数。定义这些响应函数时，一般的做法是根据响应函数传递进来的**事件**对象以及组件本身的**属性**，来改变Redux中存储的组件的**状态**（由向`dispatch`函数中传递一个**action**实现，这个action对象可以夹带事件或组件属性相关的信息）。
+- `mapStateToProps`：`connect`可以接受的第一个函数（函数名不一定要是这个）。它的作用是根据Redux中存储组件现在的**状态**，来生成组件的**属性**。***特别需要注意的是`mapStateToProps`的输入为Redux中组件的状态以及组件自己的属性（ownProps，即通过`react-redux`生成的属性是不算在内的）。***
+- `mapDispatchToProps`：`connect`可以接受的第二个函数（函数名也不一定是这个）。它的作用也是用来生成组件属性的，但这里的属性一般是一些事件的响应函数。定义这些响应函数时，一般的做法是根据响应函数传递进来的**事件**对象以及组件本身的**属性**，来改变Redux中存储的组件的**状态**（通过向`dispatch`函数中传递一个**action**实现，这个action对象可以夹带事件或组件属性相关的信息）。
 - reducer：函数名称自己定义。它的作用是根据**action**的类型和其中包含的信息，来生成新的**状态**放到Redux中。
 - `combineReducers`：`react-redux`提供的函数，作用是将多个不同的reducer函数合并成一个。
-- `Provider`：`react-redux`提供的React组件，用来
+- `Provider`：`react-redux`提供的React组件，用来将store对象通过组件context的方式传递给该组件的所有子孙组件。
 - `createStore`：`react-redux`提供的函数，作用是根据reducer来生成一个store对象，用来放置到需要被状态管理的组件的`Provider`组件中。
 
 把以上函数串联起来，当一个组件有一个事件发生，并要改变Redux的状态：
