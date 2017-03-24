@@ -215,3 +215,5 @@ const store = createStore(
 把以上函数串联起来，当一个组件有一个事件发生，并要改变Redux的状态：
 
 `mapDispatchToProps`中的事件响应函数被调用 ==> 响应函数中调用`dispatch`函数并传递一个action ==> reducer函数被调用 ==> reducer函数中根据action生成对应的状态 ==>  `mapStateToProps`被调用并根据新的状态生成组件的属性 ==> 组件属性被更新并重新render
+
+特别需要注意的一点是，当`dispatch`发生后，当前组件的`store`中注册的所有reducer函数都会被调用，当然可能只有某一个reducer会因为当前的action而触发改变state的行为。
