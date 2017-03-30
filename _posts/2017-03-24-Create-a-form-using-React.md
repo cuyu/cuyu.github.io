@@ -20,7 +20,7 @@ class App extends Component {
 }
 ```
 
-第一坑：运行时发现输入框中输入任何字符都没有反应。原因[官方文档](https://facebook.github.io/react/docs/forms.html)也作了说明，简单说就是需要我们自己实现一个`onChange`的事件函数。
+第一坑：运行时发现输入框中输入任何字符都没有反应。原因[官方文档](https://facebook.github.io/react/docs/forms.html)也作了说明，简单说就是需要我们自己实现一个`onChange`的事件函数。（还有一个选择是仍让DOM来自己管理这些输入的值，参考[官方文档](https://facebook.github.io/react/docs/uncontrolled-components.html)）
 
 ---
 
