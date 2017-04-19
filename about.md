@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: default-with-comment
 title: About
 permalink: /about/
 ---
@@ -15,4 +15,4 @@ This site is developed based on `Jekyll 3` and powered by [lanyon](http://lanyon
 
 ### About this blog
 
-所有文章除注明`[转载]`外，均为原创。如需转载，请注明出处。(🙂)
+所有文章除注明`[转载]`外，均为原创。禁止任何形式的商业转载。
