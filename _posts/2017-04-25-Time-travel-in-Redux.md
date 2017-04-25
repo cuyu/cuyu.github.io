@@ -58,7 +58,7 @@ b.c = 3;
 console.log(b);  // { c: 3 }
 ```
 
-回到reducer函数上来，如果我们的state对象是immutable的话，所有问题就都解决了。而[immutable.js](https://github.com/facebook/immutable-js/)正是这一把🔑，它不仅实现了对象的immutable，并且十分高效，每次改变一个对象，（内存中）仅仅是改变的那部分做了更新，其余部分还是指向原来的对象（当然根节点肯定是要更新的），简单的原理示意如下：
+回到reducer函数上来，如果我们的state对象是immutable的话，所有问题就都解决了。而[immutable.js](https://github.com/facebook/immutable-js/)正是这一把🔑，它不仅实现了对象的immutable，并且十分高效，每次改变一个对象，（内存中）仅仅是改变的那部分（以及其父节点）做了更新（或拷贝），其余部分还是指向原来的对象（当然根节点肯定是要更新的），简单的原理示意如下：
 
 ![immutable.js原理](/images/2017-04-25-immutable原理.gif)
 
