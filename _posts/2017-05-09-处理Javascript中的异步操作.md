@@ -10,7 +10,7 @@ date: 2017-05-09
 
 我们知道JavaScript和其他语言很大的一点区别就在于其中存在大量的异步函数。所谓异步是指一个函数可能调用它的语句已经执行结束了，但函数内部的语句依然还没有执行，即函数的调用仅仅是一个trigger。比如下图中的`getAccount`函数作为异步操作被调用后，紧接着`fetchGreetings`被调用，它们内部语句的执行几乎是在同时并发进行的。如果我希望`fetchGreetings`函数能在`getAccount`函数执行完成之后再开始执行（比如前者的需要后者的返回结果作为输入），并且仍保持`getAccount`函数是异步的，要怎么办？
 
-![sync vs. async](/images/2017-05-05-sync_vs_async.png)
+![sync vs. async](/images/2017-05-09-sync_vs_async.png)
 
 一个最直接了当的方式就是回调，即把`fetchGreetings`函数本身作为一个参数传递给`getAccount`函数，当`getAccount`内部语句执行完成后，由它去调用`fetchGreetings`函数。
 
