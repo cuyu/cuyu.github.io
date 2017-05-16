@@ -69,9 +69,28 @@ myFirstPromise.then(function(successMessage){
 });
 ```
 
-可以看到其实Promise的本质还是利用了回调函数，并不是什么全新的东西。上面的`new Promise()`中传递进去的函数就是我们的异步操作，当这一句执行后，即创建了Promise对象后，该函数就会开始执行。这个函数的输入包含两个参数，`resolve`和`reject`，它们其实就是异步操作的回调函数，Promise规定了`resolve`应该在操作成功后执行，而`reject`应该在操作失败后执行。`myFirstPromise.then()`其实就是定义了`resolve`函数的模样，对应的`myFirstPromise.catch()`用来定义`reject`回调函数。
+可以看到其实Promise只是一种模式，其本质还是利用了回调函数，并不是什么全新的东西。上面的`new Promise()`中传递进去的函数就是我们的异步操作，当这一句执行后，即创建了Promise对象后，该函数就会开始执行。这个函数的输入包含两个参数，`resolve`和`reject`，它们其实就是异步操作的回调函数，Promise规定了`resolve`应该在操作成功后执行，而`reject`应该在操作失败后执行。`myFirstPromise.then()`其实就是定义了`resolve`函数的模样，对应的`myFirstPromise.catch()`用来定义`reject`回调函数。当处理多个异步操作串联时，只需要在回调函数中返回下一个操作的Promise对象即可：
 
-因此**Promise只是定义了一套规则（或者叫模式）来使用回调函数**，当大家都使用这套规则来处理回调函数时，代码就会显得比较清晰。
+```javascript
+function promisePrint(str) {
+    console.log(str);
+    return new Promise(function (resolve, reject) {
+        setTimeout(function () {
+            resolve();
+        }, 1000);
+    });
+}
+
+promisePrint('111').then(function () {
+    return promisePrint('222');
+}).then(function () {
+    return promisePrint('333');
+}).then(function () {
+    return promisePrint('444');
+});
+```
+
+因此**Promise只是定义了一套规则（或者叫模式）来使用回调函数**，利用这个模式，可以将嵌套的回调函数变成串联的函数调用。
 
 ### Generator
 
@@ -179,3 +198,78 @@ asyncCall();
 - `await`语句也可以接受一个普通的函数（即不返回Promise对象的函数），在这种情况下，该函数会被调用，并立即进入下一个`await`语句。
 
 从这些特点，以及和Generator方式的比较可以看到，两者确实非常相似，async函数可以看成是官方实现的一个"[Co](https://github.com/tj/co)"来解析异步操作，并且制定了略有不同的规则（模式）的一套东西，达到的效果是类似的：即使用像同步编程一样的方式来编写异步操作流程，增强了代码的可读性。
+
+### Observable (RxJS)###
+
+和Promise类似，Observable是另一种异步操作处理的模式，而[RXJS](https://github.com/Reactive-Extensions/RxJS)则是Observable的Javascript实现，并且集成了许多常用的功能。
+
+同样以官方的例子为基础稍作修改：
+
+```javascript
+const Rx = require('rx');
+
+// Similar to `new Promise()`
+const source = Rx.Observable.create(function (observer) {
+    setTimeout(function () {
+        observer.onNext(42);
+        observer.onNext(43);
+        observer.onCompleted();
+    }, 1000);
+    return function () {
+        console.log('disposed');
+    }
+});
+
+const subscription = source.subscribe(
+    function (x) {
+        console.log('onNext: %s', x);
+    },
+    function (e) {
+        console.log('onError: %s', e);
+    },
+    function () {
+        console.log('onCompleted');
+    }
+); // Will print 'onNext: 42', 'onNext: 43', 'onCompleted', 'disposed' after 1 second
+// You can also call `subscription.dispose()` to run the returned function directly (will cancel other operations)
+```
+
+这个例子里面，可以看到Observable的一些特点：
+
+- 和Promise一样，都是以一个函数作为输入来创建一个Observable对象，不同的是这里函数的输入只有一个`observer`；
+- 操作的不同状态是通过函数输入的`observer`不同属性来表示的，`observer.onNext`表示下一步要执行的操作（类似Promise中的`resolve`），`observer.onError`类似Promise中的`reject`，`observer.onComplete`表示快完成时要执行的操作，函数返回另一个函数会在取消未所有执行的操作时执行（如果没发生取消操作则在最后执行）；
+- `observer.onNext`和`observer.onComplete`的区别在于，前者可以多次执行，而后者最多只执行一次；
+- 可以通过调用`subscription.dispose()`来提前终止未执行的操作，这是Promise所不具备的；
+
+更多关于Observable和Promise的区别建议看一看[RxJS Observables vs Promises](https://link.zhihu.com/?target=https%3A//egghead.io/lessons/rxjs-rxjs-observables-vs-promises)这个视频。
+
+OK，现在我们来实现和之前一样的事情，每隔一秒打印一个字符串：
+
+```javascript
+const Rx = require('rx');
+
+function observablePrint(str) {
+    return Rx.Observable.create(function (observer) {
+        console.log(str);
+        setTimeout(function () {
+            observer.onNext();
+            observer.onCompleted();
+            observer.onError();
+        }, 1000);
+        return function () {
+        }
+    });
+}
+
+observablePrint('ob1').flatMap(observablePrint('ob2')).flatMap(observablePrint('ob3')).flatMap(observablePrint('ob4')).subscribe();
+```
+
+### 小结###
+
+- 回调函数是实现异步调用最基本的手段，但过度使用会让代码的可读性下降；
+- Promise是一种以回调函数为基础实现的异步调用模式，利用此模式可以把嵌套的回调函数转变为链式的函数调用；
+- Generator是一种迭代器，利用生成器可以让异步调用变成类似同步调用的多条执行语句，使代码可读性进一步提升；
+- async函数是Generator实现异步调用的模式的语法糖，并被官方ES7所支持；
+- Observable是另一种可以用来处理异步调用的模式，它比Promise更加复杂，也更加强大，在特定场合非常有用。
+
+以上，对于异步操作，个人觉得大部分情况下使用async函数就足够了，某些情况下使用RxJS来处理会更加方便一些（至于是哪些时候我现在也不清楚啊-_-）。对于Generator，它比async函数要更加灵活，在某些async函数无法满足需求时，可考虑使用Generator自己造轮子。Promise的话，由于是async函数的基础，可能还是会经常碰到的，只不过它的那种链式调用应该会被async函数取代了。
