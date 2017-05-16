@@ -2,7 +2,7 @@
 layout: post
 title: "处理Javascript中的异步操作"
 category: Javascript
-tags: [Promise, Generator, async]
+tags: [Promise, Generator, async, RxJS]
 date: 2017-05-09
 ---
 
@@ -201,7 +201,7 @@ asyncCall();
 
 ### Observable (RxJS)###
 
-和Promise类似，Observable是另一种异步操作处理的模式，而[RXJS](https://github.com/Reactive-Extensions/RxJS)则是Observable的Javascript实现，并且集成了许多常用的功能。
+和Promise类似，Observable是另一种异步操作处理的模式，而[RxJS](https://github.com/Reactive-Extensions/RxJS)则是Observable的Javascript实现，并且集成了许多常用的功能。
 
 同样以官方的例子为基础稍作修改：
 
@@ -261,7 +261,7 @@ function observablePrint(str) {
     });
 }
 
-observablePrint('ob1').flatMap(observablePrint('ob2')).flatMap(observablePrint('ob3')).flatMap(observablePrint('ob4')).subscribe();
+observablePrint('aaa').flatMap(observablePrint('bbb')).flatMap(observablePrint('ccc')).flatMap(observablePrint('ddd')).subscribe();
 ```
 
 ### 小结###
@@ -272,4 +272,4 @@ observablePrint('ob1').flatMap(observablePrint('ob2')).flatMap(observablePrint('
 - async函数是Generator实现异步调用的模式的语法糖，并被官方ES7所支持；
 - Observable是另一种可以用来处理异步调用的模式，它比Promise更加复杂，也更加强大，在特定场合非常有用。
 
-以上，对于异步操作，个人觉得大部分情况下使用async函数就足够了，某些情况下使用RxJS来处理会更加方便一些（至于是哪些时候我现在也不清楚啊-_-）。对于Generator，它比async函数要更加灵活，在某些async函数无法满足需求时，可考虑使用Generator自己造轮子。Promise的话，由于是async函数的基础，可能还是会经常碰到的，只不过它的那种链式调用应该会被async函数取代了。
+以上，对于异步操作，个人觉得大部分情况下使用async函数就足够了，某些情况下使用RxJS来处理会更加方便一些（至于是哪些情况我现在也不清楚啊-_-）。对于Generator，它比async函数要更加灵活，在某些async函数无法满足需求时，可考虑使用Generator自己造轮子。Promise的话，由于是async函数的基础，还是会经常碰到的，只不过它的那种链式调用应该会被async函数取代了。
