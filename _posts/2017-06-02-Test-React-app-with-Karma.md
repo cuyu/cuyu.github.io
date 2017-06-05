@@ -2,13 +2,13 @@
 layout: post
 title: "Test React app with Karma"
 category: Javascript
-tags: [Karma, React]
+tags: [Karma, React]
 date: 2017-06-02
 ---
 
-### Why Karma?###
-
 ![karma-logo](http://karma-runner.github.io/assets/img/banner.png)
+
+### Why Karma?###
 
 前端的工具真的太多了，多的有点让人眼花缭乱。问题是我们真的需要这么多的工具吗？我觉得对于一个成熟的需要长期更新维护的代码库而言，是的，真的需要😂，最起码每一类工具总得需要选择一个来使用。而对于那些“一次性”的作品，我觉得很多工具大可省略不用（它们甚至连测试代码都可以不需要）。而[Karma](http://karma-runner.github.io/)就是属于那一类可用可不用的工具。这类可用可不用的工具有一些共性，它们要么是为了解决因项目复杂度提高而产生的问题（小项目可以不用），要么是为了提高开发的效率（不那么关心效率的话可以不用）。
 
@@ -81,4 +81,5 @@ describe("app", () => {
 这里提几个碰到的坑：
 
 - 如果项目用到了`react-router`，Karma测试默认打开的页面路径是`/debug.html`，不是`/`哦，这里可能会有问题；
-- 如果没有host `public/index.html`文件，项目的入口函数所在的js文件就不要加载到Karma的server上；
+- 项目的入口函数所在的js文件（一般是`index.js`）不要打包加载到Karma的server上，否则除了测试代码以外，项目也会随着加载而执行（如果是想测试整个项目的加载那也是放到测试代码里面）；
+- 如果觉得弄Babel的设置比较麻烦，可以直接用`create-react-app`一样的preset，即`react-app`这个preset，前提是需要设定一个环境变量`NODE_ENV=development`；
