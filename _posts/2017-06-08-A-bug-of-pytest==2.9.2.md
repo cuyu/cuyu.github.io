@@ -13,7 +13,7 @@ date: 2017-06-08
 在pytest中添加了一个参数需要输入一个路径作为参数的值，像这样：
 
 ```
-pytest --remote-path /root/tmp /my/tests/folder
+pytest --remote-path /root/tmp --ssh-username root /my/tests/folder
 ```
 
 结果执行时，得到的pytest执行tests的路径却变成了`/`，即根目录。
@@ -33,5 +33,5 @@ pytest --remote-path /root/tmp /my/tests/folder
 要么，option后面的参数以等号来连接，而不是空格：
 
 ```
-pytest --remote-path=/root/tmp /my/tests/folder
+pytest --remote-path=/root/tmp --ssh-username=root /my/tests/folder
 ```
