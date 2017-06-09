@@ -2,7 +2,7 @@
 layout: post
 title: "A bug of pytest==2.9.2"
 category: Python
-tags: [pytest]
+tags: [pytest, 坑]
 date: 2017-06-08
 ---
 
