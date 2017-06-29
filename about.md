@@ -10,7 +10,8 @@ This site is developed based on `Jekyll 3` and powered by [lanyon](http://lanyon
 
 - `rouge` — A Jekyll plugin to display code blocks with colours
 - `jekyll-paginate` — A Jekyll plugin to display articles with multiple pages conveniently
-- [不蒜子](http://ibruce.info/2015/04/04/busuanzi/) — A third-party service to record the site and article visit statistics
+- ~~[不蒜子](http://ibruce.info/2015/04/04/busuanzi/) — A third-party service to record the site and article visit statistics~~
+- [StatCounter](https://statcounter.com) — A third-party service to record the site and article visit statistics
 - [Disqus](https://disqus.com/) — A third-party service to provide comment function
 
 ### About this blog
