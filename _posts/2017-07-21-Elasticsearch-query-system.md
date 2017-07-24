@@ -31,7 +31,6 @@ date: 2017-07-21
 下面这两种方式得到的结果是一样的，前者里面包含的正是Lucene的语法，后者是对应的DSL：
 
 ```json
-GET /_search
 {
   "query": {
     "query_string": {
@@ -42,7 +41,6 @@ GET /_search
 ```
 
 ```json
-GET /_search
 {
   "query": {
     "term": {
@@ -87,7 +85,6 @@ Elasticsearch的DSL其实还是有点小复杂的，这里以`match`语句的搜
 `match`是比较基本的查询方式，主要用于查询某个field匹配上了指定的规则。比如下面用于搜索`play_name`这个field包含`Henry IV`的所有events：
 
 ```json
-GET /_search
 {
   "query": {
     "match": {
@@ -100,7 +97,6 @@ GET /_search
 `match`其实是支持很多高级的选项的，上面的语句和下面的search其实是一模一样的（`operator`默认就是"or"）。比如我们想找的`play_name`就是叫`Henry IV`，为了避免像`Marry IV`或`Henry X`之类也被搜索到，这里可以把`operator`设为"and"（即需要同时满足query中的每个单词）。
 
 ```json
-GET /_search
 {
   "query": {
     "match": {
@@ -190,7 +186,6 @@ GET /_search
 5. 以下两个搜索得到的结果是一样的，它们有区别么？
 
    ```json
-   GET /my_store/products/_search
    {
      "query": {
        "term": {
@@ -201,7 +196,6 @@ GET /_search
    ```
 
    ```json
-   GET /_search
    {
      "query": {
        "constant_score": {
