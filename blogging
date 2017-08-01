@@ -132,6 +132,7 @@ date: {date}
         elif args.list_content == 'tags':
             stats_tags()
     elif args.command == 'publish':
+        # Rename the file name and the date in meta header then commit to Github
         draft_path = os.path.join(THIS_FILE_DIR, '_drafts', args.draft_file)
         new_name = str(datetime.date.today()) + args.draft_file[10:]
         post_path = os.path.join(THIS_FILE_DIR, '_posts', new_name)
@@ -143,7 +144,7 @@ date: {date}
                         changed_date = True
                         line = 'date: {0}\n'.format(str(datetime.date.today()))
                     in_file.write(line)
-        os.remove(draft_path)
-        # call(['git', 'add', args.post_title])
-        # call(['git', 'commit', '-m', '"Publish post: {0}"'.format(args.post_title)])
-        # call(['git', 'push'])
+        call(['git', 'add', post_path])
+        call(['git', 'rm', '-f', draft_path])
+        call(['git', 'commit', '-m', 'Publish post: {0}'.format(args.draft_file)])
+        call(['git', 'push'])

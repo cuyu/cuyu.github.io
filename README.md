@@ -9,7 +9,7 @@ I've write a python script to generate new mark down file and some other conveni
 ./blogging new {title} {category} {[tag1, tag2]}
 ```
 
-This will generate a new file with some meta data and open it.
+This will generate a new file (under `./_drafts/`) with some meta data and open it.
 
 ```
 ./blogging ls category
@@ -22,6 +22,18 @@ This will list all the categories and corresponding count.
 ```
 
 The same but list tags instead.
+
+```
+./blogging save
+```
+
+This will commit in all the changes in `./_drafts/` folder.
+
+```
+./blogging publish {file_name}
+```
+
+This will move the file from `./_drafts/` to `./_posts/` and commit it to the Github pages.
 
 ### TODO List
 
