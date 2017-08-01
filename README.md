@@ -41,6 +41,7 @@ The same but list tags instead.
   *Seems a little bit difficult to implement as Github disables customize Jekyll plugins. Although we can use Javascript to relocate footnotes after Jekyll rendered, the footnote cannot contain multi-lines. All these (limitations) make it complicated to achieve a notebook-like page layout.*
 - In site content search (can use google)
 - A statistics page (e.g. the rank of each post viewed/commented, the average word count, etc.)
+- Besides create date, display edit date (if the post is edited later)
 
 #### For CLI:
 
