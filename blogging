@@ -98,6 +98,8 @@ if __name__ == '__main__':
     ls_parser = subparsers.add_parser('ls', help='List exist stats')
     ls_parser.add_argument('list_content', choices=['categories', 'tags'])
 
+    save_parser = subparsers.add_parser('save', help='Save all the drafts to the Github')
+
     publish_parser = subparsers.add_parser('publish', help='Publish the post to the Github')
     publish_parser.add_argument('draft_file', help='File name of the blog').completer = FileCompleter('_drafts')
 
@@ -147,4 +149,9 @@ date: {date}
         call(['git', 'add', post_path])
         call(['git', 'rm', '-f', draft_path])
         call(['git', 'commit', '-m', 'Publish post: {0}'.format(args.draft_file)])
+        call(['git', 'push'])
+    elif args.command == 'save':
+        all_drafts = os.path.join(THIS_FILE_DIR, '_drafts', '*')
+        call(['git', 'add', all_drafts])
+        call(['git', 'commit', '-m', 'Save drafts'])
         call(['git', 'push'])
