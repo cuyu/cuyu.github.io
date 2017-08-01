@@ -4,48 +4,56 @@ import argparse
 import os
 import datetime
 from subprocess import call
+
 from termcolor import colored
 from tabulate import tabulate
 from pprint import pprint
 import codecs
+import argcomplete
 
 THIS_FILE_DIR = os.path.split(os.path.abspath(__file__))[0]
 
 
-def _list_meta_info():
+def _list_meta_info(path='_posts'):
     result = dict()
     categories = dict()
     tags = dict()
+    titles = dict()
     result['category'] = categories
     result['tag'] = tags
-    for file_name in os.listdir(os.path.join(THIS_FILE_DIR, '_posts')):
-        with codecs.open(os.path.join(THIS_FILE_DIR, '_posts', file_name), 'r', encoding='utf-8') as f:
-            f.readline()
-            while True:
-                line = f.readline()
-                if line.startswith('category:'):
-                    category = line[9:].strip()
-                    if category in categories:
-                        categories[category] += 1
-                    else:
-                        categories[category] = 1
-                if line.startswith('tags:'):
-                    tag_list = line[5:].strip()[1:-1].split(',')
-                    for tag in tag_list:
-                        tag = tag.strip()
-                        if tag in tags:
-                            tags[tag] += 1
+    result['title'] = titles
+    for file_name in os.listdir(os.path.join(THIS_FILE_DIR, path)):
+        with codecs.open(os.path.join(THIS_FILE_DIR, path, file_name), 'r', encoding='utf-8') as f:
+            first_line = f.readline()
+            if first_line.startswith('---'):
+                while True:
+                    line = f.readline()
+                    if line.startswith('title:'):
+                        title = line[6:].strip()
+                        titles[title] = file_name
+                    elif line.startswith('category:'):
+                        category = line[9:].strip()
+                        if category in categories:
+                            categories[category] += 1
                         else:
-                            tags[tag] = 1
-                if line == '---\n':
-                    break
+                            categories[category] = 1
+                    elif line.startswith('tags:'):
+                        tag_list = line[5:].strip()[1:-1].split(',')
+                        for tag in tag_list:
+                            tag = tag.strip()
+                            if tag in tags:
+                                tags[tag] += 1
+                            else:
+                                tags[tag] = 1
+                    if line == '---\n':
+                        break
     return result
 
 
 def stats_categories():
     result = _list_meta_info()
     table = []
-    all_categories =  result['category'].keys()
+    all_categories = result['category'].keys()
     all_categories.sort()
     for c in all_categories:
         table.append([c, result['category'][c]])
@@ -62,6 +70,20 @@ def stats_tags():
     print tabulate(table, headers=['Tag', 'Count'])
 
 
+class FileCompleter(object):
+    """
+    Seems not work with argcomplete, not sure if it is because the
+    """
+    def __init__(self, path):
+        file_names = os.listdir(os.path.join(THIS_FILE_DIR, path))
+        self.choices = [name.decode('utf-8') for name in file_names]
+
+    def __call__(self, prefix, **kwargs):
+        return (c for c in self.choices if c.startswith(prefix))
+
+
+# To register with argcompletion, run following command:
+#   eval "$(register-python-argcomplete blogging)"
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter,
                                      description='A simple tool to create new blogging file.\n' +
@@ -69,13 +91,17 @@ if __name__ == '__main__':
     subparsers = parser.add_subparsers(help='Use {subcommand} -h for each subcommand\'s optional arguments details',
                                        dest='command')
     create_parser = subparsers.add_parser('new', help='Create new blogging')
-    create_parser.add_argument('post_title', help='Title of the blogging blogging')
-    create_parser.add_argument('category', help='The category of the blogging')
-    create_parser.add_argument('tags', help='The tag list of the blogging, split by comma')
+    create_parser.add_argument('post_title', help='Title of the blog')
+    create_parser.add_argument('category', help='The category of the blog')
+    create_parser.add_argument('tags', help='The tag list of the blog, split by comma')
 
     ls_parser = subparsers.add_parser('ls', help='List exist stats')
     ls_parser.add_argument('list_content', choices=['categories', 'tags'])
 
+    publish_parser = subparsers.add_parser('publish', help='Publish the post to the Github')
+    publish_parser.add_argument('draft_file', help='File name of the blog').completer = FileCompleter('_drafts')
+
+    argcomplete.autocomplete(parser)
     args = parser.parse_args()
 
     if args.command == 'new':
@@ -95,13 +121,29 @@ tags: {tags}
 date: {date}
 ---""".format(title=post_name, date=str(today), category=args.category, tags=post_tags)
 
-        post_path = os.path.join(THIS_FILE_DIR, '_posts', '{0}'.format(file_name))
-        with open(post_path, 'w') as f:
+        draft_path = os.path.join(THIS_FILE_DIR, '_drafts', '{0}'.format(file_name))
+        with open(draft_path, 'w') as f:
             f.write(content)
         print "\"{0}\" has been created under _posts folder.".format(file_name)
-        call(['open', post_path])
+        call(['open', draft_path])
     elif args.command == 'ls':
         if args.list_content == 'categories':
             stats_categories()
         elif args.list_content == 'tags':
             stats_tags()
+    elif args.command == 'publish':
+        draft_path = os.path.join(THIS_FILE_DIR, '_drafts', args.draft_file)
+        new_name = str(datetime.date.today()) + args.draft_file[10:]
+        post_path = os.path.join(THIS_FILE_DIR, '_posts', new_name)
+        changed_date = False
+        with open(post_path, 'w') as in_file:
+            with open(draft_path, 'r') as out_file:
+                for line in out_file:
+                    if not changed_date and line.startswith('date:'):
+                        changed_date = True
+                        line = 'date: {0}\n'.format(str(datetime.date.today()))
+                    in_file.write(line)
+        os.remove(draft_path)
+        # call(['git', 'add', args.post_title])
+        # call(['git', 'commit', '-m', '"Publish post: {0}"'.format(args.post_title)])
+        # call(['git', 'push'])
