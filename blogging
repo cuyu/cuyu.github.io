@@ -71,9 +71,6 @@ def stats_tags():
 
 
 class FileCompleter(object):
-    """
-    Seems not work with argcomplete, not sure if it is because the
-    """
     def __init__(self, path):
         file_names = os.listdir(os.path.join(THIS_FILE_DIR, path))
         self.choices = [name.decode('utf-8') for name in file_names]
@@ -81,9 +78,10 @@ class FileCompleter(object):
     def __call__(self, prefix, **kwargs):
         return (c for c in self.choices if c.startswith(prefix))
 
-
-# To register with argcompletion, run following command:
-#   eval "$(register-python-argcomplete blogging)"
+#################################################################
+# To register with argcompletion, run following command:        #
+#   eval "$(register-python-argcomplete blogging)"              #
+#################################################################
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter,
                                      description='A simple tool to create new blogging file.\n' +
