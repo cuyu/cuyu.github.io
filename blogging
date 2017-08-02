@@ -24,7 +24,8 @@ class Settings(object):
 
     def __getattribute__(self, item):
         if item == 'PROJECT_PATH':
-            assert object.__getattribute__(self, item), 'Please set the project path firstly\n E.g. blogging set-project-path [YOUR_BLOG_PATH]'
+            assert object.__getattribute__(self,
+                                           item), 'Please set the project path firstly\n E.g. blogging set-project-path [YOUR_BLOG_PATH]'
         return object.__getattribute__(self, item)
 
 
@@ -106,13 +107,15 @@ class FileCompleter(object):
 
 def CategoryCompleter(prefix, **kwargs):
     result = _list_meta_info()
-    all_categories = sorted(result['category'].keys())
+    all_categories = result['category'].keys()
     return (c for c in all_categories if c.startswith(prefix))
 
 
 def TagCompleter(prefix, **kwargs):
     result = _list_meta_info()
-    all_tags = sorted(result['tag'].keys())
+    # Sorting is not work as it is controlled by the bash side
+    # See https://github.com/kislyuk/argcomplete/issues/129 for details
+    all_tags = result['tag'].keys()
     return (c for c in all_tags if c.startswith(prefix))
 
 
@@ -123,7 +126,7 @@ def TagCompleter(prefix, **kwargs):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter,
                                      description='A simple tool to create new blogging file.\n' +
-                                                 'Use example: ./blogging new "post_title" category tag1,tag2\n')
+                                                 'Use example: ./blogging new "post_title" category tag1 tag2\n')
     subparsers = parser.add_subparsers(help='Use {subcommand} -h for each subcommand\'s optional arguments details',
                                        dest='command')
     set_parser = subparsers.add_parser('set-project-path', help='Configure the project path')
@@ -132,7 +135,8 @@ if __name__ == '__main__':
     create_parser = subparsers.add_parser('new', help='Create new blogging')
     create_parser.add_argument('post_title', help='Title of the blog')
     create_parser.add_argument('category', help='The category of the blog').completer = CategoryCompleter
-    create_parser.add_argument('tags', help='The tag list of the blog, split by comma').completer = TagCompleter
+    create_parser.add_argument('tags', help='The tag list of the blog, separate by space',
+                               nargs="*").completer = TagCompleter
 
     ls_parser = subparsers.add_parser('ls', help='List exist stats')
     ls_parser.add_argument('list_content', choices=['categories', 'tags'])

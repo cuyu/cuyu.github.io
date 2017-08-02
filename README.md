@@ -38,34 +38,34 @@ Open a new shell session and ENJOY🍹
 #### Usage
 
 ```
-./blogging new {title} {category} {[tag1, tag2]}
+blogging new {title} {category} {tag1} {tag2}
 ```
 
 This will generate a new file (under `./_drafts/`) with some meta data and open it.
 
 ```
-./blogging ls category
+blogging ls category
 ```
 
 This will list all the categories and corresponding count.
 
 ```
-./blogging ls tag
+blogging ls tag
 ```
 
 The same but list tags instead.
 
 ```
-./blogging save
+blogging save
 ```
 
 This will commit in all the changes in `./_drafts/` folder.
 
 ```
-./blogging publish {file_name}
+blogging publish {file_name}
 ```
 
-This will move the file from `./_drafts/` to `./_posts/` and commit it to the Github pages.
+This will move the file from `./_drafts/` to `./_posts/` (also change the date info) and commit it to the Github pages.
 
 ### TODO List
 
@@ -90,5 +90,5 @@ This will move the file from `./_drafts/` to `./_posts/` and commit it to the Gi
 #### For CLI:
 
 - Can push specific post to git and there can be a post time besides a create time
-- Auto complete category/tags
+- ~~Auto complete category/tags~~
 - Colourful
