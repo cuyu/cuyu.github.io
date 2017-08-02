@@ -1,9 +1,41 @@
-# cuyu.github.io
-This is my personal blog.
+# 📖🖊
+>  This is my personal blog.
 
 ### CLI
 
-I've write a python script to generate new mark down file and some other convenient functions:
+I've write a python script to generate new mark down file and with some other convenient functions.
+
+#### Prerequisites
+
+To enable the `argcomplete`, you should:
+
+1. ```bash
+   pip install argcomplete
+   ```
+
+2. Insert the following content into `~/.zshrc`:
+
+   ```bash
+   eval "$(register-python-argcomplete blogging)"
+   ```
+
+To using `blogging` command from anywhere, you should:
+
+1. Create a soft link to the `blogging` file:
+
+   ```
+   ln -s [YOUR_PROJECT_PATH]/blogging /usr/bin/local/blogging
+   ```
+
+2. Set the blog project path:
+
+   ```
+   blogging set-project-path [YOUR_PROJECT_PATH]
+   ```
+
+Open a new shell session and ENJOY🍹
+
+#### Usage
 
 ```
 ./blogging new {title} {category} {[tag1, tag2]}
