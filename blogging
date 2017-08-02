@@ -104,6 +104,18 @@ class FileCompleter(object):
         return (c for c in self.choices if c.startswith(prefix))
 
 
+def CategoryCompleter(prefix, **kwargs):
+    result = _list_meta_info()
+    all_categories = sorted(result['category'].keys())
+    return (c for c in all_categories if c.startswith(prefix))
+
+
+def TagCompleter(prefix, **kwargs):
+    result = _list_meta_info()
+    all_tags = sorted(result['tag'].keys())
+    return (c for c in all_tags if c.startswith(prefix))
+
+
 #################################################################
 # To register with argcompletion, run following command:        #
 #   eval "$(register-python-argcomplete blogging)"              #
@@ -119,8 +131,8 @@ if __name__ == '__main__':
 
     create_parser = subparsers.add_parser('new', help='Create new blogging')
     create_parser.add_argument('post_title', help='Title of the blog')
-    create_parser.add_argument('category', help='The category of the blog')
-    create_parser.add_argument('tags', help='The tag list of the blog, split by comma')
+    create_parser.add_argument('category', help='The category of the blog').completer = CategoryCompleter
+    create_parser.add_argument('tags', help='The tag list of the blog, split by comma').completer = TagCompleter
 
     ls_parser = subparsers.add_parser('ls', help='List exist stats')
     ls_parser.add_argument('list_content', choices=['categories', 'tags'])
