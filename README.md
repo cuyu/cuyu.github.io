@@ -67,6 +67,12 @@ blogging publish {file_name}
 
 This will move the file from `./_drafts/` to `./_posts/` (also change the date info) and commit it to the Github pages.
 
+```
+blogging continue {file_name}
+```
+
+This will open one of your drafts so that you can continue the writes.
+
 ### TODO List
 
 #### For the site:

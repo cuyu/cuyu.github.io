@@ -99,7 +99,7 @@ class FileCompleter(object):
                 file_names = os.listdir(os.path.join(SETTINGS.PROJECT_PATH, path))
             else:
                 file_names = []
-        self.choices = [name.decode('utf-8') for name in file_names]
+        self.choices = [name.decode('utf-8') for name in file_names if not name.startswith('.')]
 
     def __call__(self, prefix, **kwargs):
         return (c for c in self.choices if c.startswith(prefix))
@@ -143,8 +143,11 @@ if __name__ == '__main__':
 
     save_parser = subparsers.add_parser('save', help='Save all the drafts to the Github')
 
+    continue_parser = subparsers.add_parser('continue', help='Open one draft and continue the writing')
+    continue_parser.add_argument('draft_file', help='File name of the draft').completer = FileCompleter('_drafts')
+
     publish_parser = subparsers.add_parser('publish', help='Publish the post to the Github')
-    publish_parser.add_argument('draft_file', help='File name of the blog').completer = FileCompleter('_drafts')
+    publish_parser.add_argument('draft_file', help='File name of the draft').completer = FileCompleter('_drafts')
 
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
@@ -203,3 +206,6 @@ date: {date}
     elif args.command == 'set-project-path':
         with open(BLOGGING_SETTINGS_FILE, 'w') as f:
             f.write(args.project_path)
+    elif args.command == 'continue':
+        draft_path = os.path.join(SETTINGS.PROJECT_PATH, '_drafts', args.draft_file)
+        call(['open', draft_path])
