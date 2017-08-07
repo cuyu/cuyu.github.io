@@ -3,7 +3,7 @@ layout: post
 title: "Upload Python package to PyPI"
 category: Python
 tags: [guide, 坑]
-date: 2017-08-03
+date: 2017-08-07
 ---
 
 ### 流程###
@@ -39,9 +39,8 @@ date: 2017-08-03
 
 ### 坑###
 
-使用`twine`进行upload出现如下的错误，那么很可能是因为你的项目和已有的项目重名了，可以到[https://pypi.python.org/simple/](https://pypi.python.org/simple/)上搜一下看看是否重名。解决的方法自然就是修改一下`setup.py`中setup函数中的`name`参数，删除之前生成的`dist`文件夹并重新生成，然后再upload。
-
 ```
 HTTPError: 403 Client Error: You are not allowed to upload to 'xxxx'. for url: https://upload.pypi.org/legacy/
 ```
 
+使用`twine`进行upload出现以上的错误，那么很可能是因为你的项目和已有的项目重名了，可以到[https://pypi.python.org/simple/](https://pypi.python.org/simple/)上搜一下看看是否重名。解决的方法自然就是修改一下`setup.py`中setup函数中的`name`参数，删除之前生成的`dist`文件夹并重新生成，然后再upload。
