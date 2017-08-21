@@ -3,7 +3,7 @@ layout: post
 title: "Reading &lt;Types & Grammar&gt; - 3"
 category: Javascript
 tags: [You Dont Know JS, 读书笔记]
-date: 2017-08-15
+date: 2017-08-21
 ---
 
 # Chapter 5: Grammar
@@ -167,7 +167,50 @@ func(**d)  # 1, 2
 >
 > My take: **use semicolons wherever you know they are "required," and limit your assumptions about ASI to a minimum.**
 
-说的也有道理，毕竟JavaScript不想Python那样对缩进要求严格，如果两行直接仅仅有一个换行符作为连接，似乎是有些不保险。
+说的也有道理，毕竟JavaScript不像Python那样对缩进要求严格，如果两行直接仅仅有一个换行符作为连接，似乎是有些不保险。
 
 ---
 
+> ## `try..finally`
+>
+> A `return` inside a `finally` has the special ability to override a previous `return` from the `try` or `catch` clause, but only if `return` is explicitly called:
+>
+> ```javascript
+> function bar() {
+> 	try {
+> 		return 42;
+> 	}
+> 	finally {
+> 		// override previous `return 42`
+> 		return;
+> 	}
+> }
+>
+> bar();	// undefined
+> ```
+
+永远不要在`finally`语句中放入`return`、`continue`、`break`等语句（Python中也同样适用）。
+
+---
+
+> ## `switch`
+>
+> If the `case` expression resulted in something that was truthy but not strictly `true` (see Chapter 4), it wouldn't work. This can bite you if you're for instance using a "logical operator" like `||` or `&&` in your expression:
+>
+> ```javascript
+> var a = "hello world";
+> var b = 10;
+>
+> switch (true) {
+> 	case (a || b == 10):
+> 		// never gets here
+> 		break;
+> 	default:
+> 		console.log( "Oops" );
+> }
+> // Oops
+> ```
+>
+> Since the result of `(a || b == 10)` is `"hello world"` and not `true`, the strict match fails. In this case, the fix is to force the expression explicitly to be a `true` or `false`, such as `case !!(a || b == 10)`.
+
+感觉这会是一个大坑。
