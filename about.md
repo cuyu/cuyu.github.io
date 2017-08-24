@@ -4,6 +4,19 @@ title: About
 permalink: /about/
 ---
 
+### About me
+A passionate and curious software engineer, working on (or interested in) following areas:
+
+- Python
+- Javascript
+- Data pipeline
+- Software testing
+- Front-end developing
+
+Contact me:
+- [E-mail](mailto:icyarm@icloud.com)
+- [Github](https://github.com/cuyu)
+
 ### About this site
 
 This site is developed based on `Jekyll 3` and powered by [lanyon](http://lanyon.getpoole.com/). Here are some plugins and third-party services I used:
@@ -14,6 +27,6 @@ This site is developed based on `Jekyll 3` and powered by [lanyon](http://lanyon
 - [StatCounter](https://statcounter.com) — A third-party service to record the site and article visit statistics
 - [Disqus](https://disqus.com/) — A third-party service to provide comment function
 
-### About this blog
-
-所有文章除注明`[转载]`外，均为原创。禁止任何形式的商业转载。
+### About blogs
+所有文章除注明`[转载]`外，均为原创。非本人许可，禁止任何形式的商业转载。
+Prohibit reproduce without permission.
