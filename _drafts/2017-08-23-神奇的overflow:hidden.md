@@ -18,14 +18,49 @@ date: 2017-08-23
 
 <!--break-->
 
-##Formatting context##
+##Visual formatting model##
 
-首先要彻底弄明白设置`overflow:hidden`work的原因，就要从formatting context讲起（参考[w3c标准](https://www.w3.org/TR/CSS2/visuren.html#normal-flow)）。首先，每个DOM元素都有一个formatting context，它要么是block formatting context，要么是inline formatting context。元素的formatting context类型决定了该元素内部的元素是怎样堆叠排列的，比如在block formatting context中：
+###Normal flow###
 
-> In a block formatting context:
+> An element is called [out of flow]() if it is floated, absolutely positioned, or is the root element. An element is called [in-flow]() if it is not out-of-flow. 
+
+即一个元素符合以下条件之一，那么它称之为“out of flow”，否则就是“in flow”（这里的flow即指normal flow）：
+
+- `float`属性不为`none`
+- `position:absolute`
+- `position:fixed` 
+- `<html>`（大部分情况下的根元素）
+
+> The [flow of an element]() A is the set consisting of A and all in-flow elements whose nearest out-of-flow ancestor is A.
+
+“flow of an element”可以理解为多个元素组成的一个flow集合，简单地说就是根据上面的flow概念可以把元素进行一个集合的划分，其中，如果这个元素是“in flow”的，那么它的flow集合就是它自己；如果这个元素是“out of flow”的（假设为元素A），那么它的flow集合就是它自己以及所有它内部的满足一定条件的“in flow”的元素，这个条件是指该“in flow”元素自底向上遍历找到的第一个“out of flow”元素就是元素A。（参考[In the CSS Visual Formatting Model, what does “the flow of an element” mean?](https://stackoverflow.com/questions/40325236/in-the-css-visual-formatting-model-what-does-the-flow-of-an-element-mean)）
+
+Formatting context###
+
+> Boxes in the normal flow belong to a [formatting context](), which may be block or inline, but not both simultaneously. [Block-level](https://www.w3.org/TR/CSS2/visuren.html#block-level) boxes participate in a [block formatting](https://www.w3.org/TR/CSS2/visuren.html#block-formatting) context. [Inline-level boxes](https://www.w3.org/TR/CSS2/visuren.html#inline-level) participate in an [inline formatting](https://www.w3.org/TR/CSS2/visuren.html#inline-formatting) context.
+
+**只有属于normal flow的box才会参与formatting context。**比如一个拥有`float: left`属性的元素是不会参与任何formatting context的。另外注意这里的动词是**参与**，后面会讲到**形成**formatting context并没有这个限制。
+
+> Floats, absolutely positioned elements, block containers (such as inline-blocks, table-cells, and table-captions) that are not block boxes, and block boxes with 'overflow' other than 'visible' (except when that value has been propagated to the viewport) establish new block formatting contexts for their contents.
+
+一个元素只要满足下面任何一个条件就会**形成**block formatting context，若都不满足则**形成**inline formatting context（形成formatting context后，该元素中的所有属于normal flow的box才会参与到该formatting context中）：
+
+- `float`属性不是`none`
+- `overflow`属性不是`visible`
+- `display`属性是`table-cell`、`table-caption`或`inline-block`
+- `position`属性不是`static` 或`relative`
+
+> In a block formatting context, boxes are laid out one after the other, vertically, beginning at the top of a containing block. The vertical distance between two sibling boxes is determined by the ['margin'](https://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-margin) properties. Vertical margins between adjacent block-level boxes in a block formatting context [collapse](https://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#collapsing-margins).
 >
-> - boxes are laid out one after the other, vertically, beginning at the top of a containing block. The vertical distance between two sibling boxes is determined by the ['margin'](https://www.w3.org/TR/CSS2/box.html#propdef-margin) properties. Vertical margins between adjacent block-level boxes in a block formatting context [collapse](https://www.w3.org/TR/CSS2/box.html#collapsing-margins).
-> - each box's left outer edge touches the left edge of the containing block (for right-to-left formatting, right edges touch). This is true even in the presence of floats (although a box's *line boxes* may shrink due to the floats), unless the box establishes a new block formatting context (in which case the box itself [*may* become narrower](https://www.w3.org/TR/CSS2/visuren.html#bfc-next-to-float) due to the floats).
+> In a block formatting context, each box's left outer edge touches the left edge of the containing block (for right-to-left formatting, right edges touch). This is true even in the presence of floats (although a box's *line boxes* may shrink due to the floats), unless the box establishes a new block formatting context (in which case the box itself [*may* become narrower](https://www.w3.org/TR/2011/REC-CSS2-20110607/visuren.html#bfc-next-to-float) due to the floats).
+
+元素的formatting context类型决定了该元素内部的元素是怎样堆叠排列的。
+
+
+
+首先要彻底弄明白设置`overflow:hidden`work的原因，就要从formatting context讲起（参考[w3c标准](https://www.w3.org/TR/CSS2/visuren.html#normal-flow)）。首先，每个DOM元素（准确说是属于normal flow的元素，参考[W3C中的定义](https://www.w3.org/TR/2011/REC-CSS2-20110607/visuren.html#positioning-scheme)）都有一个formatting context，它要么是block formatting context (BFC)，要么是inline formatting context (IFC)（最近添加了FFC和GFC，分别对应flex和grid两种模型）。元素的formatting context类型决定了该元素内部的元素是怎样堆叠排列的，比如在block formatting context中：
+
+
 
 而在inline formatting context中，规则要复杂一些：
 
@@ -45,17 +80,6 @@ date: 2017-08-23
 
 这样理下来原因就有一些明朗了，在出现问题的表单中，包裹表单的label和input元素的父元素应该是inline formatting context，而由于label和input元素（均为block-level element）都不会产生inline-level box，所以它们的高度都没有被计算在内，最终它们父元素的高度就是0了。而对该父元素设置`overflow:hidden`，便把它转换为了block formatting context，它计算高度自然会把其中的block-level element高度都计算在内，自然就不为0了。
 
-至于到底哪些元素会形成block formatting context，可以参考如下规则：
-
-> A block formatting context is a box that satisfies at least one of the following:
->
-> - the value of "float" is not "none",
-> - the used value of "overflow" is not "visible",
-> - the value of "display" is "table-cell", "table-caption", or "inline-block",
-> - the value of "position" is neither "static" nor "relative".
-
-而不满足上面任何一条的就是inline formatting context。
-
 ##Block-level box VS. block-level element VS. block formatting context##
 
 因为上面出现了这些概念，这里稍微做个梳理。
@@ -64,7 +88,7 @@ date: 2017-08-23
 >
 > [Block-level boxes]() are boxes that participate in a [block formatting context.](https://www.w3.org/TR/CSS2/visuren.html#block-formatting) Each block-level element generates a [principal block-level box]() that contains descendant boxes and generated content and is also the box involved in any positioning scheme. Some block-level elements may generate additional boxes in addition to the principal box: 'list-item' elements. These additional boxes are placed with respect to the principal box.
 
-简单来说，一个元素是block-level element还是inline-level element仅仅是由它的`display`属性决定的。而一个block-level element可以产生一个或多个block-level box（这里的box是一个虚拟的概念，它主要用于formatting context中的计算）。但反过来说，是否所有能产生block-level box的都是block-level element呢？答案是否定的。比如`display:inline-block`的元素同样会生成block-level box（存个疑，不完全确定~）:
+简单来说，**一个元素是block-level element还是inline-level element仅仅是由它的`display`属性决定的。**而一个block-level element可以产生一个或多个block-level box（这里的box是一个虚拟的概念，它主要用于formatting context中的计算）。但反过来说，是否所有能产生block-level box的都是block-level element呢？答案是否定的。比如`display:inline-block`的元素同样会生成block-level box（存个疑，不完全确定~）:
 
 > - [**block**]()
 >
@@ -112,11 +136,11 @@ date: 2017-08-23
 
 经过仔细的比对，发现两张表单唯一的区别就是重写之前的表单`form`元素多了一个`form-horizontal`的类，把这个类去掉则和重写后的表达有了一样的问题。但是我用[CSS Diff](https://chrome.google.com/webstore/detail/css-diff/pefnhibkhcfooofgmgoipfpcojnhhljm)来直接比较两个表单的计算后的css并没有得到太大的区别，也是蛮奇怪的。
 
-![CSS Diff](/images/2017-08-23-神奇的overflow:hidden-3.png)
+<img title="CSS Diff" src="/images/2017-08-23-神奇的overflow:hidden-3.png)" width="500"/>
 
 然后我们来看`form-horizontal`带来的应用上的CSS：
 
-![form-horizontal](/images/2017-08-23-神奇的overflow:hidden-2.png)
+<img title="form-horizontal" src="/images/2017-08-23-神奇的overflow:hidden-2.png" width="500" />
 
 原来是pseudo element在捣鬼！也就是说[CSS Diff](https://chrome.google.com/webstore/detail/css-diff/pefnhibkhcfooofgmgoipfpcojnhhljm)并没有把伪元素的差别算在内，因为它比较的是计算过后CSS，而伪元素带来的效果在计算过后只是体现在了`height`等属性上，即我们知道结果是有差别的，却不知道是什么导致了这种差别（即导致这种差别的原因并不能体现在计算过后的CSS上，比如`overflow:hidden`是可以在计算后的CSS上看到的）。
 
@@ -152,17 +176,25 @@ date: 2017-08-23
 }
 ```
 
-所以，这个CSS之所以能达到和`overflow:hidden`一样的效果，是因为
+所以，这个CSS之所以能达到和`overflow:hidden`一样的效果，是因为它在当前元素内部插入了两个拥有`clear: both`属性的元素，也就意味着这两个元素会在元素内部最上边和最下边单独占用一行空间，而这两个元素又拥有`display: table`属性，
 
-
+这个解决方案其实是很早之前Nicolas Gallagher在[A new micro clearfix hack](http://nicolasgallagher.com/micro-clearfix-hack/)中提出来的。
 
 小结##
 
+- DOM元素的formatting context决定了其中的元素是怎样排列的，BFC是从上往下排列的，IFC是从左往右排列的；
+- 在元素的`height`属性为`auto`时，如果该元素形成BFC，则最终高度为能包裹其中所有的block-level box的最小值，如果该元素形成IFC，则最终高度为inline-level box；
 
-
-##Reference##
+Reference##
 
 1. [w3c - §9](https://www.w3.org/TR/CSS2/visuren.html)
+
 2. [w3c - §10](https://www.w3.org/TR/CSS21/visudet.html)
+
 3. [Block Level Element vs Block Formatting Context](https://stackoverflow.com/questions/35111906/block-level-element-vs-block-formatting-context)
+
 4. [CSS中为什么overflow:hidden能清除浮动(float)的影响？原理是什么？ - 知乎](https://www.zhihu.com/question/30938856)
+
+5. [A new micro clearfix hack](http://nicolasgallagher.com/micro-clearfix-hack/)
+
+6. [CSS清浮动处理（Clear与BFC）](http://www.cnblogs.com/dolphinX/p/3508869.html)
