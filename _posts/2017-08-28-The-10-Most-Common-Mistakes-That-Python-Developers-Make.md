@@ -52,6 +52,8 @@ FYI, a common workaround for this is as follows:
 ["baz"]
 ```
 
+<!--break-->
+
 ## Common Mistake #2: Using class variables incorrectly
 
 Consider the following example:

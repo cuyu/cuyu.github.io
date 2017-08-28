@@ -129,6 +129,7 @@ a[class="post-comment"]:before {
 div[class="bottom-nav"] {
     font-size: 1rem;
 }
+
 div[class="bottom-nav"] > a {
     display: table;
     height: 2rem;
@@ -140,8 +141,8 @@ div[class="bottom-nav"] > a {
 }
 
 div[class="bottom-nav"] > a > span[class="bottom-nav-title"] {
-    display:table-cell;
-    vertical-align:middle;
+    display: table-cell;
+    vertical-align: middle;
 }
 
 div[class="bottom-nav"] > a > span[class="bottom-nav-title"]:before {
@@ -206,4 +207,10 @@ div[class="bottom-nav"] > a:hover > span[id="next-logo"] {
     color: #505050;
     margin-left: 2rem;
     margin-bottom: 2rem;
+}
+
+image {
+    max-width: 100%;
+    display: block;
+    margin: auto;
 }
