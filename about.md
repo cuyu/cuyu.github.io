@@ -28,5 +28,5 @@ This site is developed based on `Jekyll 3` and powered by [lanyon](http://lanyon
 - [Disqus](https://disqus.com/) — A third-party service to provide comment function
 
 ### About blogs
-所有文章除注明`[转载]`外，均为原创。非本人许可，禁止任何形式的商业转载。
+所有文章除注明`[转载]`外，均为原创。非本人许可，禁止任何形式的转载。
 Prohibit reproduce without permission.

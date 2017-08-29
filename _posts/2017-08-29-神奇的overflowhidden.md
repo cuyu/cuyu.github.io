@@ -18,11 +18,11 @@ date: 2017-08-29
 
 <!--break-->
 
-##Visual formatting model##
+## Visual formatting model
 
 要彻底弄明白设置`overflow:hidden`work的原因，就要从CSS的visual formatting model讲起。
 
-###Normal flow###
+### Normal flow
 
 > An element is called [out of flow]() if it is floated, absolutely positioned, or is the root element. An element is called [in-flow]() if it is not out-of-flow. 
 
@@ -37,7 +37,7 @@ date: 2017-08-29
 
 “flow of an element”可以理解为多个元素组成的一个flow集合，简单地说就是根据上面的flow概念可以把元素进行一个集合的划分，其中，如果这个元素是“in flow”的，那么它的flow集合就是它自己；如果这个元素是“out of flow”的（假设为元素A），那么它的flow集合就是它自己以及所有它内部的满足一定条件的“in flow”的元素，这个条件是指该“in flow”元素自底向上遍历找到的第一个“out of flow”元素就是元素A。（参考[In the CSS Visual Formatting Model, what does “the flow of an element” mean?](https://stackoverflow.com/questions/40325236/in-the-css-visual-formatting-model-what-does-the-flow-of-an-element-mean)）
 
-###Formatting context###
+### Formatting context
 
 > Boxes in the normal flow belong to a [formatting context](), which may be block or inline, but not both simultaneously. [Block-level](https://www.w3.org/TR/CSS2/visuren.html#block-level) boxes participate in a [block formatting](https://www.w3.org/TR/CSS2/visuren.html#block-formatting) context. [Inline-level boxes](https://www.w3.org/TR/CSS2/visuren.html#inline-level) participate in an [inline formatting](https://www.w3.org/TR/CSS2/visuren.html#inline-formatting) context.
 
@@ -110,7 +110,7 @@ formatting context本身也像一个“盒子”，它内部排列好对应类�
 
 这样理下来原因就有一些明朗了，在出现问题的表单中，包裹表单的label和input元素的父元素形成了IFC，且其`display: block;overflow: visible`，计算高度时套用上面的计算方法，由于label和input元素均为float元素，所以它们的高度都没有被计算在内，最终它们父元素的高度就是0了。而对该父元素设置`overflow:hidden`，便把它转换为了BFC，它计算高度的方法就变成了把其中的float元素高度也计算在内的了，自然就不为0了。
 
-##Block-level box VS. block-level element VS. block formatting context##
+## Block-level box VS. block-level element VS. block formatting context
 
 因为上面出现了这些概念，这里稍微做个梳理。
 
@@ -164,7 +164,7 @@ formatting context本身也像一个“盒子”，它内部排列好对应类�
 > | inline, table-row-group, table-column, table-column-group, table-header-group, table-footer-group, table-row, table-cell, table-caption, inline-block | block             |
 > | others                                   | same as specified |
 
-##Styles in bootstrap##
+## Styles in bootstrap
 
 经过仔细的比对，发现两张表单唯一的区别就是重写之前的表单`form`元素多了一个`form-horizontal`的类，把这个类去掉则和重写后的表达有了一样的问题。但是我用[CSS Diff](https://chrome.google.com/webstore/detail/css-diff/pefnhibkhcfooofgmgoipfpcojnhhljm)来直接比较两个表单的计算后的css并没有得到太大的区别，也是蛮奇怪的。
 
@@ -214,7 +214,7 @@ formatting context本身也像一个“盒子”，它内部排列好对应类�
 
 这个解决方案其实是很早之前Nicolas Gallagher在[A new micro clearfix hack](http://nicolasgallagher.com/micro-clearfix-hack/)中提出来的。
 
-##小结##
+## 小结
 
 - DOM元素的formatting context决定了其中的元素是怎样排列的，BFC是从上往下排列的，IFC是从左往右排列的；
 - 在元素的`height`属性为`auto`时，如果该元素形成BFC，则最终高度会包裹其中所有的浮动元素，否则，最终高度不会把浮动元素计算在内；
@@ -222,7 +222,7 @@ formatting context本身也像一个“盒子”，它内部排列好对应类�
 
 float的元素布局由于会产生本文所阐述的问题，往往就需要使用clearfix之类的hack的方式来达到预期的布局效果，如果不考虑支持较老的浏览器，建议使用Flex布局来屏蔽掉这些麻烦的问题（参考[What is a clearfix?](https://stackoverflow.com/questions/8554043/what-is-a-clearfix)）。另外，要感谢Bootstrap这些样式库，原来好多问题已经被它们屏蔽了，这几天光看了两章W3C的CSS标准就看得我想哭。
 
-##Reference##
+## Reference
 
 1. [w3c - §9](https://www.w3.org/TR/CSS2/visuren.html)
 2. [w3c - §10](https://www.w3.org/TR/CSS21/visudet.html)
