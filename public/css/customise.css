@@ -210,7 +210,12 @@ div[class="bottom-nav"] > a:hover > span[id="next-logo"] {
 }
 
 img {
-    max-width: 100%;
-    display: block;
     margin: auto;
+}
+
+.caption {
+    display: block;
+    text-align: center;
+    font-size: .8rem;
+    color: grey;
 }
