@@ -214,8 +214,10 @@ img {
 }
 
 .caption {
+    margin-top: .2rem;
     display: block;
     text-align: center;
     font-size: .8rem;
     color: grey;
+    font-style: italic;
 }
