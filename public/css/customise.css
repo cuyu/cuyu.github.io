@@ -209,7 +209,7 @@ div[class="bottom-nav"] > a:hover > span[id="next-logo"] {
     margin-bottom: 2rem;
 }
 
-img {
+p > img {
     margin: auto;
 }
 
