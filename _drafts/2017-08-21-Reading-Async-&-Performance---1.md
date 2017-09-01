@@ -138,9 +138,17 @@ ES6为了配合新添加的Promise机制在event loop的基础上添加了job qu
 
 ---
 
-> But the brittle nature of manually hardcoded callbacks (even with hardcoded error handling) is often far less graceful. Once you end up specifying (aka pre-planning) all the various eventualities/paths, the code becomes so convoluted that it's hard to ever maintain or update it.
+> ## Trust Issues
 >
-> **That** is what "callback hell" is all about! The nesting/indentation are basically a side show, a red herring.
+> If you have code that uses callbacks, especially but not exclusively with third-party utilities, and you're not already applying some sort of mitigation logic for all these *inversion of control* trust issues, your code *has* bugs in it right now even though they may not have bitten you yet. Latent bugs are still bugs.
+>
+> Hell indeed.
 
-这里作者探讨了回调地狱以及回调地狱的本质：复杂、松散的回调逻辑让代码变得难以维护和复用。因此多个异步操作的串联执行都可以看作是回调地狱（或者说和回调地狱有同样的问题）。
+这里作者说了关于回调函数的另一个问题，难以确保你的异步回调的整个流程是正确的，尤其是当你使用了第三方的异步执行的库之后。比如说一个普通的函数，你是可以去验证它的输入类型，在输入类型不正确时可以进行适当地处理，而对于回调函数而言，你要去确保某个回调函数只被执行了一次是比较难的（比如网络请求的回调函数，请求失败可能会retry，但此时回调函数可能被重复执行了，或者一些情况下可能没有被执行，情况比较多也不容易处理）。
+
+当然，现在我们知道JavaScript中新添加的Promise机制（每个异步回调都分了几种情况来处理）可以多多少少降低异步回调出现的这些问题了。
+
+---
+
+# Chapter 3: Promises
 
