@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Debug Javascript like a boss"
+title: "Debug Javascript using Webstorm"
 category: Javascript
 tags: [debug, Webstorm]
 date: 2017-09-04
@@ -64,4 +64,4 @@ For example, in above example code, the subprocess execute the Javascript code i
 
 In latest version of Webstorm, debugging the code of a React project is as easy as debugging JS code in normal html pages (thanks for the sourcemap, the debugger can recognize breakpoints in the code before pre-compiled by Babel). Please read [Debugging React apps created with Create React App in WebStorm](https://blog.jetbrains.com/webstorm/2017/01/debugging-react-apps/) for guides.
 
-In practice, I found that the breakpoint is not work when the first time page is rendered. In this situation, refreshing the page will solve the problem (Not sure if this is the bug of Webstorm).
+In practice, I found that the breakpoint is not work when the first time page is rendered. In this situation, refreshing the page will solve the problem (Not sure if this is the bug of Webstorm or not).
