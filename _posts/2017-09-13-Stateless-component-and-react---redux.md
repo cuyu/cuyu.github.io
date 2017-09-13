@@ -2,7 +2,7 @@
 layout: post
 title: "Stateless component and react-redux"
 category: Javascript
-tags: [react-redux, React]
+tags: [Redux, React]
 date: 2017-09-13
 ---
 
@@ -73,7 +73,7 @@ export default function reducer(state = _defaultState, action) {
 
 以上三段代码分别是无状态的组件、将组件赋予状态的装饰部分以及状态的处理部分（[全部代码](https://github.com/cuyu/react-widgets/tree/master/stateless-component-with-redux)）。结果是可以和从`React.Component`继承的类组件一样工作，即`connect`函数可以接受任何类型的React组件！
 
-###How?
+### How?
 
 这个问题的关键在于`connect`函数。`connect`函数首先返回的其实是一个高阶组件，所谓高阶组件其实是类似高阶函数的一个概念，即一个函数，它支持一个组件作为输入，并返回一个组件。当然，把它理解为装饰器也可以，并且在最新的ES7语法中是可以这样写的：
 
