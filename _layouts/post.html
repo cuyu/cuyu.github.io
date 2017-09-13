@@ -9,11 +9,11 @@ layout: default-with-comment
         <span class="post-date">{{ page.date | date: "%B %d, %Y" }}</span>
         <span class="sep">|</span>
         {% if page.category %}
-            <a href="/categories/#{{ page.category | slugify }}" class="post-category"> {{ page.category }} <sup>{{ site.categories[page.category].size }}</sup></a>
+            <a href="/categories/#{{ page.category }}" class="post-category"> {{ page.category }} <sup>{{ site.categories[page.category].size }}</sup></a>
         {% endif %}
         <span class="sep">|</span>
         {% for tag in page.tags %}
-            <a href="/tags/#{{ tag | slugify }}" class="post-tag"> {{ tag }} <sup>{{ site.tags[tag].size }}</sup></a>
+            <a href="/tags/#{{ tag }}" class="post-tag"> {{ tag }} <sup>{{ site.tags[tag].size }}</sup></a>
         {% endfor %}
     </div>
     <div class="post-content">{{ content }}</div>
