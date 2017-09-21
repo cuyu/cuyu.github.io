@@ -152,3 +152,39 @@ ES6为了配合新添加的Promise机制在event loop的基础上添加了job qu
 
 # Chapter 3: Promises
 
+> Let's go back to our `x + y` math operation. Imagine if there was a way to say, "Add `x` and `y`, but if either of them isn't ready yet, just wait until they are. Add them as soon as you can."
+>
+> Your brain might have just jumped to callbacks. OK, so...
+>
+> ```javascript
+> function add(getX,getY,cb) {
+> 	var x, y;
+> 	getX( function(xVal){
+> 		x = xVal;
+> 		// both are ready?
+> 		if (y != undefined) {
+> 			cb( x + y );	// send along sum
+> 		}
+> 	} );
+> 	getY( function(yVal){
+> 		y = yVal;
+> 		// both are ready?
+> 		if (x != undefined) {
+> 			cb( x + y );	// send along sum
+> 		}
+> 	} );
+> }
+>
+> // `fetchX()` and `fetchY()` are sync or async
+> // functions
+> add( fetchX, fetchY, function(sum){
+> 	console.log( sum ); // that was easy, huh?
+> } );
+> ```
+
+如何实现对两个异步的函数的返回值进行相加操作，想想还是一个蛮有意思的问题呢。
+
+---
+
+> Moreover, once a Promise is resolved, it stays that way forever -- it becomes an *immutable value* at that point -- and can then be *observed* as many times as necessary.
+

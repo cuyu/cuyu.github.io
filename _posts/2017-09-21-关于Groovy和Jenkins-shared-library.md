@@ -12,7 +12,7 @@ Jenkins 2.0首先是完全兼容Jenkins 1.x的，因此迁移的成本并不大�
 
 ### 关于Groovy
 
-Groovy是Java可以直接编译运行一种脚本语言，因此向Jenkins这种用Java写的软件就喜欢用它来作为DSL。因为是脚本语言，它本身并不复杂，只要使用过其他的脚本语言是很容易上手的。这里提几点对于我这种之前用惯了Python和JavaScript的要注意的地方：
+Groovy是Java编译器可以直接编译运行一种脚本语言，因此向Jenkins这种用Java写的软件就喜欢用它来作为DSL。因为是脚本语言，它本身并不复杂，只要使用过其他的脚本语言是很容易上手的。这里提几点对于我这种之前用惯了Python和JavaScript的人要注意的地方：
 
 - Groovy中使用`def`关键字来声明变量，即类似JavaScript中的`var`；
 
@@ -25,7 +25,7 @@ Groovy是Java可以直接编译运行一种脚本语言，因此向Jenkins这种
   def emptyDict = [:]
   ```
 
-- Groovy中的函数的输入可以不用括号括起来，而直接用空格间隔开函数名和参数（并且参数和对应的输入之前是用冒号而不是等号）：
+- Groovy中的函数的输入可以不用括号括起来，而直接用空格间隔开函数名和参数（并且参数和对应的输入之间是用冒号而不是等号）：
 
   ```groovy
   // below two are the same
