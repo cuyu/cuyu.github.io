@@ -67,3 +67,5 @@ Groovy是Java编译器可以直接编译运行一种脚本语言，因此向Jenk
 - 除了在Jenkins中可以存放某个job所需要的pipeline代码外，还可以把pipeline代码以文件的形式存放在需要被Jenkins执行的代码库中，即所谓的pipeline as code（参考[Using a Jenkinsfile](https://jenkins.io/doc/book/pipeline/jenkinsfile/)）。这样做的好处是，pipeline代码也可以进行版本管理了，且各个不同的文件夹下可以管理各自的pipeline，而不需要创建多个不同的Jenkins job了。
 
 - 写好了pipeline的代码，想要调试怎么办？一种最直接的方式是使用`println`来把中间关键的信息打印出来，然后每更新一下pipeline都trigger一个Jenkins job，通过console output来看打印的信息。但如果需要频繁地调试，比如开发Jenkins的shared library中的代码，上面的那种方式就有点效率低下了，另一种思路是对Jenkins的中间状态进行模拟，即将mock的数据传入来调试。
+
+- 有一些Jenkins自带的全局变量是可以直接使用的，比如`currentBuild.currentResult`表示运行到目前为止结果是否有fail。参考[官方文档](https://qa.nuxeo.org/jenkins/pipeline-syntax/globals)。
