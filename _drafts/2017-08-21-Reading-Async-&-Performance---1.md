@@ -229,6 +229,10 @@ Promise本身只是一种协议（或者叫规范）嘛，所以只要满足一�
 
 我的理解是，**Promise本身会存储一个状态，当这个状态转变为“resolve”或“reject”时它会去把所有通过`then`函数注册进来的对应该状态的函数放到Jobs队列当中，而当一个函数通过`then`注册时，也会先检查该Promise的状态，若是有状态的（“resolve”或“reject”），则直接把对应的回调函数放到Jobs队列中**。
 
+通过Webstorm查看Promise类型的对象可以看到，Promise对象除了拥有一个状态以外，还会存储一个值，这个值其实就是它本身的resolve函数或reject函数的输入的值：
+
+![Promise status](/images/2017-08-21-Reading-Async-&-Performance---1.png)
+
 而即使都是在Jobs队列当中，也是有一个先后顺序的，所以上面的例子中C会在B后面，因为A、B一开始就注册进来了，当p变成“resolve”状态时，A、B就被放到Jobs队列中了，而当A部分代码开始执行时才会将C放到Jobs队列中。
 
 ---
@@ -429,4 +433,4 @@ p6.then(
 > } );
 > ```
 
-Promise对象的`then`函数会返回另一个Promise对象，
+Promise对象的`then`函数会返回另一个Promise对象，并且对应resolve（或reject）回调函数的返回值决定了该返回的Promise对象的状态值。
