@@ -74,3 +74,11 @@ w3c中关于line box的定义如下：
 
 <p data-height="265" data-theme-id="0" data-slug-hash="oGRvZa" data-default-tab="js,result" data-user="curiousY" data-embed-version="2" data-pen-title="drag and drop" class="codepen">See the Pen <a href="https://codepen.io/curiousY/pen/oGRvZa/">drag and drop</a> by Curtis Yu (<a href="https://codepen.io/curiousY">@curiousY</a>) on <a href="https://codepen.io">CodePen</a>.</p>
 <script async src="https://production-assets.codepen.io/assets/embed/ei.js"></script>
+
+## References ##
+
+1. [Expand a div to take the remaining width](https://stackoverflow.com/questions/1260122/expand-a-div-to-take-the-remaining-width)
+2. [You Don't Know CSS（二）](https://zhuanlan.zhihu.com/p/23856688)
+3. [w3c](https://www.w3.org/TR/CSS2/visudet.html#Computing_widths_and_margins)
+4. [Are floated element really removed from normal html flow?](https://stackoverflow.com/questions/18150765/are-floated-element-really-removed-from-normal-html-flow)
+5. [关于float是否脱离标准文档流详细解析](http://www.imooc.com/article/8915)
