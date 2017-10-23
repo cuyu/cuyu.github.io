@@ -43,7 +43,7 @@ date: 2017-08-29
 
 > Boxes in the normal flow belong to a [formatting context](), which may be block or inline, but not both simultaneously. [Block-level](https://www.w3.org/TR/CSS2/visuren.html#block-level) boxes participate in a [block formatting](https://www.w3.org/TR/CSS2/visuren.html#block-formatting) context. [Inline-level boxes](https://www.w3.org/TR/CSS2/visuren.html#inline-level) participate in an [inline formatting](https://www.w3.org/TR/CSS2/visuren.html#inline-formatting) context.
 
-元素可以形成formatting context，它要么是block formatting context (BFC)，要么是inline formatting context (IFC)（最近添加了FFC和GFC，分别对应flex和grid两种模型）。这里并不是说只有属于normal flow的box才会参与formatting context，它只是单纯的引出了formatting context的概念。比如一个`display: block;float: left`的元素会产生block-level box，自然可以参与block formatting context。另外注意这里的动词是**参与**，后面还会讲到**形成**formatting context。
+元素可以形成formatting context，它要么是block formatting context (BFC)，要么是inline formatting context (IFC)（最近添加了FFC和GFC，分别对应flex和grid两种模型）。~~这里并不是说只有属于normal flow的box才会参与formatting context，它只是单纯的引出了formatting context的概念。比如一个`display: block;float: left`的元素会产生block-level box，自然可以参与block formatting context。~~另外注意这里的动词是**参与**，后面还会讲到**形成**formatting context。
 
 一个BFC中包含了inline-level box，那么这个inline-level box是不会参与该BFC的咯？是的，它会往上去寻找祖先节点，直到找到一个IFC并参与进去。如果一直往上找都没有找到能形成IFC的元素呢？那它可能会会变成一个anonymous block box（参考[W3C - 9.2.1.1](https://www.w3.org/TR/CSS2/visuren.html#anonymous-block-level)）。反过来，一个IFC钟包含的block-level box也同理，它会往祖先节点去找到第一个BFC并参与进去（根节点会形成BFC，所以不存在找不到的情况，参考[what is mean of “participate” in definition of normal flow in w3 spec?](https://stackoverflow.com/questions/43215834/what-is-mean-of-participate-in-definition-of-normal-flow-in-w3-spec)）。
 
