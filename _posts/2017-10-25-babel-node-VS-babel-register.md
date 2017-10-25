@@ -6,7 +6,7 @@ tags: [babel, Webstorm]
 date: 2017-10-25
 ---
 
-最近尝试用了下[react-starter-kit](https://github.com/kriasoft/react-starter-kit)，其中进行polyfill的方式是直接使用`babel-node`来执行Node.js脚本，比如`npm start`对应的命令为：
+最近尝试用了下[react-starter-kit](https://github.com/kriasoft/react-starter-kit)，其中进行预编译的方式是直接使用`babel-node`来执行Node.js脚本，比如`npm start`对应的命令为：
 
 ```
 babel-node tools/run start
@@ -24,9 +24,7 @@ node -r babel-register tools/run start
 ReferenceError: regeneratorRuntime is not defined
 ```
 
-这个错误的原因是async/await这类的生成器语句没有被polyfill因而编译器执行时不认识这些语句了。但为什么后者会出现这样的问题呢？以及究竟要怎样做才能成功地使用Webstorm结合Babel进行debug呢？
-
-<!--break-->
+这个错误的原因是有用到生成器的语句没有被正确polyfill，因而编译器执行时不认识这些语句了。但为什么后者会出现这样的问题呢？以及究竟要怎样做才能成功地使用Webstorm结合Babel进行debug呢？
 
 ## babel-node VS babel-register ##
 
@@ -39,6 +37,7 @@ require('babel-register');
 require('./run.js');
 ```
 
+<!--break-->
 加载了`babel-register`之后，所有的JS代码就会在run time时先预编译（默认根据项目中的`.babelrc`配置）再执行（其实现的原理是它对`require`函数添加了一个hook使得每次加载模块时会先预编译）。由于预编译是run time的，因此会比先预编译好所有代码在执行要效率低些，因此不建议在生产环境中使用这种方式（`babel-node`也同理）。
 
 另外，`babel-register`可以显式指定Babel配置：
