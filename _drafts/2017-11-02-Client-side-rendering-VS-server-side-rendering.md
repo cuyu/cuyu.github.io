@@ -8,9 +8,15 @@ date: 2017-11-02
 
 Why server side rendering? ##
 
+- server-side rendering is great for SEO
+- faster for the first time reaching the site
+
 
 
 Why client side rendering? ##
+
+- more friendly for server
+- better user experience after loading all resources
 
 
 
@@ -61,3 +67,16 @@ The differences between `React.renderToString` and `React.renderToStaticMarkup`:
 
 
 
+
+Some thinkings ##
+
+I've tried to develop a simple website using both server side rendering and client side rendering. I found it may be sometimes confusing and not so clear as developing only client codes. So, here are some experience/tips.
+
+When dealing with both back-end and front-end development, it is especially important to know clearly which part is rendered in server side and which part is rendered in client side. For example, in server side, the cookies is parsed and you can acquire information stored in the session conveniently while in client side, you can only get the original cookies and may need other ways to acquire the information in the session (like request to a backend API).
+
+Besides, you should distinguish between real http requests and client side routings when handling a url. For example, if `/login` endpoint is a backend API, you should make real http request instead of switching client route and vice versa. Sometimes, error occurs due to inappropriate operation with the url.
+
+Reference ##
+
+1. [react-dom 的 renderToString 与 renderToStaticMarkup](http://www.jianshu.com/p/5fa6d6c63d96)
+2. ​
