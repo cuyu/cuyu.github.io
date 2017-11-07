@@ -6,6 +6,8 @@ tags: [React]
 date: 2017-11-02
 ---
 
+Just similar to client side routing VS server side routing (see [Client side routing VS. server side routing](http://cuyu.github.io/web/2017/07/31/Client-side-routing-VS.-server-side-routing)), the topic is now change to rendering. Actually, the client side rendering make it possible for client side routing as each route invokes at least a rendering operation. If the rendering is executed by the client, that routing is client side routing. See, they are just the same thing at the end.
+
 Why server side rendering? ##
 
 - server-side rendering is great for SEO
@@ -63,10 +65,15 @@ The differences from the function signature:
 
 The differences between `React.renderToString` and `React.renderToStaticMarkup`:
 
-- The former one is more powerful than the latter one, 
+- The former one is more powerful than the latter one. It also renders a `data-reactid` for each React component into the html string so that the ReactJS in the client side can recognize corresponding DOM nodes and rendered afterwards (the "render" here means the operations which cannot be done by the server side rendering, e.g. executing `componentDidMount` function).
+- Correspondingly, the latter one is more light weighted, as the doc said, save some bytes.
 
 
+So the **conclusion** is:
 
+- Use `React.render` for client side rendering.
+- Use `React.renderToStaticMarkup` for server side rendering of simple pages.
+- Use `React.renderToString` for server side rendering of complex pages (have interactive components).
 
 Some thinkings ##
 
@@ -76,7 +83,13 @@ When dealing with both back-end and front-end development, it is especially impo
 
 Besides, you should distinguish between real http requests and client side routings when handling a url. For example, if `/login` endpoint is a backend API, you should make real http request instead of switching client route and vice versa. Sometimes, error occurs due to inappropriate operation with the url.
 
+If the http request is made by the browser (i.e. enter url in browser), in the backend, you can just return a redirect (304) response and the browser will receive the redirection page. However, if the http request is made by your JS code, you should handle the redirection by yourself in JS code and in backend, the response should not be 304 (actually the 304 response will return the whole html of the redirect target page). For example:
+
+```javascript
+window.location = '/login';
+```
+
 Reference ##
 
 1. [react-dom 的 renderToString 与 renderToStaticMarkup](http://www.jianshu.com/p/5fa6d6c63d96)
-2. ​
+2. [What is the difference between React.render, React.renderToStaticMarkup and React.renderToString?](https://www.quora.com/What-is-the-difference-between-React-render-React-renderToStaticMarkup-and-React-renderToString)
