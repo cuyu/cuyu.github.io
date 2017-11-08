@@ -6,7 +6,7 @@ tags: [React]
 date: 2017-11-08
 ---
 
-Just similar to client side routing VS server side routing (see [Client side routing VS. server side routing](http://cuyu.github.io/web/2017/07/31/Client-side-routing-VS.-server-side-routing)), the topic is now change to rendering. Actually, **the client side rendering make it possible for client side routing** as each route invokes at least a rendering operation. If the rendering is executed by the client, that routing is client side routing. See, they are just the same thing at the end.
+Just similar to [Client side routing VS. server side routing](http://cuyu.github.io/web/2017/07/31/Client-side-routing-VS.-server-side-routing), the topic is now change to rendering. Actually, **the client side rendering make it possible for client side routing** as each route invokes at least a rendering operation. If the rendering is executed by the client, that routing is client side routing. See, they are just the same thing at the end.
 
 ## Why server side rendering? ##
 
@@ -34,7 +34,7 @@ React provides `React.render` for client side rendering and `React.renderToStrin
 > ReactDOM.render(element, container[, callback])
 > ```
 >
-> Render a React element into the DOM in the supplied `container` and return a [reference](https://reactjs.org/docs/more-about-refs.html)to the component (or returns `null` for [stateless components](https://reactjs.org/docs/components-and-props.html#functional-and-class-components)).
+> Render a React element into the DOM in the supplied `container` and return a [reference](https://reactjs.org/docs/more-about-refs.html) to the component (or returns `null` for [stateless components](https://reactjs.org/docs/components-and-props.html#functional-and-class-components)).
 >
 > If the React element was previously rendered into `container`, this will perform an update on it and only mutate the DOM as necessary to reflect the latest React element.
 >
@@ -64,6 +64,7 @@ The differences from the function signature:
 
 - The return object type is different: `React.render` returns a ReactComponent object and the latter two functions return a string.
 - The inputs are different: `React.render` also needs a DOM node as input where the React element will attach on while the latter two functions do not need this because server side rendering always return a full html page to the browser.
+- The definition file is different: `React.render` is in `ReactDOM.js` which indicate the function is used by the client and the latter two functions are in `ReactDOMServer.js` which indicate to be called by the server side.
 
 The differences between `React.renderToString` and `React.renderToStaticMarkup`:
 
