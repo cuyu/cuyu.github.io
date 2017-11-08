@@ -3,26 +3,28 @@ layout: post
 title: "Client side rendering VS server side rendering"
 category: Javascript
 tags: [React]
-date: 2017-11-02
+date: 2017-11-08
 ---
 
-Just similar to client side routing VS server side routing (see [Client side routing VS. server side routing](http://cuyu.github.io/web/2017/07/31/Client-side-routing-VS.-server-side-routing)), the topic is now change to rendering. Actually, the client side rendering make it possible for client side routing as each route invokes at least a rendering operation. If the rendering is executed by the client, that routing is client side routing. See, they are just the same thing at the end.
+Just similar to client side routing VS server side routing (see [Client side routing VS. server side routing](http://cuyu.github.io/web/2017/07/31/Client-side-routing-VS.-server-side-routing)), the topic is now change to rendering. Actually, **the client side rendering make it possible for client side routing** as each route invokes at least a rendering operation. If the rendering is executed by the client, that routing is client side routing. See, they are just the same thing at the end.
 
-Why server side rendering? ##
+## Why server side rendering? ##
 
 - server-side rendering is great for SEO
 - faster for the first time reaching the site
 
 
+## Why client side rendering? ##
 
-Why client side rendering? ##
-
-- more friendly for server
+- less requests for server
 - better user experience after loading all resources
 
 
+For my opinion, the only reason I may choose server side rendering is for SEO (and it won't be a problem as crawler tech evolves). Assume you've opened a web page, it may be awful that each link on the page still costs seconds to open up. The client side rendering is more like loading a game. Once loaded, enjoy everywhere.
 
-How (take React as example)? ##
+<!--break-->
+
+## How (take React as example)? ##
 
 React provides `React.render` for client side rendering and `React.renderToString`, `React.renderToStaticMarkup` for server side rendering. Let's see what the React doc says:
 
@@ -75,7 +77,7 @@ So the **conclusion** is:
 - Use `React.renderToStaticMarkup` for server side rendering of simple pages.
 - Use `React.renderToString` for server side rendering of complex pages (have interactive components).
 
-Some thinkings ##
+## Some thinkings ##
 
 I've tried to develop a simple website using both server side rendering and client side rendering. I found it may be sometimes confusing and not so clear as developing only client codes. So, here are some experience/tips.
 
@@ -89,7 +91,7 @@ If the http request is made by the browser (i.e. enter url in browser), in the b
 window.location = '/login';
 ```
 
-Reference ##
+## Reference ##
 
 1. [react-dom 的 renderToString 与 renderToStaticMarkup](http://www.jianshu.com/p/5fa6d6c63d96)
 2. [What is the difference between React.render, React.renderToStaticMarkup and React.renderToString?](https://www.quora.com/What-is-the-difference-between-React-render-React-renderToStaticMarkup-and-React-renderToString)
