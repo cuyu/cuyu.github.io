@@ -67,6 +67,8 @@ console.log('D');
 
 Javascript是单线程的，所以在一个瞬间只有一段代码会被执行。而由于event loop的机制，所有插入其中的task都自带了原子属性，即一个task完全执行完才会去执行下一个task，即使这两个task被安排到了同一时间执行也是如此（安排在同一时间就按照进入event loop的先后来按顺序执行呗）。有点Python中协程的感觉。
 
+<!--break-->
+
 ---
 
 > ## Concurrency
@@ -433,4 +435,261 @@ p6.then(
 > } );
 > ```
 
-Promise对象的`then`函数会返回另一个Promise对象，并且对应resolve（或reject）回调函数的返回值决定了该返回的Promise对象的状态值。
+Promise对象的`then`函数会创建（返回）另一个Promise对象（它接收两个函数作为参数，分别为`resolve`和`reject`函数），并且Promise对象的状态决定了该对象的`then`函数中是`resolve`函数被调用还是`reject`函数被调用，且Promise对象的状态值决定了`then`函数中被调用的输入。
+
+需要注意的是，Promise定义时是接收**一个**函数作为参数的，而该函数接收了两个回调函数分别为`resolve`和`reject`函数。可以理解为`then`函数就是Promise定义时接收的那个函数：
+
+```javascript
+function then(resolve, reject) {
+  // Do something according to the status of last Promise
+  // For example, like below codes:
+  if (this.status === 'resolved') {
+  	return Promise.resolve(resolve(this.value));
+  }
+  else {
+    return Promise.resolve(reject(this.value));
+  }
+}
+var p = new Promise(then);
+```
+
+---
+
+> Even though we wrapped `42` up in a promise that we returned, it still got unwrapped and ended up as the resolution of the chained promise, such that the second `then(..)` still received `42`. If we introduce asynchrony to that wrapping promise, everything still nicely works the same:
+>
+> ```javascript
+> var p = Promise.resolve( 21 );
+>
+> p.then( function(v){
+> 	console.log( v );	// 21
+>
+> 	// create a promise to return
+> 	return new Promise( function(resolve,reject){
+> 		// introduce asynchrony!
+> 		setTimeout( function(){
+> 			// fulfill with value `42`
+> 			resolve( v * 2 );
+> 		}, 100 );
+> 	} );
+> } )
+> .then( function(v){
+> 	// runs after the 100ms delay in the previous step
+> 	console.log( v );	// 42
+> } );
+> ```
+>
+> That's incredibly powerful! Now we can construct a sequence of however many async steps we want, and each step can delay the next step (or not!), as necessary.
+
+正如我上面所猜想的一样，`then`函数返回时会用`Promise.resolve`包装一下来确保返回的是一个Promise对象。当Promise对象的状态变为resolve或reject时才会调用`then`函数，所以可以串起异步的操作。
+
+---
+
+> If a proper valid function is not passed as the fulfillment handler parameter to `then(..)`, there's also a default handler substituted:
+>
+> ```javascript
+> var p = Promise.resolve( 42 );
+>
+> p.then(
+> 	// assumed fulfillment handler, if omitted or
+> 	// any other non-function value passed
+> 	// function(v) {
+> 	//     return v;
+> 	// }
+> 	null,
+> 	function rejected(err){
+> 		// never gets here
+> 	}
+> );
+> ```
+>
+> As you can see, the default fulfillment handler simply passes whatever value it receives along to the next step (Promise).
+>
+> **Note:** The `then(null,function(err){ .. })` pattern -- only handling rejections (if any) but letting fulfillments pass through -- has a shortcut in the API: `catch(function(err){ .. })`.
+
+`then`函数的输入如果不是一个函数，Promise会使用一个默认的handler函数来处理，即把resolve（reject）的值原封不动地返回到下一层。
+
+---
+
+> ## Error Handling
+>
+> `try..catch` would certainly be nice to have, but it doesn't work across async operations. That is, unless there's some additional environmental support, which we'll come back to with generators in Chapter 4.
+>
+> In callbacks, some standards have emerged for patterned error handling, most notably the "error-first callback" style:
+>
+> ```javascript
+> function foo(cb) {
+> 	setTimeout( function(){
+> 		try {
+> 			var x = baz.bar();
+> 			cb( null, x ); // success!
+> 		}
+> 		catch (err) {
+> 			cb( err );
+> 		}
+> 	}, 100 );
+> }
+>
+> foo( function(err,val){
+> 	if (err) {
+> 		console.error( err ); // bummer :(
+> 	}
+> 	else {
+> 		console.log( val );
+> 	}
+> } );
+> ```
+
+Go语言好像就是建议这么做的，函数第一个输入默认为error，不过也是被人诟病比较多的一个特性。
+
+---
+
+> Promises don't use the popular "error-first callback" design style, but instead use "split callbacks" style; there's one callback for fulfillment and one for rejection.
+>
+> While this pattern of error handling makes fine sense on the surface, the nuances of Promise error handling are often a fair bit more difficult to fully grasp.
+>
+> Consider:
+>
+> ```javascript
+> var p = Promise.resolve( 42 );
+>
+> p.then(
+> 	function fulfilled(msg){
+> 		// numbers don't have string functions,
+> 		// so will throw an error
+> 		console.log( msg.toLowerCase() );
+> 	},
+> 	function rejected(err){
+> 		// never gets here
+> 	}
+> );
+> ```
+
+> Jeff Atwood noted years ago: programming languages are often set up in such a way that by default, developers fall into the "pit of despair" (<http://blog.codinghorror.com/falling-into-the-pit-of-success/>) -- where accidents are punished -- and that you have to try harder to get it right. He implored us to instead create a "pit of success," where by default you fall into expected (successful) action, and thus would have to try hard to fail.
+>
+> Promise error handling is unquestionably "pit of despair" design. By default, it assumes that you want any error to be swallowed by the Promise state, and if you forget to observe that state, the error silently languishes/dies in obscurity -- usually despair.
+
+这里说的是uncaught exception的问题，即如果我忘记去处理Promise中产生的error了，或处理error的函数中又产生新的error了，这些情况都没有在Promise的设计中考虑到。
+
+要解决上面这类问题，就是要把这些error能像正常程序的出现的异常一样抛出来，而不是傻傻地指望有代码去处理（这样异常就被吞了）。这在Promise刚出来时确实是一个大问题，但现在我在在NodeJS (v8.5.0)环境中尝试了下是可以正确地抛出`UnhandledPromiseRejectionWarning`的全局异常的。
+
+---
+
+> ## Promise Patterns
+>
+> Say you wanted to make two Ajax requests at the same time, and wait for both to finish, regardless of their order, before making a third Ajax request. Consider:
+>
+> ```javascript
+> // `request(..)` is a Promise-aware Ajax utility,
+> // like we defined earlier in the chapter
+>
+> var p1 = request( "http://some.url.1/" );
+> var p2 = request( "http://some.url.2/" );
+>
+> Promise.all( [p1,p2] )
+> .then( function(msgs){
+> 	// both `p1` and `p2` fulfill and pass in
+> 	// their messages here
+> 	return request(
+> 		"http://some.url.3/?v=" + msgs.join(",")
+> 	);
+> } )
+> .then( function(msg){
+> 	console.log( msg );
+> } );
+> ```
+>
+> `Promise.all([ .. ])` expects a single argument, an `array`, consisting generally of Promise instances. The promise returned from the `Promise.all([ .. ])` call will receive a fulfillment message (`msgs` in this snippet) that is an `array` of all the fulfillment messages from the passed in promises, in the same order as specified (regardless of fulfillment order).
+
+`Promise.all([ .. ])`会创建一个新的Promise对象，它在所有输入的Promise对象状态全部变为resolve时才会变成resolve状态，但只要有某个输入的Promise对象状态为reject了，它也会立刻变为reject的状态（即使其他输入的Promise对象还没有出状态）。这就有点像是逻辑操作中的“与”操作，只要有一个输入是false，其他的输入也就不用管了，结果就是false。
+
+---
+
+> Similar to `Promise.all([ .. ])`, `Promise.race([ .. ])` will fulfill if and when any Promise resolution is a fulfillment, and it will reject if and when any Promise resolution is a rejection.
+>
+> ```javascript
+> // `request(..)` is a Promise-aware Ajax utility,
+> // like we defined earlier in the chapter
+>
+> var p1 = request( "http://some.url.1/" );
+> var p2 = request( "http://some.url.2/" );
+>
+> Promise.race( [p1,p2] )
+> .then( function(msg){
+> 	// either `p1` or `p2` will win the race
+> 	return request(
+> 		"http://some.url.3/?v=" + msg
+> 	);
+> } )
+> .then( function(msg){
+> 	console.log( msg );
+> } );
+> ```
+>
+> Because only one promise wins, the fulfillment value is a single message, not an `array` as it was for `Promise.all([ .. ])`.
+
+`Promise.race([ .. ])`同样会创建一个新的Promise对象，它会和所有输入的Promise对象中第一个达到resolve状态或reject状态的对象同时（更准确地说是紧随其后）变为与之相同的状态，其他的输入对象就不管了。
+
+---
+
+> While native ES6 Promises come with built-in `Promise.all([ .. ])` and `Promise.race([ .. ])`, there are several other commonly used patterns with variations on those semantics:
+>
+> - `none([ .. ])` is like `all([ .. ])`, but fulfillments and rejections are transposed. All Promises need to be rejected -- rejections become the fulfillment values and vice versa.
+> - `any([ .. ])` is like `all([ .. ])`, but it ignores any rejections, so only one needs to fulfill instead of *all* of them.
+> - `first([ .. ])` is like a race with `any([ .. ])`, which is that it ignores any rejections and fulfills as soon as the first Promise fulfills.
+> - `last([ .. ])` is like `first([ .. ])`, but only the latest fulfillment wins.
+>
+> Some Promise abstraction libraries provide these, but you could also define them yourself using the mechanics of Promises, `race([ .. ])` and `all([ .. ])`.
+>
+> For example, here's how we could define `first([ .. ])`:
+>
+> ```javascript
+> // polyfill-safe guard check
+> if (!Promise.first) {
+> 	Promise.first = function(prs) {
+> 		return new Promise( function(resolve,reject){
+> 			// loop through all promises
+> 			prs.forEach( function(pr){
+> 				// normalize the value
+> 				Promise.resolve( pr )
+> 				// whichever one fulfills first wins, and
+> 				// gets to resolve the main promise
+> 				.then( resolve );
+> 			} );
+> 		} );
+> 	};
+> }
+> ```
+
+这里`first([ .. ])`的实现利用了Promise的一个特性：即Promise对象的状态一旦变为了非`undefined`的值就不会再变化了，即Promise对象是immutable的。这里就只有第一个调用的`resolve`函数是有效的，后续的调用已经对返回的Promise对象没有影响了。
+
+---
+
+> For example, let's consider an asynchronous `map(..)` utility that takes an `array` of values (could be Promises or anything else), plus a function (task) to perform against each. `map(..)` itself returns a promise whose fulfillment value is an `array` that holds (in the same mapping order) the async fulfillment value from each task:
+>
+> ```javascript
+> if (!Promise.map) {
+> 	Promise.map = function(vals,cb) {
+> 		// new promise that waits for all mapped promises
+> 		return Promise.all(
+> 			// note: regular array `map(..)`, turns
+> 			// the array of values into an array of
+> 			// promises
+> 			vals.map( function(val){
+> 				// replace `val` with a new promise that
+> 				// resolves after `val` is async mapped
+> 				return new Promise( function(resolve){
+> 					cb( val, resolve );
+> 				} );
+> 			} )
+> 		);
+> 	};
+> }
+> ```
+
+这里`vals`是一组Promise对象，`cb`是一个回调函数，接收一个Promise对象和它的resolve函数。
+
+---
+
+> ## Promise API Recap
+>
+> 
