@@ -3,7 +3,7 @@ layout: post
 title: "Reading &lt;Async & Performance&gt; - 1"
 category: Javascript
 tags: [You Dont Know JS, 读书笔记]
-date: 2017-08-21
+date: 2017-11-10
 ---
 
 # Chapter 1: Asynchrony: Now & Later
@@ -408,7 +408,7 @@ p6.then(
 > ```
 > Promise.resolve(..) will accept any thenable, and will unwrap it to its non-thenable value. But you get back from Promise.resolve(..) a real, genuine Promise in its place, **one that you can trust**. If what you passed in is already a genuine Promise, you just get it right back, so there's no downside at all to filtering through Promise.resolve(..) to gain trust.
 
-**通过`Promise.resolve(..)`函数可以将传入的对象转变成一个Promise对象**，无论这个对象原来是不是Promise对象，或者它只是一个具有`then`属性的鸭子类型的对象。因此，当我们不确定一个对象是否是Promise对象但又希望把它作为Promise对象来处理时，可以先使用`Promise.resolve`来处理一下该对象。
+**通过`Promise.resolve(..)`函数可以将传入的对象转变成一个resolve状态的Promise对象**，无论这个对象原来是不是Promise对象，或者它只是一个具有`then`属性的鸭子类型的对象。因此，当我们不确定一个对象是否是Promise对象但又希望把它作为Promise对象来处理时，可以先使用`Promise.resolve`来处理一下该对象。类似的，`Promise.reject(..)`函数可以将输入的对象转变为一个reject状态的Promise对象。
 
 ---
 
@@ -507,6 +507,8 @@ var p = new Promise(then);
 > **Note:** The `then(null,function(err){ .. })` pattern -- only handling rejections (if any) but letting fulfillments pass through -- has a shortcut in the API: `catch(function(err){ .. })`.
 
 `then`函数的输入如果不是一个函数，Promise会使用一个默认的handler函数来处理，即把resolve（reject）的值原封不动地返回到下一层。
+
+`catch(rejectCallback)`函数相当于`then(null,rejectCallback)`，即只处理reject状态的`then`函数。
 
 ---
 
@@ -687,9 +689,3 @@ Go语言好像就是建议这么做的，函数第一个输入默认为error，�
 > ```
 
 这里`vals`是一组Promise对象，`cb`是一个回调函数，接收一个Promise对象和它的resolve函数。
-
----
-
-> ## Promise API Recap
->
-> 
