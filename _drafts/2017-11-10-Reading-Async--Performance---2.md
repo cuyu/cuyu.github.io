@@ -62,7 +62,29 @@ console.log(it2.next(3));  // { value: 3, done: true }
 
 > And if there **is no return** in your generator -- `return` is certainly not any more required in generators than in regular functions -- there's always an assumed/implicit `return;` (aka `return undefined;`).
 
-函数（生成器）中不写`return`语句，编译器会默认加上一句`return undefined;`。
+函数（生成器）中不写`return`语句，编译器会默认加上一句`return undefined;`。对于生成器而言，return的值会出现在最后一个`next`语句的返回值中，即`{value: <returnValue>, done: true}`。虽然通过`for..in`来遍历时，return的值不会被遍历，但在yield delegation时会起到和调用`next`函数时传入参数一样的效果：
+
+```javascript
+function *foo() {
+    var a = yield 1;
+    console.log(a); // 5
+    return 2;
+}
+
+function *bar() {
+    var b = yield *foo();
+    console.log(b); // 2
+    var c = yield 3;
+    console.log(c); // 6
+  	return 4;
+}
+
+var it = bar();
+
+it.next();    // {value: 1, done: false}
+it.next(5);   // {value: 3, done: false}
+it.next(6);   // {value: 4, done: true}
+```
 
 ---
 
@@ -323,4 +345,266 @@ console.log(it2.next(3));  // { value: 3, done: true }
 > 		} );
 > }
 > ```
+
+`run`函数接收一个生成器，返回一个Promise对象。注意其中的`handleNext`函数被递归调用了，即每一个Promise对象返回的Promise对象均包含这个`handleNext`函数来处理resolve的状态。
+
+---
+
+> Imagine a scenario where you need to fetch data from two different sources, then combine those responses to make a third request, and finally print out the last response.
+>
+> The simplest approach:
+>
+> ```javascript
+> function *foo() {
+> 	// make both requests "in parallel"
+> 	var p1 = request( "http://some.url.1" );
+> 	var p2 = request( "http://some.url.2" );
+>
+> 	// wait until both promises resolve
+> 	var r1 = yield p1;
+> 	var r2 = yield p2;
+>
+> 	var r3 = yield request(
+> 		"http://some.url.3/?v=" + r1 + "," + r2
+> 	);
+>
+> 	console.log( r3 );
+> }
+>
+> // use previously defined `run(..)` utility
+> run( foo );
+> ```
+
+`request`会返回Promise对象，而直到yield语句才会等待Promise对象变成resolved状态时才会继续调用`next`函数去等待下一个yield的Promise对象。所以，两个请求会并发进行。
+
+试想一下，如果是用async/await要怎么实现类似并行的操作：
+
+```javascript
+async function foo() {
+	var p1 = request( "http://some.url.1" );
+	var p2 = request( "http://some.url.2" );
+    
+    await p1;
+    await p2;
+    
+    var r3 = yield request(
+		"http://some.url.3/?v=" + r1 + "," + r2
+	);
+
+	console.log( r3 );
+}
+
+foo();
+```
+
+其实用`Promise.all`也能实现一样的效果，就不赘述了。
+
+---
+
+> Abstraction is not *always* a healthy thing for programming -- many times it can increase complexity in exchange for terseness.
+
+但这种情况难道不是因为抽象得不够好么？
+
+---
+
+> ## Generator Delegation
+>
+> It may then occur to you that you might try to call one generator from another generator, using our `run(..)` helper, such as:
+>
+> ```javascript
+> function *foo() {
+> 	var r2 = yield request( "http://some.url.2" );
+> 	var r3 = yield request( "http://some.url.3/?v=" + r2 );
+>
+> 	return r3;
+> }
+>
+> function *bar() {
+> 	var r1 = yield request( "http://some.url.1" );
+>
+> 	// "delegating" to `*foo()` via `run(..)`
+> 	var r3 = yield run( foo );
+>
+> 	console.log( r3 );
+> }
+>
+> run( bar );
+> ```
+>
+> But there's an even better way to integrate calling `*foo()` into `*bar()`, and it's called `yield`-delegation. The special syntax for `yield`-delegation is: `yield * __` (notice the extra `*`). Before we see it work in our previous example, let's look at a simpler scenario:
+>
+> ```javascript
+> function *foo() {
+> 	console.log( "`*foo()` starting" );
+> 	yield 3;
+> 	yield 4;
+> 	console.log( "`*foo()` finished" );
+> }
+>
+> function *bar() {
+> 	yield 1;
+> 	yield 2;
+> 	yield *foo();	// `yield`-delegation!
+> 	yield 5;
+> }
+>
+> var it = bar();
+>
+> it.next().value;	// 1
+> it.next().value;	// 2
+> it.next().value;	// `*foo()` starting
+> 					// 3
+> it.next().value;	// 4
+> it.next().value;	// `*foo()` finished
+> 					// 5
+> ```
+
+通过`yield *`加另外一个生成器，可以将其他生成器串起来，插入到当前的生成器当中。
+
+这其实是一个语法糖，比如我可以这样实现一样的效果：
+
+```javascript
+function myBar() {
+    var sequence = [1, 2, foo(), 5];
+    var index = 0;
+
+    return {
+        // needed for `for..of` loops
+        [Symbol.iterator]: function () {
+            return this;
+        },
+
+        // standard iterator interface method
+        next: function () {
+            if (index >= sequence.length) {
+                return {done: true, value: undefined};
+            }
+
+            var value = sequence[index];
+            // if value is a generator, use its next value and index stay unchanged
+            if (value && typeof value.next === "function") {
+                var nextVal = value.next();
+                if (!nextVal.done) {
+                    value = nextVal.value;
+                }
+                else {
+                    // if the generator is done, use the next value of myself
+                    index++;
+                    value = this.next().value;
+                }
+            }
+            else{
+                index++;
+            }
+
+            return {done: false, value: value};
+        }
+    };
+}
+
+var myIt = myBar();
+for (i of myIt) {
+    console.log(i);
+}
+```
+
+甚至，我还可以实现一个`yieldDelegate`函数来达到和`yield *`一样的功能（其实就是对函数的`next`函数做手脚）。
+
+---
+
+> In fact, `yield`-delegation doesn't even have to be directed to another generator; it can just be directed to a non-generator, general *iterable*. For example:
+>
+> ```javascript
+> function *bar() {
+> 	console.log( "inside `*bar()`:", yield "A" );
+>
+> 	// `yield`-delegation to a non-generator!
+> 	console.log( "inside `*bar()`:", yield *[ "B", "C", "D" ] );
+>
+> 	console.log( "inside `*bar()`:", yield "E" );
+>
+> 	return "F";
+> }
+>
+> var it = bar();
+>
+> console.log( "outside:", it.next().value );
+> // outside: A
+>
+> console.log( "outside:", it.next( 1 ).value );
+> // inside `*bar()`: 1
+> // outside: B
+>
+> console.log( "outside:", it.next( 2 ).value );
+> // outside: C
+>
+> console.log( "outside:", it.next( 3 ).value );
+> // outside: D
+>
+> console.log( "outside:", it.next( 4 ).value );
+> // inside `*bar()`: undefined
+> // outside: E
+>
+> console.log( "outside:", it.next( 5 ).value );
+> // inside `*bar()`: 5
+> // outside: F
+> ```
+>
+> Notice the differences in where the messages were received/reported between this example and the one previous.
+>
+> Most strikingly, the default `array` *iterator* doesn't care about any messages sent in via `next(..)` calls, so the values `2`, `3`, and `4` are essentially ignored. Also, because that *iterator* has no explicit `return` value (unlike the previously used `*foo()`), the `yield *` expression gets an `undefined` when it finishes.
+
+`yield *`语法糖可以用于任何可迭代的对象，但`next`函数传入参数就不一定有意义了。
+
+---
+
+> Of course, `yield`-delegation can keep following as many delegation steps as you wire up. You could even use `yield`-delegation for async-capable generator "recursion" -- a generator `yield`-delegating to itself:
+>
+> ```javascript
+> function *foo(val) {
+> 	if (val > 1) {
+> 		// generator recursion
+> 		val = yield *foo( val - 1 );
+> 	}
+>
+> 	return yield request( "http://some.url/?v=" + val );
+> }
+>
+> function *bar() {
+> 	var r1 = yield *foo( 3 );
+> 	console.log( r1 );
+> }
+>
+> run( bar );
+> ```
+
+够花哨。
+
+---
+
+> ## Thunks
+>
+> In general computer science, there's an old pre-JS concept called a "thunk." Without getting bogged down in the historical nature, a narrow expression of a thunk in JS is a function that -- without any parameters -- is wired to call another function.
+>
+> In other words, you wrap a function definition around function call -- with any parameters it needs -- to *defer* the execution of that call, and that wrapping function is a thunk. When you later execute the thunk, you end up calling the original function.
+>
+> For example:
+>
+> ```javascript
+> function foo(x,y) {
+> 	return x + y;
+> }
+>
+> function fooThunk() {
+> 	return foo( 3, 4 );
+> }
+>
+> // later
+>
+> console.log( fooThunk() );	// 7
+> ```
+
+终于知道`redux-thunk`的由来了。
+
+---
 
