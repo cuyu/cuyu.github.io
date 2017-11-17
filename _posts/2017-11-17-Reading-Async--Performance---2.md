@@ -3,7 +3,7 @@ layout: post
 title: "Reading &lt;Async &amp; Performance&gt; - 2"
 category: Javascript
 tags: [You Dont Know JS, 读书笔记]
-date: 2017-11-10
+date: 2017-11-17
 ---
 
 # Chapter 4: Generators
@@ -604,7 +604,171 @@ for (i of myIt) {
 > console.log( fooThunk() );	// 7
 > ```
 
-终于知道`redux-thunk`的由来了。
+终于知道`redux-thunk`名称的由来了。
 
 ---
 
+# Chapter 5: Program Performance
+
+> ## Web Workers
+>
+> But an environment like your browser can easily provide multiple instances of the JavaScript engine, each on its own thread, and let you run a different program in each thread. Each of those separate threaded pieces of your program is called a "(Web) Worker." This type of parallelism is called "task parallelism," as the emphasis is on splitting up chunks of your program to run in parallel.
+>
+> From your main JS program (or another Worker), you instantiate a Worker like so:
+>
+> ```javascript
+> var w1 = new Worker( "http://some.url.1/mycoolworker.js" );
+> ```
+>
+> The URL should point to the location of a JS file (not an HTML page!) which is intended to be loaded into a Worker. The browser will then spin up a separate thread and let that file run as an independent program in that thread.
+
+Javascript语言设计的出发点就是单线程环境下运行的，web worker这种其实更像是多进程，因为各个work是不共享内存的，并且是浏览器的特性，而非JavaScript语言的特性（浏览器每打开一个tab会启一个JS进程，启一个web worker就和打开一个新的tab类似吧）。
+
+---
+
+> Workers do not share any scope or resources with each other or the main program -- that would bring all the nightmares of threaded programming to the forefront -- but instead have a basic event messaging mechanism connecting them.
+>
+> The `w1` Worker object is an event listener and trigger, which lets you subscribe to events sent by the Worker as well as send events to the Worker.
+>
+> Here's how to listen for events (actually, the fixed `"message"` event):
+>
+> ```javascript
+> w1.addEventListener( "message", function(evt){
+> 	// evt.data
+> } );
+> ```
+>
+> And you can send the `"message"` event to the Worker:
+>
+> ```javascript
+> w1.postMessage( "something cool to say" );
+> ```
+>
+> Inside the Worker, the messaging is totally symmetrical:
+>
+> ```javascript
+> // "mycoolworker.js"
+>
+> addEventListener( "message", function(evt){
+> 	// evt.data
+> } );
+>
+> postMessage( "a really cool reply" );
+> ```
+
+> Usually the main page application creates the Workers, but a Worker can instantiate its own child Worker(s) -- known as subworkers -- as necessary. Sometimes this is useful to delegate such details to a sort of "master" Worker that spawns other Workers to process parts of a task. Unfortunately, at the time of this writing, Chrome still does not support subworkers, while Firefox does.
+>
+> To kill a Worker immediately from the program that created it, call `terminate()` on the Worker object (like `w1` in the previous snippets). Abruptly terminating a Worker thread does not give it any chance to finish up its work or clean up any resources. It's akin to you closing a browser tab to kill a page.
+
+web worker支持在启动的线程中再启子线程。
+
+---
+
+> What are some common uses for Web Workers?
+>
+> - Processing intensive math calculations
+> - Sorting large data sets
+> - Data operations (compression, audio analysis, image pixel manipulations, etc.)
+> - High-traffic network communications
+
+---
+
+> If you pass an object, a so-called "Structured Cloning Algorithm" (<https://developer.mozilla.org/en-US/docs/Web/Guide/API/DOM/The_structured_clone_algorithm>) is used to copy/duplicate the object on the other side. This algorithm is fairly sophisticated and can even handle duplicating objects with circular references. The to-string/from-string performance penalty is not paid, but we still have duplication of memory using this approach. There is support for this in IE10 and above, as well as all the other major browsers.
+>
+> An even better option, especially for larger data sets, is "Transferable Objects" (<http://updates.html5rocks.com/2011/12/Transferable-Objects-Lightning-Fast>). What happens is that the object's "ownership" is transferred, but the data itself is not moved. Once you transfer away an object to a Worker, it's empty or inaccessible in the originating location -- that eliminates the hazards of threaded programming over a shared scope. Of course, transfer of ownership can go in both directions.
+>
+> There really isn't much you need to do to opt into a Transferable Object; any data structure that implements the Transferable interface (<https://developer.mozilla.org/en-US/docs/Web/API/Transferable>) will automatically be transferred this way (support Firefox & Chrome).
+
+目前主流有两种方式来进行web worker之间的数据交换，一种是使用浏览器自带的"Structured Cloning Algorithm"来对数据进行序列化后传递，注意不是所有的数据类型都能复制的，比如函数就不行；另外一种是将数据的拥有者进行转移，而数据本身不进行复制，这种适合于数据量较大的情况。总之，看上去就是要避免资源发生竞争的情况。
+
+---
+
+> ## SIMD
+>
+> Single instruction, multiple data (SIMD) is a form of "data parallelism," as contrasted to "task parallelism" with Web Workers, because the emphasis is not really on program logic chunks being parallelized, but rather multiple bits of data being processed in parallel.
+>
+> With SIMD, threads don't provide the parallelism. Instead, modern CPUs provide SIMD capability with "vectors" of numbers -- think: type specialized arrays -- as well as instructions that can operate in parallel across all the numbers; these are low-level operations leveraging instruction-level parallelism.
+
+有点像是利用GPU多核心并行计算那一套东西。
+
+---
+
+> ## asm.js
+>
+> "asm.js" (<http://asmjs.org/>) is a label for a highly optimizable subset of the JavaScript language. By carefully avoiding certain mechanisms and patterns that are *hard* to optimize (garbage collection, coercion, etc.), asm.js-styled code can be recognized by the JS engine and given special attention with aggressive low-level optimizations.
+
+这就是源自那个著名的要在网页上运行C++写的游戏的项目，它的原理简单来说是将各种语言（包括JavaScript）编译成一种中间字节码，然后在浏览器中执行运行编译过后的代码。因为编译和运行可以分离了（原生的JavaScript编译和运行都是在浏览器中进行的），因此浏览器中执行的性能能得到提升。（试想一下，在浏览器中运行C++代码，那速度就不谈了，以后还有什么事情是前端不能做的？）
+
+asm.js现在衍生出了非常有名的[WebAssembly](https://developer.mozilla.org/zh-CN/docs/WebAssembly)，可以理解为各大厂商对asm.js进行了标准化和优化之后的项目。
+
+---
+
+# Chapter 6: Benchmarking & Tuning
+
+> ## Context Is King
+>
+> What this boils down to is that testing *not real* code gives you *not real* results. In so much as is possible and practical, you should test actual real, non-trivial snippets of your code, and under as best of real conditions as you can actually hope to. Only then will the results you get have a chance to approximate reality.
+>
+> Microbenchmarks like `++x` vs `x++` are so incredibly likely to be bogus, we might as well just flatly assume them as such.
+
+这里作者想说的是，只有在真实的环境中测试真实的代码（性能）才是有意义的，因为代码运行频率不同、编译器会有优化等各种因素影响着性能，几乎不可能只从理论上去静态分析得到两段代码性能的优劣（当然算法的性能还是能分析出来的）。
+
+---
+
+> ## Microperformance
+>
+> So I'm very cautious about making wide ranging performance optimizations in my JS code based purely on engine implementation details, **especially if those details are only true of a single engine**.
+
+针对某个特定的编译器做性能优化应该是最后的选择了吧，那真是要把性能优化到极致了。
+
+---
+
+> "There is nothing more permanent than a temporary hack." Chances are, the code you write now to work around some performance bug will probably outlive the performance bug in the browser itself.
+
+精辟！
+
+---
+
+> Ever heard the admonition, "that's premature optimization!"? It comes from a famous quote from Donald Knuth: "premature optimization is the root of all evil.". Many developers cite this quote to suggest that most optimizations are "premature" and are thus a waste of effort. The truth is, as usual, more nuanced.
+>
+> Here is Knuth's quote, in context:
+>
+> > Programmers waste enormous amounts of time thinking about, or worrying about, the speed of **noncritical** parts of their programs, and these attempts at efficiency actually have a strong negative impact when debugging and maintenance are considered. We should forget about small efficiencies, say about 97% of the time: premature optimization is the root of all evil. Yet we should not pass up our opportunities in that **critical** 3%. [emphasis added]
+>
+> (<http://web.archive.org/web/20130731202547/http://pplab.snu.ac.kr/courses/adv_pl05/papers/p261-knuth.pdf>, Computing Surveys, Vol 6, No 4, December 1974)
+>
+> I believe it's a fair paraphrasing to say that Knuth *meant*: "non-critical path optimization is the root of all evil." So the key is to figure out if your code is on the critical path -- you should optimize it! -- or not.
+
+名言的出处。
+
+---
+
+> ## Tail Call Optimization (TCO)
+>
+> Briefly, a "tail call" is a function call that appears at the "tail" of another function, such that after the call finishes, there's nothing left to do (except perhaps return its result value).
+>
+> For example, here's a non-recursive setup with tail calls:
+>
+> ```javascript
+> function foo(x) {
+> 	return x;
+> }
+>
+> function bar(y) {
+> 	return foo( y + 1 );	// tail call
+> }
+>
+> function baz() {
+> 	return 1 + bar( 40 );	// not tail call
+> }
+>
+> baz();						// 42
+> ```
+>
+> `foo(y+1)` is a tail call in `bar(..)` because after `foo(..)` finishes, `bar(..)` is also finished except in this case returning the result of the `foo(..)` call. However, `bar(40)` is *not* a tail call because after it completes, its result value must be added to `1` before `baz()` can return it.
+>
+> Without getting into too much nitty-gritty detail, calling a new function requires an extra amount of reserved memory to manage the call stack, called a "stack frame." So the preceding snippet would generally require a stack frame for each of `baz()`, `bar(..)`, and `foo(..)` all at the same time.
+>
+> However, if a TCO-capable engine can realize that the `foo(y+1)` call is in *tail position* meaning `bar(..)` is basically complete, then when calling `foo(..)`, it doesn't need to create a new stack frame, but can instead reuse the existing stack frame from `bar(..)`. That's not only faster, but it also uses less memory.
+
+之所以能reuse是因为已经到外层函数的结尾了，对frame的改变并不会再影响外层函数了。这点对递归比较重要，递归函数转换为尾递归之后就没有递归深度的限制了。
