@@ -28,3 +28,23 @@ date: 2017-11-20
 
    回想一下React的项目为什么没有这种限制，是因为它是用Webpack把所有后缀是`js`和`jsx`的文件打包起来了最后放到浏览器中一起执行，所以只要这其中某一个文件中包含一个入口即可。
 
+   <!--break-->
+
+5. 把一个React web app转换成一个React Native app，碰到了以下的问题：
+
+   - CSS不能用了，要使用React Native提供的`StyleSheet`来创建样式对象（类似CSS in JS的做法），且各种属性名称也不太一样（[react-native-css](https://github.com/sabeurthabti/react-native-css)这个库可以把CSS转换成React Native的样式类）。
+   - 浏览器中的一些DOM（比如`div`、`input`）不能使用了（React Native强制要求所有的JSX组件名称要以大写字母开头，所以用了这些的话会直接报错）。类似的，可以用`View`代替`div`，`TextInput`代替`input`等等。
+
+6. 关于debug，在手机端或模拟器上的`expo`中可以启用remote debugging的模式（模拟器中按`⌘+D`来启用），然后在浏览器中打开对应的页面即可（因为是remote debugging，浏览器中并不会有你的app的界面，你还是要在手机端操作，但可以在浏览器中浏览源码并打断点），注意在Console或Sources中要选择debuggerWorker.js再操作。
+
+7. 想要像React app那样在浏览器中（安装对应的插件）可以很方便地查看React组件以及Redux状态？只需要安装[react-native-debugger](https://github.com/jhen0409/react-native-debugger)：
+
+   ```shell
+   $ brew update && brew cask install react-native-debugger
+   ```
+
+   然后，可以安装[react-native-debugger-open](https://www.npmjs.com/package/react-native-debugger-open)来修改`react-native`启用remote debugging时的默认行为（从打开浏览器变成打开[react-native-debgger](https://github.com/jhen0409/react-native-debugger)）（注意安装完成后还要执行一下`rndebugger-open`，因为它其实是给`react-native`打了一个patch）。
+   <img title="2017-11-20-React-Native初窥.png" src="/images/2017-11-20-React-Native初窥.png" width="2217" />
+   <span class="caption">react-native-debugger</span>
+
+
