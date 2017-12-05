@@ -32,6 +32,29 @@
         return str.replace(/^\s+|\s+$/g, '');
     }
 
+    function encodeForSort(str) {
+        // encode the string so that result of sort([ 'Abc', 'Bc', 'abc' ]) will be [ 'abc', 'Abc', 'Bc' ],
+        // not [ 'Abc', 'Bc', 'abc' ] (by default)
+        // So, 'a' => 65 (ascii code), 'A' => 66, ...
+        const a_CODE = 97;
+        const A_CODE = 65;
+        const z_CODE = 122;
+        var result = '';
+        for (var i =0; i < str.length; ++i) {
+            var code = str.charCodeAt(i);
+            if (code >= A_CODE && code <= z_CODE) {
+                if (code >= a_CODE) {
+                    code = (code - a_CODE) * 2 + A_CODE;
+                }
+                else {
+                    code = (code - A_CODE) * 2 + A_CODE + 1;
+                }
+            }
+            result += String.fromCharCode(code);
+        }
+        return result;
+    }
+
     var grid = new Muuri('.grid', {
         sortData: {
             byCount: function (item, element) {
@@ -42,12 +65,14 @@
             byName: function (item, element) {
                 const innerString = element.innerText;
                 const stringList = strip(innerString).split(' ');
-                return stringList[0];
+                return encodeForSort(stringList[0]);
             }
         }
     });
     // Refresh sort data whenever an item changes
     grid.refreshSortData();
+    // Default sort by name
+    grid.sort('byName');
     function sortMuuriGrid(event) {
         grid.sort(event.target.value);
     }
