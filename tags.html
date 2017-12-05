@@ -13,6 +13,10 @@ permalink: /tags/
 {% assign tag_array = tag_string | split: '#' %}
 {% assign sorted_tags = tag_array | sort %}
 
+<select title="sort" onchange="sortMuuriGrid(event)">
+    <option value="byName">By Name</option>
+    <option value="byCount">By Count</option>
+</select>
 
 <div class="grid">
     {% for tag in sorted_tags %}

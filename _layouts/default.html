@@ -28,7 +28,29 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/muuri/0.5.1/muuri.min.js"></script>
 <script>
-    var grid = new Muuri('.grid');
+    function strip(str) {
+        return str.replace(/^\s+|\s+$/g, '');
+    }
+
+    var grid = new Muuri('.grid', {
+        sortData: {
+            byCount: function (item, element) {
+                const innerString = element.innerText;
+                const stringList = strip(innerString).split(' ');
+                return -parseInt(stringList[stringList.length - 1]); // Inverse the number so that the largest comes first
+            },
+            byName: function (item, element) {
+                const innerString = element.innerText;
+                const stringList = strip(innerString).split(' ');
+                return stringList[0];
+            }
+        }
+    });
+    // Refresh sort data whenever an item changes
+    grid.refreshSortData();
+    function sortMuuriGrid(event) {
+        grid.sort(event.target.value);
+    }
 </script>
 
 <script>

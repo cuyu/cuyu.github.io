@@ -6,6 +6,11 @@ permalink: /categories/
 
 <h2>Categories</h2>
 
+<select title="sort" onchange="sortMuuriGrid(event)">
+	<option value="byName">By Name</option>
+	<option value="byCount">By Count</option>
+</select>
+
 <div class="grid">
 	{% for category in site.categories %}
 	<div class="item post-category">
