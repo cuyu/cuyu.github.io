@@ -67,7 +67,9 @@
                 const stringList = strip(innerString).split(' ');
                 return encodeForSort(stringList[0]);
             }
-        }
+        },
+        layoutEasing: 'cubic-bezier(0.215, 0.55, 0.355, 0.95)',
+        layoutDuration: 500,
     });
     // Refresh sort data whenever an item changes
     grid.refreshSortData();
