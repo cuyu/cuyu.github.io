@@ -7,28 +7,34 @@ permalink: /tags/
 <h2>Tags</h2>
 {% assign tag_string = "" %}
 {% for tag in site.tags %}
-	{% assign tag_string = tag[0] | append: '#' | append: tag_string %}
+{% assign tag_string = tag[0] | append: '#' | append: tag_string %}
 {% endfor %}
 
 {% assign tag_array = tag_string | split: '#' %}
 {% assign sorted_tags = tag_array | sort %}
 
 
-{% for tag in sorted_tags %}
-<a href="/tags/#{{ tag }}" class="post-tag"> {{ tag }} <sup>{{ site.tags[tag].size }}</sup></a>
-{% endfor %}
+<div class="grid">
+    {% for tag in sorted_tags %}
+    <div class="item post-tag">
+        <div class="item-content">
+            <a href="/tags/#{{ tag }}" class="post-tag"> {{ tag }} <sup>{{ site.tags[tag].size }}</sup></a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
 
 
 {% for tag in sorted_tags %}
-	<h3 class="tag-list" id="{{ tag }}">{{ tag }}</h3>
-	<ul class="article-list">
-	{% for post in site.tags[tag] %}
-		<a href="{{ post.url }}">
-			<li>
-				{{ post.title }}
-				<small>{{ post.date | date_to_string }}</small>
-			</li>
-		</a>
-	{% endfor %}
-	</ul>
+<h3 class="tag-list" id="{{ tag }}">{{ tag }}</h3>
+<ul class="article-list">
+    {% for post in site.tags[tag] %}
+    <a href="{{ post.url }}">
+        <li>
+            {{ post.title }}
+            <small>{{ post.date | date_to_string }}</small>
+        </li>
+    </a>
+    {% endfor %}
+</ul>
 {% endfor %}

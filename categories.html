@@ -5,9 +5,16 @@ permalink: /categories/
 ---
 
 <h2>Categories</h2>
-{% for category in site.categories %}
-	<a href="/categories/#{{ category[0] }}" class="post-category"> {{ category[0] }} <sup>{{ category[1].size }}</sup></a>
-{% endfor %}
+
+<div class="grid">
+	{% for category in site.categories %}
+	<div class="item post-category">
+		<div class="item-content">
+			<a href="/categories/#{{ category[0] }}" class="post-category"> {{ category[0] }} <sup>{{ category[1].size }}</sup></a>
+		</div>
+	</div>
+	{% endfor %}
+</div>
 
 {% for category in site.categories %}
 	<h3 class="category-list" id="{{ category[0] }}">{{ category[0] }}</h3>

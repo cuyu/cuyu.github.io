@@ -9,11 +9,15 @@ layout: default-with-comment
         <span class="post-date">{{ page.date | date: "%B %d, %Y" }}</span>
         <span class="sep">|</span>
         {% if page.category %}
+        <div class="post-category inline-label">
             <a href="/categories/#{{ page.category }}" class="post-category"> {{ page.category }} <sup>{{ site.categories[page.category].size }}</sup></a>
+        </div>
         {% endif %}
         <span class="sep">|</span>
         {% for tag in page.tags %}
+        <div class="post-tag inline-label">
             <a href="/tags/#{{ tag }}" class="post-tag"> {{ tag }} <sup>{{ site.tags[tag].size }}</sup></a>
+        </div>
         {% endfor %}
     </div>
     <div class="post-content">{{ content }}</div>
