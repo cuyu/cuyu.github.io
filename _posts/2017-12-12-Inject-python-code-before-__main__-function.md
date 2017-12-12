@@ -2,7 +2,7 @@
 layout: post
 title: "Inject python code before __main__ function"
 category: Python
-tags: [hacking, virtualenv, bash]
+tags: [Hacking, virtualenv, bash]
 date: 2017-12-12
 ---
 
@@ -53,10 +53,10 @@ So, till now, we cannot depands on / make use of:
 
 - `$PATH` — it changes as entering a virtualenv
 - `python` — some command specify which python to use and we cannot change it
-- `virtualenv` — many commands can create new virtualenv and the actual may just entering an exist virtualenv
-- `source` / `.` — same reason as above
+- `virtualenv` — many commands can create new virtualenv (e.g. [virtualenvwrapper](https://virtualenvwrapper.readthedocs.io/en/latest/)) and we cannot decide which virtualenv is used just according to the create command
+- `source` / `.` — normally can detect entering of a virtualenv, however some other commands can do the same thing (similar as above)
 
-The main problem here is we cannot decide where to put the `sitecustomize.py` because of virtualenv. So why not just patch the `sitecustomize.py` under the default python's "site-packages" and patch it also to the virtualenv's "site-packages" once entering a virtualenv? We cannot depand on the `source` / `.` to detect entering a virtualenv, but we can rely on `export` command! Entering a virtualenv is actually exporting some environment variables. So we just need to hijack the `export` command. Note `export` is reserved keyword (not a build-in function) of shell which cannot be overrode. It means we cannot hijack it by simply defining a shell function named "export".
+The main problem here is we cannot decide where to put the `sitecustomize.py` because we do not know which virtualenv we are in. So why not just patch the `sitecustomize.py` under the default python's "site-packages" and patch it also to the virtualenv's "site-packages" once entering a virtualenv? We cannot depand on the `source` / `.` to detect entering a virtualenv, but we can rely on `export` command! Entering a virtualenv is actually exporting some environment variables. So we just need to hijack the `export` command. Note `export` is reserved keyword (not a build-in function) of shell which cannot be overrode. It means we cannot hijack it by simply defining a shell function named "export".
 
 Luckily, there is a way to add a hook for every shell command which is very handy (see [https://superuser.com/questions/175799/does-bash-have-a-hook-that-is-run-before-executing-a-command](https://superuser.com/questions/175799/does-bash-have-a-hook-that-is-run-before-executing-a-command)):
 
