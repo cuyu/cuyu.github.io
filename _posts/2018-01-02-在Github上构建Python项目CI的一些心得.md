@@ -33,7 +33,7 @@ CI服务选择了使用广泛的Travis CI，代码覆盖则交给了Coveralls，
 3. 为何OSX的job总是比较慢？
    **A**: 因为Linux默认情况下起来的是container，OSX只能启VM。
 
-<!--breal-->
+<!--break-->
 
 ## Coveralls相关 ##
 
