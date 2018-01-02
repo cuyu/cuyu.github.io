@@ -3,7 +3,7 @@ layout: post
 title: "在Github上构建Python项目CI的一些心得"
 category: Other
 tags: [CI, Github, 心得]
-date: 2017-12-29
+date: 2018-01-02
 ---
 
 > 项目[在此](https://github.com/cuyu/pypeep)。
@@ -26,21 +26,23 @@ CI服务选择了使用广泛的Travis CI，代码覆盖则交给了Coveralls，
        python: "2.7"
    ```
 
-2. 在Travis CI上的job出现了类似“The command "sudo tar xjf python-2.7.tar.bz2 --directory /" failed and exited with 1 during .”的错误？
+2. 在Travis CI上macOS下的Python环境启动失败，出现了类似“The command "sudo tar xjf python-2.7.tar.bz2 --directory /" failed and exited with 1 during .”的错误？
 
-   **A**: 
+   **A**: Travis CI目前并不支持`os: osx`的情况下选择`language: python`（[https://github.com/travis-ci/travis-ci/issues/2312](https://github.com/travis-ci/travis-ci/issues/2312)）。这里不支持的意思是macOS自带的Python不支持，当然你可以选择启动好VM后再安装指定版本的Python，并且很多项目也是这么做的。
 
 3. 为何OSX的job总是比较慢？
    **A**: 因为Linux默认情况下起来的是container，OSX只能启VM。
 
-Coveralls相关 ##
+<!--breal-->
+
+## Coveralls相关 ##
 
 1. `REPO TOKEN`有啥用？
    **A**: 用于私有仓库和Coveralls通信的token，对于开源的Github项目而言，没有也不用设置相关的东西。
 2. 每次跑完覆盖率结果是仅仅作为参考吗？有没有类似Travis CI那样硬性的检查标准？
    **A**: 当然有，在Coveralls网站上找到你的repo，仔细找找有一个settings链接，在其中可以设置最低需要满足的代码覆盖率以及一次提交代码覆盖率下降不能超过的阈值。
 
-Python相关 ##
+## Python相关 ##
 
 1. 由于我的项目有一个`setup.py`文件，其中已经包含了项目的Python依赖包，可不可以不添加`requirements.txt`文件（DRY原则，否则新添一个依赖两头都得改）？如果可以，要如何安装这些依赖？
    **A**: 当然是可以的。为了遵循DRY原则，有两种方案可以选择：
@@ -92,7 +94,31 @@ Python相关 ##
 
 2. 假如我选择了上述的第二套方案，又需要安装一个命令行工具并使用它，该怎么做（比如用来上传代码覆盖率的`coveralls`）？
    **A**: 最简单的解决方案：在执行`setup.py`之前先用pip install安装好那些命令行依赖。比如Travis CI会在执行测试脚本之前有一个install的步骤，那么我们就可以在其中插入一句`pip install coveralls`，简单粗暴！
-   更优雅的解决方案：因为上面的方案其实是破坏了DRY的原则的（每新添一个依赖，有可能要改两个地方了），
+   更优雅的解决方案：因为上面的方案其实是破坏了DRY的原则的（每新添一个依赖，有可能要改两个地方了），为此，在`setup.py`中不使用`tests_require`，取而代之地使用`extras_require`来存放测试需要的依赖：
+
+   ```python
+   test_requirements = [
+       "pytest",
+       "pytest-cov",
+       "coveralls",
+   ]
+
+   setup(
+       # ...
+       extras_require={
+           'test': test_requirements,
+       },
+       # ...
+   )
+   ```
+
+   然后安装时指定需要额外安装的依赖即可：
+
+   ```
+   pip install -e .[test]
+   ```
+
+   （注意：如果是zsh，`.[test]`需要放在引号里，中括号有其他的意义。）
 
 3. `setup.py`默认是使用unittest框架（不确定）来进行测试的，如果我想用pytest框架，又想用`python setup.py test`来启动测试，要怎样做？
    **A**: 参考[requests](https://github.com/requests/requests/blob/master/setup.py)的做法，自定义`setup.py`的test命令的执行函数：
