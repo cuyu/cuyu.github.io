@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "About "deque mutated during iteration""
+title: "About 'deque mutated during iteration'"
 category: Python
 tags: [坑]
 date: 2018-01-26
