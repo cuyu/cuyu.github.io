@@ -8,7 +8,7 @@ date: 2017-03-24
 
 想用React实现一个简单的表单，其中主要的组件如下：
 
-```javascript
+```jsx
 class App extends Component {
     render() {
         return (
@@ -26,7 +26,7 @@ class App extends Component {
 
 因此，参考官方文档，且为了方便代码复用，写了如下一个`Input`组件，然后在`App`组件中使用这个组件来替换原来的`input`。
 
-```javascript
+```jsx
 class Input extends Component {
     constructor() {
         super();
@@ -69,7 +69,7 @@ Uncaught TypeError: Cannot assign to read only property 'value' of object '#<Obj
 
 行吧，那就用state来存储要改变的值：
 
-```javascript
+```jsx
 class Input extends Component {
     constructor() {
         super();
@@ -97,7 +97,7 @@ class Input extends Component {
 
 回忆了一下React组件渲染的顺序，决定把组件状态初始化往后挪一挪，放到`componentWillMount`函数中：
 
-```javascript
+```jsx
 class Input extends Component {
     constructor() {
         super();
@@ -130,7 +130,7 @@ class Input extends Component {
 
 In `components/BaseInput.js`:
 
-```javascript
+```jsx
 import React, {Component, PropTypes} from 'react';
 
 function filterObject(target, whiteList) {
@@ -240,7 +240,7 @@ export {store}
 
 在使用上面创建的`Input`组件时，只需要指定它们的`id`属性与`rootReducer`中的属性对应即可：
 
-```javascript
+```jsx
 class App extends Component {
     render() {
         return (

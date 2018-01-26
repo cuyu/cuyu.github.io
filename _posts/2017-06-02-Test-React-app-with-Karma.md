@@ -59,7 +59,7 @@ Invariant Violation: _registerComponent(...): Target container is not a DOM elem
 
 以上，为了避免一开始出现的错误，要么就像下面的代码那样人为创建一个DOM再执行渲染，要么就也把之前的html文件加载到测试的server上（如果用Karma的话，可以用[html2js preprocessor](https://github.com/karma-runner/karma-html2js-preprocessor)来把html文件像js一样加载进来）。
 
-```javascript
+```jsx
 import {expect} from "chai";
 import React from 'react';
 import ReactDOM from 'react-dom';

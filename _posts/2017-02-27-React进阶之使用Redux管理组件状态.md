@@ -12,7 +12,7 @@ date: 2017-02-27
 
 默认情况下，React组件的属性是可以任意赋值的，为了对此加以限制，在定义React组件时，可以同时定义好它允许设置的属性以及对应的类型（通过定义组件`propTypes`属性来限定），比如：
 
-```javascript
+```jsx
 import React, {Component, PropTypes} from 'react';
 
 class MyButton extends Component {
@@ -38,7 +38,7 @@ class MyButton extends Component {
 
 以下，在`Screen`组件中将组件本身赋予了一个全局变量：
 
-```javascript
+```jsx
 class Screen extends Component {
     constructor(props) {
         super(props);
@@ -58,7 +58,7 @@ class Screen extends Component {
 
 在`Button`组件中，因此可以调用`Screen`组件的`setState`函数：
 
-```javascript
+```jsx
 class Button extends Component {
     handleClick() {
         let newValue = window.SCREEN_OBJ.state.value + this.props.name;
@@ -96,7 +96,7 @@ export default function (state = {value: '0'}, action) {
 
 以下，在`Screen`组件中，在构造函数中，调用`store`的`subscribe`函数，将`Screen`组件的`setState`函数注册进去。当`store`中存储的状态方式改变时，会触发调用所有注册进去的函数（即广播者订阅者模式）：
 
-```javascript
+```jsx
 class Screen extends Component {
     constructor(props) {
         super(props);
@@ -119,7 +119,7 @@ class Screen extends Component {
 
 在`Button`组件中，直接调用`store`的dispatch方法来更新store存储的状态：
 
-```javascript
+```jsx
 class Button extends Component {
     handleClick() {
         store.dispatch(appendActionCreator(this.props.name));
@@ -141,7 +141,7 @@ class Button extends Component {
 
 以下，通过`react-redux`封装好的`Provider`组件，可以将`store`对象传递给它所有的子组件：
 
-```javascript
+```jsx
 ReactDOM.render((
     <Provider store={store}>
         <ChangeableScreen/>
