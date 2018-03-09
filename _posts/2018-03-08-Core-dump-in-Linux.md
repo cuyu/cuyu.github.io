@@ -63,12 +63,12 @@ kill -s SIGSEGV $$
 
 > [/proc/sys/kernel/]core_pattern is used to specify a core dumpfile pattern name.
 >
-> - If the first character of the pattern is a '|', the kernel will treat the rest of the pattern as a command to run. The core dump will be written to the standard input of that program instead of to a file.
+> - If the first character of the pattern is a `|`, the kernel will treat the rest of the pattern as a command to run. The core dump will be written to the standard input of that program instead of to a file.
 
 比较常见的程序有apport，它在`/proc/sys/kernel/core_pattern`中的设置是这样的：
 
 ```
- |/usr/share/apport/apport %p %s %c %d %P
+|/usr/share/apport/apport %p %s %c %d %P
 ```
 
 ## About apport ##
