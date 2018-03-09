@@ -68,7 +68,7 @@ kill -s SIGSEGV $$
 比较常见的程序有apport，它在`/proc/sys/kernel/core_pattern`中的设置是这样的：
 
 ```
-|/usr/share/apport/apport %p %s %c %d %P
+ |/usr/share/apport/apport %p %s %c %d %P
 ```
 
 ## About apport ##
