@@ -65,6 +65,10 @@ date: 2016-08-11
 
 - **b** (break) 动态添加断点，用法为b后面加上行号。
 
+- **u** (up) 进入上一层的stack trace的frame，这在断点停留在抛出的异常时非常有用，使用这个命令我们可以查看抛出异常时的一些变量状态。
+
+- **d** (down) 和上面的命令相反，进入下一层的stack trace的frame。
+
 - **q** (quit) 结束调试。
 
 ### Get into debugger when an exception occurs
