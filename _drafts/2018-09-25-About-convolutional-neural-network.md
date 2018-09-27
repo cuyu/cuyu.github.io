@@ -36,18 +36,40 @@ date: 2018-09-25
 
    因此对图像的局部做卷积就相当于在图像频域中做乘积？（我对图像频域这块理解不深，只记得图像高频代表了图像的一些细节特征，因此可以通过低通滤波器来对图像进行降噪（过滤掉特别高频的部分好像也类似于对图像做了平滑卷积的操作？））
 
-5. 具体实现上，CNN和普通的深度神经网络（以下用DNN代指）的区别在于：
+5. 把卷积的公式展开：设3x3的卷积核W，其中Wij表示其中第i行j列的参数，输入为X，同样Xij表示输入的第i行j列的值，那么其中一个卷积结果可以表示为：
 
-   1. DNN的每一层的输出为1xN的向量；而CNN每一层的输出为MxN的矩阵（要么是对上一层的输出卷积而得，要么是对上一层的输出池化而得）。
-   2. DNN的每一层都包含了很多的神经元，而每个神经元则含有自己的权重（weights），通过对损失函数反向传播，我们计算出每个神经元权重的梯度，进而修改神经元的权重来降低损失函数的输出；而CNN的每一层有很多神经元会共享同一套权重（使用了相同的卷积核），同样通过对损失函数反向传播，来修改神经元共享的权重（卷积核）。
-   3. DNN的层与层之间是全连接的，因此神经元可以任意排布；而CNN中卷积操作使神经元只和上一层的一部分神经元产生了连接，并且由于卷积是和空间位置相关的，所以神经元的空间排布不能随意改变。
+   ```
+   O22 = W11*X11 + W12*X12 + W13*X13 + W21*X21 + W22*X22 + W23*X23 + W31*X31 + W32*X32 + W33*X33
+   ```
 
+   最终的输出还会再加上一个偏置b。如果把这里的X和W看做一个一维的向量而不是二维矩阵，是不是感觉突然熟悉？普通的神经网络中的神经元的也有这样的计算，只不过它的输入是上一层的所有的输出，而这里的输入只选取了上一层输出的一部分。所以，这就能理解为啥CNN中神经元是按照三维空间排列的，每一次卷积运算都对应了一个神经元，并且对卷积层而言这些神经元的激活函数仍是线性的（y=x嘛，当然也可以说是没有激活函数）。
 
+6. 具体实现上，CNN（不考虑全连接层）和普通的深度神经网络（以下用DNN代指）的区别在于：
 
-Reference
+   1. DNN的每一层的输出为1xN的向量；而CNN每一层的输出为MxNxD的矩阵（可以看做是D个MxN的二维矩阵）。
+   2. DNN的每一层都包含了很多的神经元，而每个神经元则含有自己的权重（weights），通过对损失函数反向传播，我们计算出每个神经元权重的梯度，进而修改神经元的权重来降低损失函数的输出；而CNN的每一层也有很多神经元，但它们会共享同一套权重（使用了相同的卷积核），同样通过对损失函数反向传播，来修改神经元共享的权重（卷积核）。
+   3. DNN的层与层之间是全连接的，因此神经元可以任意排布；而CNN中卷积操作使神经元只和上一层的一部分神经元产生了连接，并且由于卷积是和空间位置相关的，所以神经元的空间排布直接影响到下一层的输出，因此位置不能随意改变。
+   4. CNN中的超参数（hyperparameter）和DNN不太一样：CNN中卷积层需要确定卷积核的尺寸、卷积核的数目、卷积核滑动的步幅（stride）、输入边缘填补的方式（补零、镜像等），池化层需要确定池化的尺度；而DNN中则需要确定的是，每一层的神经元数目和神经元的激活函数。层数、训练迭代次数、学习率和损失函数是两者都存在的超参数。
+      （关于参数和超参数：参数是随着训练会不断改变的变量，比如神经元中的权重和偏差，而超参数则是用于确定模型的一些参数，不会随模型训练而改变，比如学习率、迭代次数、层数、每层神经元的个数等。）
 
-https://medium.freecodecamp.org/an-intuitive-guide-to-convolutional-neural-networks-260c2de0a050
+7. 关于参数共享，CNN之所以用同一个卷积核来对输入进行卷积操作，Standford教程里是这么说的：
 
-http://cs231n.github.io/convolutional-networks/
+   > It turns out that we can dramatically reduce the number of parameters by making one reasonable assumption: That if one feature is useful to compute at some spatial position (x,y), then it should also be useful to compute at a different position (x2,y2).
 
-https://hackernoon.com/what-is-a-capsnet-or-capsule-network-2bfbe48769cc
+   > If detecting a horizontal edge is important at some location in the image, it should intuitively be useful at some other location as well due to the translationally-invariant structure of images.
+
+   只能说是一种直觉和猜想吧，不过也确实说得通，因为我们是期望将图像中的某个目标平移后还能照样检查或识别出来的，平移后目标区域就是其他的神经元来对它做卷积了，那这个神经元由于使用了相同的卷积核，因此可以和之前那个神经元卷积得到相同的特征。另外，从计算性能上来考虑，共享参数也是有必要的。
+
+   > Note that sometimes the parameter sharing assumption may not make sense. This is especially the case when the input images to a ConvNet have some specific centered structure, where we should expect, for example, that completely different features should be learned on one side of the image than another. One practical example is when the input are faces that have been centered in the image. You might expect that different eye-specific or hair-specific features could (and should) be learned in different spatial locations. In that case it is common to relax the parameter sharing scheme, and instead simply call the layer a **Locally-Connected Layer**.
+
+   感觉在这种情况下，还使用共享参数那套框架，但使用更多的神经元（卷积核）和更多的层数应该也能达到一样好的效果，只不过在不同区域提取不同的特征可以节省神经元（计算量）。
+
+8. 综上，CNN可以看做是一种神经网络的特例，特殊在于神经元的参数共享和局部连接。特殊化意味着它对某一类问题会更加有效（统计学上来说就是减少了假设空间，从而使训练得到理想模型的概率提高了），但对于解决其他的问题可能完全无效。换句话说，使用更加通用的DNN理论上应该也能够解决CNN能解决的问题，但代价可能是需要更多的神经元以及多得多得多的参数要训练。
+
+### Reference
+
+[https://medium.freecodecamp.org/an-intuitive-guide-to-convolutional-neural-networks-260c2de0a050](https://medium.freecodecamp.org/an-intuitive-guide-to-convolutional-neural-networks-260c2de0a050)
+
+[http://cs231n.github.io/convolutional-networks/](http://cs231n.github.io/convolutional-networks/)
+
+[https://hackernoon.com/what-is-a-capsnet-or-capsule-network-2bfbe48769cc](https://hackernoon.com/what-is-a-capsnet-or-capsule-network-2bfbe48769cc)
