@@ -44,7 +44,9 @@ date: 2018-09-25
 
    最终的输出还会再加上一个偏置b。如果把这里的X和W看做一个一维的向量而不是二维矩阵，是不是感觉突然熟悉？普通的神经网络中的神经元的也有这样的计算，只不过它的输入是上一层的所有的输出，而这里的输入只选取了上一层输出的一部分。所以，这就能理解为啥CNN中神经元是按照三维空间排列的，每一次卷积运算都对应了一个神经元，并且对卷积层而言这些神经元的激活函数仍是线性的（y=x嘛，当然也可以说是没有激活函数）。
 
-6. 具体实现上，CNN（不考虑全连接层）和普通的深度神经网络（以下用DNN代指）的区别在于：
+6. 对于深度大于1的输入，卷积核也要有相同的深度，比如深度为11x11x3，那么卷积核就需要是5x5x3或3x3x3等等。计算卷积时，不同深度的输入分别和对应深度的卷积核进行二维卷积计算，最终的输出为各个深度在相同位置的卷积结果之和。因此，对于卷积层而言，输出的深度就代表了卷积核的数目。（其实就是三维的卷积操作，只不过我们可能对二维平面上的卷积更熟悉一些，所以这里详细说一下三维是怎么操作的。）
+
+7. 具体实现上，CNN（不考虑全连接层）和普通的深度神经网络（以下用DNN代指）的区别在于：
 
    1. DNN的每一层的输出为1xN的向量；而CNN每一层的输出为MxNxD的矩阵（可以看做是D个MxN的二维矩阵）。
    2. DNN的每一层都包含了很多的神经元，而每个神经元则含有自己的权重（weights），通过对损失函数反向传播，我们计算出每个神经元权重的梯度，进而修改神经元的权重来降低损失函数的输出；而CNN的每一层也有很多神经元，但它们会共享同一套权重（使用了相同的卷积核），同样通过对损失函数反向传播，来修改神经元共享的权重（卷积核）。
@@ -52,7 +54,7 @@ date: 2018-09-25
    4. CNN中的超参数（hyperparameter）和DNN不太一样：CNN中卷积层需要确定卷积核的尺寸、卷积核的数目、卷积核滑动的步幅（stride）、输入边缘填补的方式（补零、镜像等），池化层需要确定池化的尺度；而DNN中则需要确定的是，每一层的神经元数目和神经元的激活函数。层数、训练迭代次数、学习率和损失函数是两者都存在的超参数。
       （关于参数和超参数：参数是随着训练会不断改变的变量，比如神经元中的权重和偏差，而超参数则是用于确定模型的一些参数，不会随模型训练而改变，比如学习率、迭代次数、层数、每层神经元的个数等。）
 
-7. 关于参数共享，CNN之所以用同一个卷积核来对输入进行卷积操作，Standford教程里是这么说的：
+8. 关于参数共享，CNN之所以用同一个卷积核来对输入进行卷积操作，Standford教程里是这么说的：
 
    > It turns out that we can dramatically reduce the number of parameters by making one reasonable assumption: That if one feature is useful to compute at some spatial position (x,y), then it should also be useful to compute at a different position (x2,y2).
 
@@ -64,12 +66,20 @@ date: 2018-09-25
 
    感觉在这种情况下，还使用共享参数那套框架，但使用更多的神经元（卷积核）和更多的层数应该也能达到一样好的效果，只不过在不同区域提取不同的特征可以节省神经元（计算量）。
 
-8. 综上，CNN可以看做是一种神经网络的特例，特殊在于神经元的参数共享和局部连接。特殊化意味着它对某一类问题会更加有效（统计学上来说就是减少了假设空间，从而使训练得到理想模型的概率提高了），但对于解决其他的问题可能完全无效。换句话说，使用更加通用的DNN理论上应该也能够解决CNN能解决的问题，但代价可能是需要更多的神经元以及多得多得多的参数要训练。
+9. 关于池化层：现在比较流行方式的是*max pooling*，曾经流行的还有*average pooling*、*L2-norm pooling*等（猜测max pooling效果更好是因为它是非线性的操作？）。
+
+10. 关于反向传播：
+
+   1. 由于正向传播时CNN在全连接层的输入是一组1x1xD的神经元，即可以看做是1xD的向量输入到DNN中，因此反向传播全连接层及之后的部分和DNN的反向传播相同。
+   2. 池化层的反向传播，以max pooling为例，我们知道max运算的反向传播的结果为，正向传播时输入的最大值的梯度等于输出的梯度，其他输入的梯度为0。比如正向传播的输入为`[[1,8],[3,5]]`，反向传播得到的输出的梯度为g，则反向传播可得输入部分的梯度为`[[0,g],[0,0]]`。（其实也没啥特殊的，就是对max运算进行反向传播而已）
+   3. 卷积层的反向传播，其实就是一个线性函数的反向传播，和DNN中的神经元反向传播类似。
+
+   以上，反向传播只和具体的运算操作有关，不管是CNN、DNN还是XXXNN，反向传播都一个样。
+
+11. 综上，CNN可以看做是一种神经网络的特例，特殊在于神经元的参数共享和局部连接。特殊化意味着它对某一类问题会更加有效（统计学上来说就是减少了假设空间，从而使训练得到理想模型的概率提高了），但对于解决其他的问题可能完全无效。换句话说，使用更加通用的DNN理论上应该也能够解决CNN能解决的问题，但代价可能是需要更多的神经元以及多得多得多的参数要训练。
 
 ### Reference
 
-[https://medium.freecodecamp.org/an-intuitive-guide-to-convolutional-neural-networks-260c2de0a050](https://medium.freecodecamp.org/an-intuitive-guide-to-convolutional-neural-networks-260c2de0a050)
-
-[http://cs231n.github.io/convolutional-networks/](http://cs231n.github.io/convolutional-networks/)
-
-[https://hackernoon.com/what-is-a-capsnet-or-capsule-network-2bfbe48769cc](https://hackernoon.com/what-is-a-capsnet-or-capsule-network-2bfbe48769cc)
+1. [https://medium.freecodecamp.org/an-intuitive-guide-to-convolutional-neural-networks-260c2de0a050](https://medium.freecodecamp.org/an-intuitive-guide-to-convolutional-neural-networks-260c2de0a050)
+2. [http://cs231n.github.io/convolutional-networks/](http://cs231n.github.io/convolutional-networks/)
+3. [https://hackernoon.com/what-is-a-capsnet-or-capsule-network-2bfbe48769cc](https://hackernoon.com/what-is-a-capsnet-or-capsule-network-2bfbe48769cc)
