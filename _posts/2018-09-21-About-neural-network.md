@@ -51,3 +51,12 @@ date: 2018-09-21
 13. 对于多类分类问题，我们可以用多个二类分类器来实现，也可以直接打造一个多类分类器。神经网络对于多类分类其实很好实现，因为输出层本来就可以有多个神经元，我们可以让每一个输出的神经元代表一个类别，比如`[0.1, 0.8, 0.2]`表示类别2的概率比较高。另外一个思路是把每个输出层神经元看做一个二类分类器，比如`[-1, -1]`表示类别1，`[-1, 1]`表示类别2，`[1, -1]`表示类别3，`[1, 1]`表示类别4。
 
 14. 如果神经网络的输出层存在多个神经元，那么每个神经元是可以使用不同的loss function的（根据需求来定，参考[这里](https://www.depends-on-the-definition.com/guide-to-multi-label-classification-with-neural-networks/)），并且最后可以通过加权的方式得到最终的loss。
+
+15. 关于batch size，是指某一次迭代输入到神经网络训练的样本数量。之所以存在batch size的概念，一是因为对于海量的训练数据，内存不够用了，没办法一次性把所有的训练样本都输入到神经网络中进行正向和反向传播，二是因为有时候选取较小的batch size可以避免过拟合或损失陷入[鞍点](https://zh.wikipedia.org/wiki/%E9%9E%8D%E9%BB%9E)。一些相关的概念：
+
+   > - one **epoch** = one forward pass and one backward pass of *all* the training examples
+   > - **batch size** = the number of training examples in one forward/backward pass. The higher the batch size, the more memory space you'll need.
+   > - number of **iterations** = number of passes, each pass using [batch size] number of examples. To be clear, one pass = one forward pass + one backward pass (we do not count the forward pass and backward pass as two different passes).
+
+   （参考[这里](https://stats.stackexchange.com/questions/153531/what-is-batch-size-in-neural-network)和[这里](https://www.zhihu.com/question/61607442)）
+
