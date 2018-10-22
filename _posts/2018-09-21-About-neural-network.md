@@ -32,9 +32,13 @@ date: 2018-09-21
    其中`L(w)`计算的是预测值与真实值的差距，可以理解为实实在在的损失，`R(w)`是所有和输入的feature相关的权重有关的函数，目的是防止某些权重过大，导致某些feature的话语权太大压制了其他的输入（即Regularization），因为真实世界中收集得到的输入总会有噪音，一旦噪音的话语权太大就会导致模型预测不准确（即overfitting）。
 
 7. 一些损失函数对于网络的输出是有要求的（或者说，一些网络的输出限制了我们对于损失函数的选择）。比如[Hinge Loss](https://en.wikipedia.org/wiki/Hinge_loss)，它的损失只有在输出大于等于+m或小于等于-m（m为margin，即SVM中两个超平面的距离的一半）时为0，因此如果神经网络的输出层激活函数使用的是sigmoid函数，那计算得到的损失就是不准确的（sigmoid函数输出为0到1区间）。
+  <!--break-->
 
-8. 适当地提升dropout可以减少训练模型的overfitting。
-   <!--break-->
+8. 适当地使用dropout可以提高训练的效率、减少训练模型的overfitting。所谓dropout是指将一层神经网络中的一部分输出丢弃掉并置为0再输入到下一层神经网络中。下图是一个CNN的网络分别不使用dropout及对其中某些层后面添加dropout得到的训练效果（MNIST训练集），可以看到使用dropout后，在同样的迭代次数下，训练效果要好了很多。
+   <img title="2018-09-21-About-neural-network.png" src="/images/2018-09-21-About-neural-network.png" width="600" />
+   <span class="caption">不使用dropout，分类准确率为0.5982</span>
+   <img title="2018-09-21-About-neural-network-1.png" src="/images/2018-09-21-About-neural-network-1.png" width="600" />
+   <span class="caption">添加了dropout，分类准确率达到0.9046</span>
 
 9. 神经网络同一层中的神经元（neuron）的参数（weights）的初始值不要一样，因为如果有两个神经元的参数值是一样的，那么无论怎么进行训练（学习率也保持一致的话），得到的还是两个一模一样的神经元，其实就和只有一个神经元的效果是一样的了（即一个神经元的输出*2）。
 
