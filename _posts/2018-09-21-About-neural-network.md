@@ -2,7 +2,7 @@
 layout: post
 title: "About neural network"
 category: Machine Learning
-tags: [neural network]
+tags: [neural network, deep learning]
 date: 2018-09-21
 ---
 
