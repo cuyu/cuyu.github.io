@@ -14,9 +14,8 @@ date: 2019-08-05
    └── src
    		├── golang.org
    		└── Example-project
-   	
    ```
-
+   
 2. 对于某一个项目，代码一般不要放在`src`目录下，而是按照功能放置代码文件(比如和web相关的就放在`web`文件夹内)。这一点和`$GOPATH`不能混淆([refer](<https://github.com/golang-standards/project-layout>))。
 
 3. 使用`go get`安装依赖之前需要使用`go mod init`来初始化。
@@ -108,14 +107,14 @@ date: 2019-08-05
    }
    ```
 
-   而其他语言使用try..catch..的话，至少代码主逻辑比较清楚，且通常并不是每种exception都会被catch（而Go的error handling就是想要handle所有的异常，所以也“异常”的繁琐）。
+   而其他语言使用try..catch..的话，至少代码主逻辑比较清楚，且通常并不是每种exception都需要被catch（而Go的error handling就是想要handle所有的异常，所以也“异常”的繁琐）。
 
    好消息是据说Go2会有一些新功能来简化error handling。
 
 10. 目前一种可以“简化“error handling的方式是使用内置的`panic`函数，但这种方式也被gopher所反对，它与Golang的error handling理念相背而驰：
 
    > Don't panic!
-
+   
    `panic`类似于其他语言中的exception（Go自己的runtime的error也会用panic的方式抛出），它用一个栈来存储input，外部函数可以通过`recover`函数来读取之前存入的内容。
 
    一个比较认可的说法是，只有在程序碰到非常严重，且不太常见的错误时，可以使用panic来中断程序。
@@ -156,3 +155,15 @@ date: 2019-08-05
    以上，`post`并没有实现`fullName`方法，也没有`bio`属性，但可以直接调用，就像是继承了`author`一样（当然，`post`也可以再实现一个方法叫`fullName`，就可以覆盖继承的方法了）。（参考：[https://golangbot.com/inheritance/](https://golangbot.com/inheritance/)）
 
    而使用interface可以达到多态的效果。
+   
+12. Go支持relative import，但不建议这样做。即使是同一个项目内部的互相之间的import，也最好是使用[remote import path](https://golang.org/cmd/go/#hdr-Remote_import_paths)（项目使用`go mod init`之后，内部的import并不需要先使用`go get`来下载当前的项目，它可以正确地解析为当前项目的package）。比如[oliva](https://github.com/olivia-ai/olivia)项目，其中`analysis`中的package需要import同一个项目下的package:
+
+   ```go
+   import (
+   	"github.com/olivia-ai/olivia/modules"
+   	"github.com/olivia-ai/olivia/neuralnet"
+   	"github.com/olivia-ai/olivia/util"
+   )
+   ```
+
+   
