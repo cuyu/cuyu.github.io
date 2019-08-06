@@ -166,4 +166,4 @@ date: 2019-08-05
    )
    ```
 
-   
+13. Golang中的union type。在Typescript中，可以使用`string | number`来表示某个变量有可能是string类型也有可能是number类型。Go没有这么直观的表达方式（By design, see [Why does Go not have variant types?](https://golang.org/doc/faq#variant_types)），work around是利用interface多态的效果，参考[Alternatives to sum types in Go](https://making.pusher.com/alternatives-to-sum-types-in-go/index.html)。
