@@ -6,7 +6,7 @@ tags: [坑]
 date: 2019-08-05
 ---
 
-1. `$GOPATH`为工作目录，~~所有项目代码（包括你自己的项目代码和项目中依赖的第三方项目的代码）都应该放在工作目录下的`src`文件夹下。比如说你的项目为`Example-project`：~~，它有点类似于Python的`site-packages`，里面用于存放项目依赖的第三方代码。
+1. `$GOPATH`为工作目录，它有点类似于Python的`site-packages`，里面用于存放项目依赖的第三方代码。
 
    ```
    $GOPATH
@@ -156,7 +156,7 @@ date: 2019-08-05
 
    而使用interface可以达到多态的效果。
    
-12. Go支持relative import，但不建议这样做。即使是同一个项目内部的互相之间的import，也最好是使用[remote import path](https://golang.org/cmd/go/#hdr-Remote_import_paths)（项目使用`go mod init`之后，内部的import并不需要先使用`go get`来下载当前的项目，它可以正确地解析为当前项目的package）。比如[oliva](https://github.com/olivia-ai/olivia)项目，其中`analysis`中的package需要import同一个项目下的package:
+12. Go支持relative import，但不建议这样做。即使是同一个项目内部的互相之间的import，也最好是使用[remote import path](https://golang.org/cmd/go/#hdr-Remote_import_paths)（为了能够正确解析remote import path，最好还是把项目按照remote import path的路径放置在`$GOPATH/src`下面）。比如[oliva](https://github.com/olivia-ai/olivia)项目，其中`analysis`中的package需要import同一个项目下的package:
 
    ```go
    import (
