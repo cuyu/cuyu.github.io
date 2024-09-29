@@ -92,6 +92,7 @@ with DAG(
         provide_context=True,
         python_callable=should_continue,
         dag=dag,
+        trigger_rule=TriggerRule.ALL_DONE,
     )
 
     trigger_gmb_attribution >> check_date_task >> [trigger_backfill, stop_task]

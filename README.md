@@ -4,7 +4,7 @@
 
 ### CLI
 
-I've write a python script to generate new mark down file and with some other convenient functions.
+I've written a python script to generate new mark down file and with some other convenient functions.
 
 #### Prerequisites
 
@@ -22,7 +22,7 @@ To enable the `argcomplete`, you should:
 
 Install [blogging](https://github.com/cuyu/blogging) command and set up:
 
-1. Create a soft link to the `blogging` file:
+1. Pip install:
 
    ````
    pip3 install github-blogging

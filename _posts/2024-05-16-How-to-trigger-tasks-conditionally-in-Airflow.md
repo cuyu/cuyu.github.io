@@ -3,7 +3,7 @@ layout: post
 title: "How to trigger tasks conditionally in Airflow"
 category: Framework
 tags: [Airflow]
-date: 2024-09-29
+date: 2024-05-16
 ---
 
 I have 3 tasks, and I want to trigger `[t1, t2] >> t3` in condition A, and `t2 >> t3` for condition B, i.e. skip `t1` conditionally.
