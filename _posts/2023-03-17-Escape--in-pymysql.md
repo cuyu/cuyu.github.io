@@ -3,7 +3,7 @@ layout: post
 title: "Escape % in pymysql"
 category: Database
 tags: [MySQL]
-date: 2024-09-29
+date: 2023-03-17
 ---
 
 想要用pymysql执行类似如下的sql查询，却碰到这样的error：
