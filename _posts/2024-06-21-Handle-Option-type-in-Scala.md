@@ -1,11 +1,10 @@
-***
-
+---
 layout: post
 title: "Handle Option type in Scala"
 category: Scala
 tags: [语法糖]
 date: 2024-06-21
-----------------
+---
 
 ## match
 
