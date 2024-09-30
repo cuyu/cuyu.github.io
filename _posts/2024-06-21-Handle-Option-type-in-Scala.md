@@ -39,7 +39,7 @@ val maybeListOfStrings: Option[List[String]] = Some(List("Hello", "World", "!"))
 val joinedStringOption: Option[String] = maybeListOfStrings.map(_.mkString(" "))
 ```
 
-Here, the `_.mkString(" ")` is applied to the List in the Option type. **The** **`map`**  **is not used for iterate the List, but process the value in the Option type.**
+Here, the `_.mkString(" ")` is applied to the List in the Option type. **The** **`map`**  **is not used to iterate the List, but process the value in the Option type.**
 
 To iterate the elements, we need to use another `map` function in the first `map`:
 
