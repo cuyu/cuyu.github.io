@@ -110,6 +110,8 @@ The 2nd `TriggerDagRunOperator` is used to trigger the DAG itself:
 
 It's also very easy to cancel/stop the backfill task. You can just mark the current running task as success/failed state when the last sub task is running. In this way, the sub task will still run to finish as we only mark the outside task as sucess/failed.
 
+<!--break-->
+
 ## Enhancement - Run on given dates
 
 Sometimes, we may need to backfill some specific dates (e.g. the job is not stable, and failed in some dates) instead of a date range. To do so, let's add an extra parameter `select_dates` and make the backfill DAG run on given dates when this parameter is provided (and ignore the `end_date` parameter).
